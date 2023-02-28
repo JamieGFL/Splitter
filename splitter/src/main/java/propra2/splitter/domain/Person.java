@@ -1,5 +1,7 @@
 package propra2.splitter.domain;
 
+import java.util.List;
+
 public class Person {
     String name;
     List<Expense> expenses;

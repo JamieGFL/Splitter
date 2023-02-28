@@ -1,5 +1,7 @@
 package propra2.splitter.domain;
 
+import java.util.List;
+
 public class Group {
     Integer id;
     List<Person> persons;
