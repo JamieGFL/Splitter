@@ -25,6 +25,11 @@ public class Group {
         return new Group(id, person, people);
     }
 
+    public void addPerson(String newPerson){
+        Person person = new Person(newPerson, new ArrayList<>(), Money.of(0, "EUR"));
+        persons.add(person);
+    }
+
     public Integer getId() {
         return id;
     }

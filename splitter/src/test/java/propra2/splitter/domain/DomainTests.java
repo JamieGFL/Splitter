@@ -38,4 +38,14 @@ public class DomainTests {
 
         assertThat(personA.compare(personA, personB)).isEqualTo(0);
     }
+
+    @Test
+    @DisplayName("Person can be added to Group")
+    void test_04(){
+        Person personA = new Person("MaxHub", new ArrayList<>(), Money.of(0.00, "EUR"));
+        Group group = Group.create(1, "MaxHub");
+        group.addPerson("GitLisa");
+
+        assertThat(group.getPersons()).contains(new Person("GitLisa", new ArrayList<>(), Money.of(0.00, "EUR")));
+    }
 }
