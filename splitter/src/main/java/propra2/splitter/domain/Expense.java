@@ -17,6 +17,10 @@ public class Expense {
         this.cost = cost;
     }
 
+    public Money getAverageCost(){
+        return cost.divide(persons.size());
+    }
+
     public Activity getActivity() {
         return activity;
     }
