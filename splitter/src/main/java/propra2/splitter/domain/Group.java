@@ -1,16 +1,28 @@
 package propra2.splitter.domain;
 
+import org.javamoney.moneta.Money;
+
+import java.util.ArrayList;
 import java.util.List;
 
 public class Group {
-    Integer id;
-    List<Person> persons;
-    Integer size = 0;
+    private Integer id;
+    private Person creator;
+    private List<Person> persons;
+    private Integer size = 0;
     boolean closed = false;
 
-    public Group(Integer id, List<Person> persons) {
+    public Group(Integer id, Person creator, List<Person> persons) {
         this.id = id;
+        this.creator = creator;
         this.persons = persons;
+    }
+
+    public static Group create(Integer id, String creator){
+        Person person = new Person(creator, new ArrayList<>(), Money.of(0, "EUR"));
+        List<Person> people = new ArrayList<>();
+        people.add(person);
+        return new Group(id, person, people);
     }
 
     public Integer getId() {
