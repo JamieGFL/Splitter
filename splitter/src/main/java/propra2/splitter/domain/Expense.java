@@ -5,31 +5,31 @@ import org.javamoney.moneta.Money;
 import java.util.List;
 
 public class Expense {
-    String activityName;
-    String payer;
+    Activity activity;
+    Person payer;
     List<Person> persons;
     Money cost;
 
-    public Expense(String activityName, String payer, List<Person> persons, Money cost) {
-        this.activityName = activityName;
+    public Expense(Activity activity, Person payer, List<Person> persons, Money cost) {
+        this.activity = activity;
         this.payer = payer;
         this.persons = persons;
         this.cost = cost;
     }
 
-    public String getActivityName() {
-        return activityName;
+    public Activity getActivity() {
+        return activity;
     }
 
-    public void setActivityName(String activityName) {
-        this.activityName = activityName;
+    public void setActivityName(Activity activity) {
+        this.activity = activity;
     }
 
-    public String getPayer() {
+    public Person getPayer() {
         return payer;
     }
 
-    public void setPayer(String payer) {
+    public void setPayer(Person payer) {
         this.payer = payer;
     }
 
