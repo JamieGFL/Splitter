@@ -12,5 +12,30 @@ import static org.mockito.Mockito.verify;
 
 public class DomainTests {
 
+    @Test
+    @DisplayName("Persons with bigger TotalExpense gets determined correctly")
+    void test_01(){
+        Person personA = new Person("MaxHub", new ArrayList<>(), Money.of(100.00, "EUR"));
+        Person personB = new Person("GitLisa", new ArrayList<>(), Money.of(120.00, "EUR"));
 
+        assertThat(personA.compare(personA, personB)).isEqualTo(-1);
+    }
+
+    @Test
+    @DisplayName("Persons with smaller TotalExpense gets determined correctly")
+    void test_02(){
+        Person personA = new Person("MaxHub", new ArrayList<>(), Money.of(120.00, "EUR"));
+        Person personB = new Person("GitLisa", new ArrayList<>(), Money.of(100.00, "EUR"));
+
+        assertThat(personA.compare(personA, personB)).isEqualTo(1);
+    }
+
+    @Test
+    @DisplayName("Persons with equal TotalExpense gets determined correctly")
+    void test_03(){
+        Person personA = new Person("MaxHub", new ArrayList<>(), Money.of(100.00, "EUR"));
+        Person personB = new Person("GitLisa", new ArrayList<>(), Money.of(100.00, "EUR"));
+
+        assertThat(personA.compare(personA, personB)).isEqualTo(0);
+    }
 }
