@@ -33,8 +33,16 @@ public class Group {
         this.id = id;
     }
 
+    public Person getCreator() {
+        return creator;
+    }
+
+    public void setCreator(Person creator) {
+        this.creator = creator;
+    }
+
     public List<Person> getPersons() {
-        return persons;
+        return List.copyOf(persons);
     }
 
     public void setPersons(List<Person> persons) {
