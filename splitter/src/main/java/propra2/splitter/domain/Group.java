@@ -30,6 +30,7 @@ public class Group {
         persons.add(person);
     }
 
+
     public Integer getId() {
         return id;
     }
