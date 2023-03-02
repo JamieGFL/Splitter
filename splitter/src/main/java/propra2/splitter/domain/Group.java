@@ -29,11 +29,27 @@ public class Group {
         return new Group(id, person, people);
     }
 
+    public void addExpenseToPerson(String activity, String name, List<String> people2, Money cost){
+        List<Person> participants = new ArrayList<>();
+        for(Person person:people){
+            for(String personName : people2){
+                if(person.name.equals(personName)){
+                    participants.add(person);
+                }
+            }
+        }
+        for(Person person : people){
+            if(person.name.equals(name)){
+                person.expenses.add(new Expense(new Activity(activity),person,participants,cost));
+            }
+        }
+    }
+
     public void addPerson(String newPerson){
         Person person = new Person(newPerson, new ArrayList<>(), new ArrayList<>());
         people.add(person);
     }
-    
+
     public Integer getId() {
         return id;
     }
