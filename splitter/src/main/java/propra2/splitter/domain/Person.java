@@ -17,6 +17,10 @@ public class Person{
         this.debts = debts;
     }
 
+    public Debt getMaxValue(Person person){
+        return person.debts.stream().max((e1,e2) -> e1.amount.getNumber().intValue() > e2.amount.getNumber().intValue() ? 1 : -1).get();
+    }
+
     public String getName() {
         return name;
     }
