@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.verify;
 
 public class DomainTests {
@@ -16,10 +15,10 @@ public class DomainTests {
     @DisplayName("Person can be added to Group")
     void test_04(){
         Person personA = new Person("MaxHub", new ArrayList<>(), new ArrayList<>());
-        Group group = Group.create(1, "MaxHub");
+        Group group = Group.createGroup(1, "MaxHub");
         group.addPerson("GitLisa");
 
-        assertThat(group.getPersons()).contains(new Person("GitLisa", new ArrayList<>(), new ArrayList<>()));
+        assertThat(group.getPeople()).contains(new Person("GitLisa", new ArrayList<>(), new ArrayList<>()));
     }
 
     @Test
