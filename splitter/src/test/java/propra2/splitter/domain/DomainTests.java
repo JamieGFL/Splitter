@@ -15,65 +15,65 @@ public class DomainTests {
     @Test
     @DisplayName("Person can be added to Group")
     void test_04(){
-        Person personA = new Person("MaxHub", new ArrayList<>(), Money.of(0.00, "EUR"));
+        Person personA = new Person("MaxHub", new ArrayList<>(), new ArrayList<>());
         Group group = Group.create(1, "MaxHub");
         group.addPerson("GitLisa");
 
-        assertThat(group.getPersons()).contains(new Person("GitLisa", new ArrayList<>(), Money.of(0.00, "EUR")));
+        assertThat(group.getPersons()).contains(new Person("GitLisa", new ArrayList<>(), new ArrayList<>()));
     }
 
     @Test
     @DisplayName("correct transaction is determined when personB owes personA")
     void test_05(){
-        Person personA = new Person("MaxHub", new ArrayList<>(), Money.of(0.00, "EUR"));
-        Person personB = new Person("GitLisa", new ArrayList<>(), Money.of(0.00, "EUR"));
+        Person personA = new Person("MaxHub", new ArrayList<>(), new ArrayList<>());
+        Person personB = new Person("GitLisa", new ArrayList<>(), new ArrayList<>());
         Expense expense1 = new Expense(new Activity("Pizza"), personA, List.of(personB), Money.of(20, "EUR"));
         Expense expense2 = new Expense(new Activity("Kino"), personA, List.of(personB), Money.of(30, "EUR"));
         Expense expense3 = new Expense(new Activity("Bowling"), personB, List.of(personA), Money.of(40, "EUR"));
-        personA.expenses().add(expense1);
-        personA.expenses().add(expense2);
-        personB.expenses().add(expense3);
+        personA.getExpenses().add(expense1);
+        personA.getExpenses().add(expense2);
+        personB.getExpenses().add(expense3);
         Transaction transactionAB = new Transaction(personA, personB);
 
         String requiredTransaction = transactionAB.getRequiredTransaction();
 
-        assertThat(requiredTransaction).isEqualTo(personB.name()+" has to pay "+ personA.name() + " an amount of EUR 10.00");
+        assertThat(requiredTransaction).isEqualTo(personB.getName()+" has to pay "+ personA.getName() + " an amount of EUR 10.00");
     }
 
     @Test
     @DisplayName("correct transaction is determined when personA owes personB")
     void test_06(){
-        Person personA = new Person("MaxHub", new ArrayList<>(), Money.of(0.00, "EUR"));
-        Person personB = new Person("GitLisa", new ArrayList<>(), Money.of(0.00, "EUR"));
+        Person personA = new Person("MaxHub", new ArrayList<>(), new ArrayList<>());
+        Person personB = new Person("GitLisa", new ArrayList<>(), new ArrayList<>());
         Expense expense1 = new Expense(new Activity("Pizza"), personA, List.of(personB), Money.of(20, "EUR"));
         Expense expense2 = new Expense(new Activity("Kino"), personA, List.of(personB), Money.of(10, "EUR"));
         Expense expense3 = new Expense(new Activity("Bowling"), personB, List.of(personA), Money.of(40, "EUR"));
-        personA.expenses().add(expense1);
-        personA.expenses().add(expense2);
-        personB.expenses().add(expense3);
+        personA.getExpenses().add(expense1);
+        personA.getExpenses().add(expense2);
+        personB.getExpenses().add(expense3);
         Transaction transactionAB = new Transaction(personA, personB);
 
         String requiredTransaction = transactionAB.getRequiredTransaction();
 
-        assertThat(requiredTransaction).isEqualTo(personA.name()+" has to pay "+ personB.name() + " an amount of EUR 10.00");
+        assertThat(requiredTransaction).isEqualTo(personA.getName()+" has to pay "+ personB.getName() + " an amount of EUR 10.00");
     }
 
     @Test
     @DisplayName("correct transaction is determined when both persons don't owe each other anything")
     void test_07(){
-        Person personA = new Person("MaxHub", new ArrayList<>(), Money.of(0.00, "EUR"));
-        Person personB = new Person("GitLisa", new ArrayList<>(), Money.of(0.00, "EUR"));
+        Person personA = new Person("MaxHub", new ArrayList<>(), new ArrayList<>());
+        Person personB = new Person("GitLisa", new ArrayList<>(), new ArrayList<>());
         Expense expense1 = new Expense(new Activity("Pizza"), personA, List.of(personB), Money.of(20, "EUR"));
         Expense expense2 = new Expense(new Activity("Kino"), personA, List.of(personB), Money.of(20, "EUR"));
         Expense expense3 = new Expense(new Activity("Bowling"), personB, List.of(personA), Money.of(40, "EUR"));
-        personA.expenses().add(expense1);
-        personA.expenses().add(expense2);
-        personB.expenses().add(expense3);
+        personA.getExpenses().add(expense1);
+        personA.getExpenses().add(expense2);
+        personB.getExpenses().add(expense3);
         Transaction transactionAB = new Transaction(personA, personB);
 
         String requiredTransaction = transactionAB.getRequiredTransaction();
 
-        assertThat(requiredTransaction).isEqualTo(personA.name() +" and "+ personB.name() +" don't owe anything to each other");
+        assertThat(requiredTransaction).isEqualTo(personA.getName() +" and "+ personB.getName() +" don't owe anything to each other");
     }
 
 
