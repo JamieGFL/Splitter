@@ -16,7 +16,7 @@ public class Debt {
 
     public Money calculateDebt(){
         Money payerDebt = Money.of(0, "EUR");
-        for(Expense expense:payee.expenses()){
+        for(Expense expense:payee.getExpenses()){
             if(expense.getPersons().contains(payer)){
                 payerDebt = payerDebt.add(expense.getAverageCost());
             }

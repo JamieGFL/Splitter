@@ -14,7 +14,7 @@ public class Transaction {
 
     private Money calculatePersonADebt(){
         Money amountA = Money.of(0, "EUR");
-        for(Expense expense : personB.expenses()){
+        for(Expense expense : personB.getExpenses()){
             if(expense.getPersons().contains(personA)){
                 amountA = amountA.add(expense.getAverageCost());
             }
@@ -24,7 +24,7 @@ public class Transaction {
 
     private Money calculatePersonBDebt(){
         Money amountB = Money.of(0, "EUR");
-        for(Expense expense : personA.expenses()){
+        for(Expense expense : personA.getExpenses()){
             if(expense.getPersons().contains(personB)){
                 amountB = amountB.add(expense.getAverageCost());
             }
@@ -38,14 +38,38 @@ public class Transaction {
     public String getRequiredTransaction(){
         amount = calculateAmount();
         if(amount.isGreaterThan(Money.of(0, "EUR"))){
-            return personA.name() +" has to pay " + personB.name() + " an amount of " + amount;
+            return personA.getName() +" has to pay " + personB.getName() + " an amount of " + amount;
         }
         if(amount.isLessThan(Money.of(0, "EUR"))){
-            return personB.name() +" has to pay " + personA.name() + " an amount of " + amount.abs();
+            return personB.getName() +" has to pay " + personA.getName() + " an amount of " + amount.abs();
         }
         else if(amount.isEqualTo(Money.of(0, "EUR"))){
-            return personA.name() +" and "+ personB.name() +" don't owe anything to each other";
+            return personA.getName() +" and "+ personB.getName() +" don't owe anything to each other";
         }
         return null;
+    }
+
+    public Person getPersonA() {
+        return personA;
+    }
+
+    public void setPersonA(Person personA) {
+        this.personA = personA;
+    }
+
+    public Person getPersonB() {
+        return personB;
+    }
+
+    public void setPersonB(Person personB) {
+        this.personB = personB;
+    }
+
+    public Money getAmount() {
+        return amount;
+    }
+
+    public void setAmount(Money amount) {
+        this.amount = amount;
     }
 }
