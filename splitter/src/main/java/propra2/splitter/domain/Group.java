@@ -45,6 +45,50 @@ public class Group {
         }
     }
 
+    public void requiredMinimalTransactions(){
+        for(int p = 0; p < people.size(); p++){
+            for(int i = 0; i<people.size(); i++){
+                personDebtMap.put(people.get(p),people.get(p).debts.get(i));
+            }
+        }
+        minimalTransactions(personDebtMap);
+    }
+
+    private void minimalTransactions(Map<Person,Debt> personDebtMap){
+        Person personMaxCred = getPersonWithMaxValue(personDebtMap);
+        Person personMaxDebt = getPersonWithMinValue(personDebtMap);
+
+        if(personDebtMap.get(personMaxCred).amount.isEqualTo(Money.of(0, "EUR"))
+            && personDebtMap.get(personMaxDebt).amount.isEqualTo(Money.of(0, "EUR"))){
+            return;
+        }
+
+        Person minPerson = personDebtMinimum(personMaxDebt,personMaxCred);
+        Money min = minPerson.getMaxValue(minPerson).amount;
+        personMaxCred.getMaxValue(personMaxCred).amount.subtract(min);
+        personMaxDebt.getMaxValue(personMaxDebt).amount.add(min);
+
+        String message = " Person " + personMaxDebt.name + " pays " + min + " to " + " Person " + personMaxCred.name;
+        Transaction minmalRequiredTransaction = new Transaction(message);
+        transactions.add(minmalRequiredTransaction);
+
+        minimalTransactions(personDebtMap);
+    }
+
+    private Person personDebtMinimum(Person p1, Person p2){
+        return p1.getMaxValue(p1).amount.negate().isLessThan(p2.getMaxValue(p2).amount) ? p1 : p2;
+    }
+
+    public Person getPersonWithMaxValue(Map<Person,Debt> personDebtMap){
+        return personDebtMap.entrySet().stream()
+                .max((e1,e2) -> e1.getValue().amount.getNumber().intValue() > e2.getValue().amount.getNumber().intValue() ? 1 : -1).get().getKey();
+    }
+
+    public Person getPersonWithMinValue(Map<Person,Debt> personDebtMap){
+        return personDebtMap.entrySet().stream()
+                .min((e1,e2) -> e1.getValue().amount.getNumber().intValue() > e2.getValue().amount.getNumber().intValue() ? 1 : -1).get().getKey();
+    }
+
     public void addPerson(String newPerson){
         Person person = new Person(newPerson, new ArrayList<>(), new ArrayList<>());
         people.add(person);
