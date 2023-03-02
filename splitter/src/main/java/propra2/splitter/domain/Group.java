@@ -75,6 +75,11 @@ public class Group {
         minimalTransactions(personDebtMap);
     }
 
+    public List<Transaction> getTransactions() {
+        requiredMinimalTransactions();
+        return transactions;
+    }
+
     private Person personDebtMinimum(Person p1, Person p2){
         return p1.getMaxValue(p1).amount.negate().isLessThan(p2.getMaxValue(p2).amount) ? p1 : p2;
     }
@@ -133,4 +138,5 @@ public class Group {
     public void setClosed(boolean closed) {
         this.closed = closed;
     }
+
 }
