@@ -69,6 +69,14 @@ public class Person{
         this.schuldenListe = schuldens;
     }
 
+    public Money getNettoBetrag() {
+        return nettoBetrag;
+    }
+
+    public void setNettoBetrag(Money nettoBetrag) {
+        this.nettoBetrag = nettoBetrag;
+    }
+
     //    @Override
 //    public int compare(Person o1, Person o2) {
 //        if(o1.totalExpense.subtract(o2.totalExpense).isLessThan(Money.of(0, "EUR"))){
