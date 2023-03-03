@@ -5,9 +5,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.verify;
@@ -17,10 +15,10 @@ public class DomainTests {
     @DisplayName("Person can be added to Group")
     void test_01(){
         Person personA = new Person("MaxHub", new ArrayList<>(), new ArrayList<>());
-        Group group = Group.createGroup(1, "MaxHub");
-        group.addPerson("GitLisa");
+        Gruppe gruppe = Gruppe.erstelleGruppe(1, "MaxHub");
+        gruppe.addPerson("GitLisa");
 
-        assertThat(group.getPeople()).contains(new Person("GitLisa", new ArrayList<>(), new ArrayList<>()));
+        assertThat(gruppe.getPersonen()).contains(new Person("GitLisa", new ArrayList<>(), new ArrayList<>()));
     }
 
     @Test
@@ -29,13 +27,13 @@ public class DomainTests {
         Person personA = new Person("MaxHub", new ArrayList<>(), new ArrayList<>());
         Person personB = new Person("GitLisa", new ArrayList<>(), new ArrayList<>());
 
-        Group group = Group.createGroup(1, personA.getName());
-        group.addPerson(personB.getName());
-        group.addExpenseToPerson("Pizza","MaxHub",List.of("GitLisa"), Money.of(20, "EUR"));
-        group.addExpenseToPerson("Kino","GitLisa",List.of("MaxHub"), Money.of(15, "EUR"));
-        List<Transaction> transactions = group.getTransactions();
+        Gruppe gruppe = Gruppe.erstelleGruppe(1, personA.getName());
+        gruppe.addPerson(personB.getName());
+        gruppe.addAusgabeToPerson("Pizza","MaxHub",List.of("GitLisa"), Money.of(20, "EUR"));
+        gruppe.addAusgabeToPerson("Kino","GitLisa",List.of("MaxHub"), Money.of(15, "EUR"));
+        List<Transaktion> transaktion = gruppe.getTransaktionen();
 
-        assertThat(transactions.get(0).transactionMessage()).isEqualTo(personB.getName()+" has to pay "+ personA.getName() + " an amount of EUR 5.00");
+        assertThat(transaktion.get(0).transaktionsNachricht()).isEqualTo(personB.getName()+" has to pay "+ personA.getName() + " an amount of EUR 5.00");
     }
 
 //    @Test
