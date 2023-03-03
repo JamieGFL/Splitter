@@ -20,7 +20,7 @@ public class DomainTests {
         Gruppe gruppe = Gruppe.erstelleGruppe(1, "MaxHub");
         gruppe.addPerson("GitLisa");
 
-        assertThat(gruppe.getPersonen()).contains(new Person("GitLisa", new ArrayList<>(), new ArrayList<>()));
+        assertThat(gruppe.getPersonen().get(1).getName()).isEqualTo("GitLisa");
     }
 
     @Test
@@ -35,7 +35,7 @@ public class DomainTests {
         gruppe.addAusgabeToPerson("Kino","GitLisa",List.of("MaxHub"), Money.of(15, "EUR"));
         List<Transaktion> transaktion = gruppe.getTransaktionen();
 
-        assertThat(transaktion.get(0).transaktionsNachricht()).isEqualTo(personB.getName()+" has to pay "+ personA.getName() + " an amount of EUR 5.00");
+        assertThat(transaktion.get(0).transaktionsNachricht()).isEqualTo(personB.getName() + " muss EUR 5.00 an " + personA.getName() + " zahlen");
     }
 
 //    @Test
