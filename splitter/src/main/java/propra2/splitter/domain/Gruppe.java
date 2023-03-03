@@ -14,8 +14,10 @@ public class Gruppe {
             ;
     private List<Ausgabe> gruppenAusgaben;
     private List<Transaktion> transaktionen = new ArrayList<>();
-    Map<Person, Schulden> personSchuldenMap = new HashMap<>();
+    Map<Person, Money> nettoBetraege = new HashMap<>();
     private Integer groesse = 0;
+
+    private boolean ausgleich;
     boolean geschlossen = false;
 
     public Gruppe(Integer id, Person gruender, List<Person> personen) {
@@ -63,10 +65,10 @@ public class Gruppe {
     public void noetigeMinimaleTransaktion(){
         for(int p = 0; p < personen.size(); p++){
             for(int i = 0; i< personen.get(p).getSchuldenListe().size(); i++){
-                personSchuldenMap.put(personen.get(p), personen.get(p).schuldenListe.get(i));
+                nettoBetraege.put(personen.get(p), personen.get(p).schuldenListe.get(i));
             }
         }
-        minimaleTransaktionen(personSchuldenMap);
+        minimaleTransaktionen(nettoBetraege);
     }
 
     private void minimaleTransaktionen(Map<Person, Schulden> personDebtMap){
