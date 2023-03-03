@@ -18,7 +18,14 @@ public class Person{
     }
 
     public Debt getMaxValue(Person person){
-        return person.debts.stream().max((e1,e2) -> e1.amount.getNumber().intValue() > e2.amount.getNumber().intValue() ? 1 : -1).get();
+        Debt maxDebt = debts.get(0);
+        for(Debt debt : debts){
+            if(maxDebt.amount.isLessThan(debt.amount)){
+                maxDebt = debt;
+            }
+        }
+        return maxDebt;
+//        return person.debts.stream().max((e1,e2) -> e1.amount.getNumber().intValue() > e2.amount.getNumber().intValue() ? 1 : -1).get();
     }
 
     public String getName() {

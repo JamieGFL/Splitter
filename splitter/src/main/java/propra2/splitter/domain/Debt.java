@@ -8,7 +8,7 @@ public class Debt {
     Person payee;
     Money amount;
 
-    public Debt(Person payer, Person payee, Money amount) {
+    public Debt(Person payer, Person payee) {
         this.payer = payer;
         this.payee = payee;
         this.amount = calculateDebt();

@@ -3,6 +3,7 @@ package propra2.splitter.domain;
 import org.javamoney.moneta.Money;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -11,8 +12,8 @@ public class Group {
     private Person creator;
     private List<Person> people;
     private List<Expense> groupExpenses;
-    private List<Transaction> transactions;
-    Map<Person,Debt> personDebtMap;
+    private List<Transaction> transactions = new ArrayList<>();
+    Map<Person,Debt> personDebtMap = new HashMap<>();
     private Integer size = 0;
     boolean closed = false;
 
@@ -30,24 +31,37 @@ public class Group {
     }
 
     public void addExpenseToPerson(String activity, String name, List<String> people2, Money cost){
+        Person payee = null;
+        for(Person person : people){
+            if(person.name.equals(name)){
+                payee = person;
+            }
+        }
+
+        // payer/Personen, die ausgelegt bekommen haben und später Geld zurückzahlen müssen
         List<Person> participants = new ArrayList<>();
         for(Person person:people){
-            for(String personName : people2){
-                if(person.name.equals(personName)){
+            for(String personName : people2) {
+                if (person.name.equals(personName)) {
                     participants.add(person);
                 }
             }
         }
-        for(Person person : people){
-            if(person.name.equals(name)){
-                person.expenses.add(new Expense(new Activity(activity),person,participants,cost));
-            }
+
+        // Ausgaben in Person, welche Ausgabe getätigt hat, speichern
+        payee.expenses.add(new Expense(new Activity(activity), payee, participants, cost));
+
+        // speichert Schulden der payers
+        for(Person participant : participants) {
+            participant.debts.add(new Debt(participant, payee));
         }
+
     }
+
 
     public void requiredMinimalTransactions(){
         for(int p = 0; p < people.size(); p++){
-            for(int i = 0; i<people.size(); i++){
+            for(int i = 0; i<people.get(p).getDebts().size(); i++){
                 personDebtMap.put(people.get(p),people.get(p).debts.get(i));
             }
         }
@@ -63,14 +77,15 @@ public class Group {
             return;
         }
 
-        Person minPerson = personDebtMinimum(personMaxDebt,personMaxCred);
+        Debt minDebt = personDebtMinimum(personMaxDebt.getMaxValue(personMaxDebt),personMaxCred.getMaxValue(personMaxCred));
+        Person minPerson = minDebt.payer;
         Money min = minPerson.getMaxValue(minPerson).amount;
-        personMaxCred.getMaxValue(personMaxCred).amount.subtract(min);
-        personMaxDebt.getMaxValue(personMaxDebt).amount.add(min);
+        personMaxCred.getMaxValue(personMaxCred).amount = personMaxCred.getMaxValue(personMaxCred).amount.subtract(min);
+        personMaxDebt.getMaxValue(personMaxDebt).amount = personMaxDebt.getMaxValue(personMaxDebt).amount.add(min);
 
-        String message = " Person " + personMaxDebt.name + " pays " + min + " to " + " Person " + personMaxCred.name;
-        Transaction minmalRequiredTransaction = new Transaction(message);
-        transactions.add(minmalRequiredTransaction);
+        String message = personMaxDebt.name + " has to pay " + personMaxCred.getName() + " an amount of " + min;
+        Transaction minimalRequiredTransaction = new Transaction(message);
+        transactions.add(minimalRequiredTransaction);
 
         minimalTransactions(personDebtMap);
     }
@@ -80,8 +95,8 @@ public class Group {
         return transactions;
     }
 
-    private Person personDebtMinimum(Person p1, Person p2){
-        return p1.getMaxValue(p1).amount.negate().isLessThan(p2.getMaxValue(p2).amount) ? p1 : p2;
+    private Debt personDebtMinimum(Debt d1, Debt d2){
+        return d1.payee.getMaxValue(d1.payee).amount.isLessThan(d2.payer.getMaxValue(d2.payer).amount) ? d1 : d2;
     }
 
     public Person getPersonWithMaxValue(Map<Person,Debt> personDebtMap){
