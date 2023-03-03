@@ -97,30 +97,30 @@ public class Gruppe {
             nettoBetraege.put(personen.get(i), betrag);
             personen.get(i).setNettoBetrag(betrag);
         }
-        minimaleTransaktionen(nettoBetraege);
+      //  minimaleTransaktionen(nettoBetraege);
     }
 
-    private void minimaleTransaktionen(Map<Person, Schulden> personDebtMap){
-        Person personMaxCred = getMaxMapBetrag(personDebtMap);
-        Person personMaxDebt = getMinMapBetrag(personDebtMap);
-
-        if(personDebtMap.get(personMaxCred).betrag.isEqualTo(Money.of(0, "EUR"))
-            && personDebtMap.get(personMaxDebt).betrag.isEqualTo(Money.of(0, "EUR"))){
-            return;
-        }
-
-        Schulden minSchulden = getPersonWithMinimalNettoBetrag(personMaxDebt.getMaxValue(personMaxDebt),personMaxCred.getMaxValue(personMaxCred));
-        Person minPerson = minSchulden.zahler;
-        Money min = minPerson.getMaxValue(minPerson).betrag;
-        personMaxCred.getMaxValue(personMaxCred).betrag = personMaxCred.getMaxValue(personMaxCred).betrag.subtract(min);
-        personMaxDebt.getMaxValue(personMaxDebt).betrag = personMaxDebt.getMaxValue(personMaxDebt).betrag.add(min);
-
-        String message = personMaxDebt.name + " has to pay " + personMaxCred.getName() + " an amount of " + min;
-        Transaktion notwendigeTransaktion = new Transaktion(message);
-        transaktionen.add(notwendigeTransaktion);
-
-        minimaleTransaktionen(personDebtMap);
-    }
+//    private void minimaleTransaktionen(Map<Person, Schulden> personDebtMap){
+//        Person personMaxCred = getMaxMapBetrag(personDebtMap);
+//        Person personMaxDebt = getMinMapBetrag(personDebtMap);
+//
+//        if(personDebtMap.get(personMaxCred).betrag.isEqualTo(Money.of(0, "EUR"))
+//            && personDebtMap.get(personMaxDebt).betrag.isEqualTo(Money.of(0, "EUR"))){
+//            return;
+//        }
+//
+//        Schulden minSchulden = getPersonWithMinimalNettoBetrag(personMaxDebt.getMaxValue(personMaxDebt),personMaxCred.getMaxValue(personMaxCred));
+//        Person minPerson = minSchulden.zahler;
+//        Money min = minPerson.getMaxValue(minPerson).betrag;
+//        personMaxCred.getMaxValue(personMaxCred).betrag = personMaxCred.getMaxValue(personMaxCred).betrag.subtract(min);
+//        personMaxDebt.getMaxValue(personMaxDebt).betrag = personMaxDebt.getMaxValue(personMaxDebt).betrag.add(min);
+//
+//        String message = personMaxDebt.name + " has to pay " + personMaxCred.getName() + " an amount of " + min;
+//        Transaktion notwendigeTransaktion = new Transaktion(message);
+//        transaktionen.add(notwendigeTransaktion);
+//
+//        minimaleTransaktionen(personDebtMap);
+//    }
 
     public List<Transaktion> getTransaktionen() {
         noetigeMinimaleTransaktion();

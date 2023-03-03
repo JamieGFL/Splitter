@@ -5,7 +5,9 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.verify;
@@ -53,5 +55,37 @@ public class DomainTests {
 //
 //        assertThat(requiredTransaction).isEqualTo(personA.getName()+" has to pay "+ personB.getName() + " an amount of EUR 10.00");
 //    }
+
+
+    @Test
+    @DisplayName("getMaxMapBetrag findet den maximalen Betrag aus der nettoBetraegeMap")
+    void test_03(){
+        Map<Person, Money> nettoBetraege = new HashMap<>();
+        Person personA = new Person("MaxHub", new ArrayList<>(), new ArrayList<>());
+        Person personB = new Person("GitLisa", new ArrayList<>(), new ArrayList<>());
+        Gruppe gruppe = Gruppe.erstelleGruppe(1, personA.getName());
+        gruppe.addPerson(personB.getName());
+
+        nettoBetraege.put(personA, Money.of(100, "EUR"));
+        nettoBetraege.put(personB, Money.of(50, "EUR"));
+
+        assertThat(gruppe.getMaxMapBetrag(nettoBetraege)).isEqualTo(personA);
+    }
+
+    @Test
+    @DisplayName("getMinMapBetrag findet den minimalen Betrag aus der nettoBetraegeMap")
+    void test_04(){
+        Map<Person, Money> nettoBetraege = new HashMap<>();
+        Person personA = new Person("MaxHub", new ArrayList<>(), new ArrayList<>());
+        Person personB = new Person("GitLisa", new ArrayList<>(), new ArrayList<>());
+        Gruppe gruppe = Gruppe.erstelleGruppe(1, personA.getName());
+        gruppe.addPerson(personB.getName());
+
+        nettoBetraege.put(personA, Money.of(100, "EUR"));
+        nettoBetraege.put(personB, Money.of(50, "EUR"));
+
+        assertThat(gruppe.getMinMapBetrag(nettoBetraege)).isEqualTo(personB);
+    }
+
 
 }
