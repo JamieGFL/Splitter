@@ -87,5 +87,23 @@ public class DomainTests {
         assertThat(gruppe.getMinMapBetrag(nettoBetraege)).isEqualTo(personB);
     }
 
+    @Test
+    @DisplayName("Szenario 1: Summieren von Auslagen")
+    void test_05(){
+        Person personA = new Person("MaxHub", new ArrayList<>(), new ArrayList<>());
+        Person personB = new Person("GitLisa", new ArrayList<>(), new ArrayList<>());
+
+
+        Gruppe gruppe = Gruppe.erstelleGruppe(1, personA.getName());
+        gruppe.addPerson(personB.getName());
+
+        gruppe.addAusgabeToPerson("Pizza","MaxHub",List.of("MaxHub","GitLisa"), Money.of(10, "EUR"));
+        gruppe.addAusgabeToPerson("Kino","MaxHub",List.of("MaxHub","GitLisa"), Money.of(20, "EUR"));
+
+        List<Transaktion> transaktionen = gruppe.getTransaktionen();
+
+        assertThat(transaktionen.get(0).transaktionsNachricht()).isEqualTo(personB.getName() + " muss EUR 15.00 an " + personA.getName() + " zahlen");
+    }
+
 
 }
