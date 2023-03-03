@@ -101,8 +101,8 @@ public class Gruppe {
     }
 
     private void minimaleTransaktionen(Map<Person, Schulden> personDebtMap){
-        Person personMaxCred = getPersonWithMaxValue(personDebtMap);
-        Person personMaxDebt = getPersonWithMinValue(personDebtMap);
+        Person personMaxCred = getMaxMapBetrag(personDebtMap);
+        Person personMaxDebt = getMinMapBetrag(personDebtMap);
 
         if(personDebtMap.get(personMaxCred).betrag.isEqualTo(Money.of(0, "EUR"))
             && personDebtMap.get(personMaxDebt).betrag.isEqualTo(Money.of(0, "EUR"))){
@@ -133,14 +133,14 @@ public class Gruppe {
         return Collections.min(personList, personComparator);
     }
 
-    public Person getPersonWithMaxValue(Map<Person, Schulden> personDebtMap){
-        return personDebtMap.entrySet().stream()
-                .max((e1,e2) -> e1.getValue().betrag.getNumber().intValue() > e2.getValue().betrag.getNumber().intValue() ? 1 : -1).get().getKey();
+    public Person getMaxMapBetrag(Map<Person, Money> nettoBetraege){
+        return nettoBetraege.entrySet().stream()
+                .max((e1,e2) -> e1.getValue().getNumber().intValue() > e2.getValue().getNumber().intValue() ? 1 : -1).get().getKey();
     }
 
-    public Person getPersonWithMinValue(Map<Person, Schulden> personDebtMap){
-        return personDebtMap.entrySet().stream()
-                .min((e1,e2) -> e1.getValue().betrag.getNumber().intValue() > e2.getValue().betrag.getNumber().intValue() ? 1 : -1).get().getKey();
+    public Person getMinMapBetrag(Map<Person, Money> nettoBetraege){
+        return nettoBetraege.entrySet().stream()
+                .min((e1,e2) -> e1.getValue().getNumber().intValue() > e2.getValue().getNumber().intValue() ? 1 : -1).get().getKey();
     }
 
     public void addPerson(String newPerson){
