@@ -2,10 +2,7 @@ package propra2.splitter.domain;
 
 import org.javamoney.moneta.Money;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class Gruppe {
     private Integer id;
@@ -112,7 +109,7 @@ public class Gruppe {
             return;
         }
 
-        Schulden minSchulden = personSchuldenMinimum(personMaxDebt.getMaxValue(personMaxDebt),personMaxCred.getMaxValue(personMaxCred));
+        Schulden minSchulden = getPersonWithMinimalNettoBetrag(personMaxDebt.getMaxValue(personMaxDebt),personMaxCred.getMaxValue(personMaxCred));
         Person minPerson = minSchulden.zahler;
         Money min = minPerson.getMaxValue(minPerson).betrag;
         personMaxCred.getMaxValue(personMaxCred).betrag = personMaxCred.getMaxValue(personMaxCred).betrag.subtract(min);
@@ -130,8 +127,10 @@ public class Gruppe {
         return transaktionen;
     }
 
-    private Schulden personSchuldenMinimum(Schulden d1, Schulden d2){
-        return d1.zahlungsEmpfaenger.getMaxValue(d1.zahlungsEmpfaenger).betrag.isLessThan(d2.zahler.getMaxValue(d2.zahler).betrag) ? d1 : d2;
+    private Person getPersonWithMinimalNettoBetrag(Person personA, Person personB){
+        List<Person> personList = List.of(personA, personB);
+        PersonComparator personComparator = new PersonComparator();
+        return Collections.min(personList, personComparator);
     }
 
     public Person getPersonWithMaxValue(Map<Person, Schulden> personDebtMap){
