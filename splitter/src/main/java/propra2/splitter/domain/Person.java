@@ -1,5 +1,7 @@
 package propra2.splitter.domain;
 
+import org.javamoney.moneta.Money;
+
 import java.util.List;
 
 public class Person{
@@ -8,10 +10,12 @@ public class Person{
     List<Ausgabe> ausgaben;
     List<Schulden> schuldenListe;
 
-    public Person(String name, List<Ausgabe> ausgaben, List<Schulden> schuldens) {
+    Money nettoBetrag = Money.of(0,"EUR");
+
+    public Person(String name, List<Ausgabe> ausgaben, List<Schulden> schuldenList) {
         this.name = name;
         this.ausgaben = ausgaben;
-        this.schuldenListe = schuldens;
+        this.schuldenListe = schuldenList;
     }
 
     public Schulden getMaxValue(Person person){
