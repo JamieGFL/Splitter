@@ -17,15 +17,23 @@ public class Ausgabe {
         this.kosten = kosten;
     }
 
-    public Money getAverageCost(){
+    public Money getKosten() {
+        if(personen.contains(ausleger)){
+            return kosten.subtract(getDurchschnittsKosten());
+        }else {
+            return kosten;
+        }
+    }
+
+    public Money getDurchschnittsKosten(){
         return kosten.divide(personen.size());
     }
 
-    public Aktivitaet getActivity() {
+    public Aktivitaet getAktivitaet() {
         return aktivitaet;
     }
 
-    public void setActivityName(Aktivitaet aktivitaet) {
+    public void setAktivitaetName(Aktivitaet aktivitaet) {
         this.aktivitaet = aktivitaet;
     }
 
@@ -43,10 +51,6 @@ public class Ausgabe {
 
     public void setPersonen(List<Person> personen) {
         this.personen = personen;
-    }
-
-    public Money getKosten() {
-        return kosten;
     }
 
     public void setKosten(Money kosten) {

@@ -18,7 +18,7 @@ public class Schulden {
         Money schulden = Money.of(0, "EUR");
         for(Ausgabe ausgabe : zahlungsEmpfaenger.getAusgaben()){
             if(ausgabe.getPersonen().contains(zahler)){
-                schulden = schulden.add(ausgabe.getAverageCost());
+                schulden = schulden.add(ausgabe.getDurchschnittsKosten());
             }
         }
         return schulden;
