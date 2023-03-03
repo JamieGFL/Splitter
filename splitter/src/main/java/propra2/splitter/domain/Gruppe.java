@@ -62,7 +62,7 @@ public class Gruppe {
 
     public void noetigeMinimaleTransaktion(){
         for(int p = 0; p < personen.size(); p++){
-            for(int i = 0; i< personen.get(p).getSchulden().size(); i++){
+            for(int i = 0; i< personen.get(p).getSchuldenListe().size(); i++){
                 personSchuldenMap.put(personen.get(p), personen.get(p).schuldenListe.get(i));
             }
         }

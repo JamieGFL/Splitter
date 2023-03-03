@@ -25,6 +25,22 @@ public class Person{
 //        return person.debts.stream().max((e1,e2) -> e1.amount.getNumber().intValue() > e2.amount.getNumber().intValue() ? 1 : -1).get();
     }
 
+    public void addAusgabe(Ausgabe ausgabe){
+        ausgaben.add(ausgabe);
+    }
+
+    public Ausgabe getAusgabe(int index){
+        return ausgaben.get(index);
+    }
+
+    public void addSchulden(Schulden schulden){
+        schuldenListe.add(schulden);
+    }
+
+    public Schulden getSchulden(int index){
+        return  schuldenListe.get(index);
+    }
+
     public String getName() {
         return name;
     }
@@ -41,11 +57,11 @@ public class Person{
         this.ausgaben = ausgaben;
     }
 
-    public List<Schulden> getSchulden() {
+    public List<Schulden> getSchuldenListe() {
         return schuldenListe;
     }
 
-    public void setSchulden(List<Schulden> schuldens) {
+    public void setSchuldenListe(List<Schulden> schuldens) {
         this.schuldenListe = schuldens;
     }
 
