@@ -2,30 +2,47 @@ package propra2.splitter.domain;
 
 import org.javamoney.moneta.Money;
 
-import java.util.Comparator;
 import java.util.List;
 
 public class Person{
 
     String name;
-    List<Expense> expenses;
-    List<Debt> debts;
+    List<Ausgabe> ausgaben;
+    List<Schulden> schuldenListe;
 
-    public Person(String name, List<Expense> expenses, List<Debt> debts) {
+    Money nettoBetrag = Money.of(0,"EUR");
+
+    public Person(String name, List<Ausgabe> ausgaben, List<Schulden> schuldenList) {
         this.name = name;
-        this.expenses = expenses;
-        this.debts = debts;
+        this.ausgaben = ausgaben;
+        this.schuldenListe = schuldenList;
     }
 
-    public Debt getMaxValue(Person person){
-        Debt maxDebt = debts.get(0);
-        for(Debt debt : debts){
-            if(maxDebt.amount.isLessThan(debt.amount)){
-                maxDebt = debt;
+    public Schulden getMaxValue(Person person){
+        Schulden maxSchulden = schuldenListe.get(0);
+        for(Schulden schulden : schuldenListe){
+            if(maxSchulden.betrag.isLessThan(schulden.betrag)){
+                maxSchulden = schulden;
             }
         }
-        return maxDebt;
+        return maxSchulden;
 //        return person.debts.stream().max((e1,e2) -> e1.amount.getNumber().intValue() > e2.amount.getNumber().intValue() ? 1 : -1).get();
+    }
+
+    public void addAusgabe(Ausgabe ausgabe){
+        ausgaben.add(ausgabe);
+    }
+
+    public Ausgabe getAusgabe(int index){
+        return ausgaben.get(index);
+    }
+
+    public void addSchulden(Schulden schulden){
+        schuldenListe.add(schulden);
+    }
+
+    public Schulden getSchulden(int index){
+        return  schuldenListe.get(index);
     }
 
     public String getName() {
@@ -36,20 +53,28 @@ public class Person{
         this.name = name;
     }
 
-    public List<Expense> getExpenses() {
-        return expenses;
+    public List<Ausgabe> getAusgaben() {
+        return ausgaben;
     }
 
-    public void setExpenses(List<Expense> expenses) {
-        this.expenses = expenses;
+    public void setAusgaben(List<Ausgabe> ausgaben) {
+        this.ausgaben = ausgaben;
     }
 
-    public List<Debt> getDebts() {
-        return debts;
+    public List<Schulden> getSchuldenListe() {
+        return schuldenListe;
     }
 
-    public void setDebts(List<Debt> debts) {
-        this.debts = debts;
+    public void setSchuldenListe(List<Schulden> schuldens) {
+        this.schuldenListe = schuldens;
+    }
+
+    public Money getNettoBetrag() {
+        return nettoBetrag;
+    }
+
+    public void setNettoBetrag(Money nettoBetrag) {
+        this.nettoBetrag = nettoBetrag;
     }
 
     //    @Override
