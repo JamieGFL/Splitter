@@ -65,12 +65,40 @@ public class Gruppe {
         }
     }
 
-
     public void noetigeMinimaleTransaktion(){
-        for(int p = 0; p < personen.size(); p++){
-            for(int i = 0; i< personen.get(p).getSchuldenListe().size(); i++){
-                nettoBetraege.put(personen.get(p), personen.get(p).schuldenListe.get(i));
+        Money[] sumAusgaben = new Money[personen.size()];
+        for(int i = 0; i < personen.size(); i++){
+            sumAusgaben[i] = Money.of(0, "EUR");
+        }
+
+        Money ausgabeSum = Money.of(0, "EUR");
+        for (int i = 0; i < personen.size(); i++) {
+            ausgabeSum = Money.of(0, "EUR");
+            for (int j = 0; j < personen.get(i).getAusgaben().size(); j++){
+                ausgabeSum = ausgabeSum.add(personen.get(i).getAusgabe(j).getKosten());
+                sumAusgaben[i] = ausgabeSum;
             }
+        }
+
+        Money[] sumSchuldenListe = new Money[personen.size()];
+        for(int i = 0; i < personen.size(); i++){
+            sumSchuldenListe[i] = Money.of(0, "EUR");
+        }
+
+        Money schuldenSum = Money.of(0, "EUR");
+        for (int i = 0; i < personen.size(); i++) {
+            schuldenSum = Money.of(0, "EUR");
+            for (int j = 0; j < personen.get(i).getSchuldenListe().size(); j++){
+                schuldenSum = schuldenSum.add(personen.get(i).getSchuldenListe().get(j).getBetrag());
+                sumSchuldenListe[i] = schuldenSum;
+            }
+        }
+
+
+        for(int i = 0; i < personen.size(); i++){
+            Money betrag = sumAusgaben[i].subtract(sumSchuldenListe[i]);
+            nettoBetraege.put(personen.get(i), betrag);
+            personen.get(i).setNettoBetrag(betrag);
         }
         minimaleTransaktionen(nettoBetraege);
     }
