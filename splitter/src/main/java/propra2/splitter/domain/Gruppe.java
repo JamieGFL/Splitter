@@ -34,9 +34,12 @@ public class Gruppe {
     }
 
     public void addAusgabeToPerson(String aktivitaet, String name, List<String> personen2, Money kosten){
-        Person zahlungsEmpfaenger = null;
+
+        geschlossen = true;
+
+        Person zahlungsEmpfaenger = new Person("platzhalter", new ArrayList<>(), new ArrayList<>());
         for(Person person : personen){
-            if(person.name.equals(name)){
+            if(person.getName().equals(name)){
                 zahlungsEmpfaenger = person;
             }
         }
@@ -45,20 +48,21 @@ public class Gruppe {
         List<Person> teilnehmer = new ArrayList<>();
         for(Person person: personen){
             for(String personName : personen2) {
-                if (person.name.equals(personName)) {
+                if (person.getName().equals(personName)) {
                     teilnehmer.add(person);
                 }
             }
         }
 
         // Ausgaben in Person, welche Ausgabe getätigt hat, speichern
-        zahlungsEmpfaenger.ausgaben.add(new Ausgabe(new Aktivitaet(aktivitaet), zahlungsEmpfaenger, teilnehmer, kosten));
+        zahlungsEmpfaenger.addAusgabe(new Ausgabe(new Aktivitaet(aktivitaet), zahlungsEmpfaenger, teilnehmer, kosten));
 
         // speichert Schulden der payers
         for(Person person : teilnehmer) {
-            person.schuldenListe.add(new Schulden(person, zahlungsEmpfaenger));
+            if (!person.equals(zahlungsEmpfaenger)) {
+                person.addSchulden(new Schulden(person, zahlungsEmpfaenger));
+            }
         }
-
     }
 
 
