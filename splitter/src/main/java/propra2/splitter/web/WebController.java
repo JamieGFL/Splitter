@@ -10,6 +10,8 @@ import propra2.splitter.domain.Gruppe;
 import propra2.splitter.service.GruppenOnPage;
 import propra2.splitter.service.GruppenService;
 
+import java.util.UUID;
+
 @Controller
 public class WebController {
 
@@ -30,6 +32,11 @@ public class WebController {
     public String addGruppen(OAuth2AuthenticationToken token){
         Gruppe gruppe = service.addGruppe(token.getPrincipal());
         return "redirect:/";
+    }
+
+    @GetMapping("/gruppe")
+    public String insideGruppe(){
+        return "gruppe";
     }
 
 
