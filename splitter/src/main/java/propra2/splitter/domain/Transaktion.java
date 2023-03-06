@@ -16,7 +16,7 @@ public class Transaktion {
     }
 
     public Transaktion(){
-        this.transaktionsNachricht = "Es sind keine Ausgleichszahlungen notwendig";
+        this.transaktionsNachricht = "Es sind keine Ausgleichszahlungen notwendig.";
     }
 
     public Person getPerson1() {
