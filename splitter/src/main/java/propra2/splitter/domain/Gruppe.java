@@ -164,12 +164,12 @@ public class Gruppe {
     }
 
 
-    public Person getPersonWithMaxNettoBetrag(List<Person> nettoBetraege){
+    private Person getPersonWithMaxNettoBetrag(List<Person> nettoBetraege){
         PersonComparator personComparator = new PersonComparator();
         return Collections.max(nettoBetraege, personComparator);
     }
 
-    public Person getPersonWithMinNettoBetrag(List<Person> nettoBetraege){
+    private Person getPersonWithMinNettoBetrag(List<Person> nettoBetraege){
         PersonComparator personComparator = new PersonComparator();
         return Collections.min(nettoBetraege, personComparator);
     }
