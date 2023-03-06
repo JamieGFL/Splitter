@@ -62,7 +62,7 @@ public class Gruppe {
         // speichert Schulden der payers
         for(Person person : teilnehmer) {
             if (!person.equals(zahlungsEmpfaenger)) {
-                person.getSchuldenListe().add(new Schulden(person, zahlungsEmpfaenger));
+                person.addSchulden(new Schulden(person, zahlungsEmpfaenger));
             }
         }
     }
