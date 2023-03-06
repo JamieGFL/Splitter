@@ -36,6 +36,20 @@ public class DomainTests {
         assertThat(gruppe.getPersonen().get(0)).isEqualTo(personA);
     }
 
+    @Test
+    @DisplayName("Ausgaben kann Person hinzugefügt werden")
+    void test_03(){
+        Person personA = new Person("MaxHub", new ArrayList<>(), new ArrayList<>());
+        Person personB = new Person("GitLisa", new ArrayList<>(), new ArrayList<>());
+        Gruppe gruppe = Gruppe.erstelleGruppe(1, "MaxHub");
+        gruppe.addPerson(personB.getName());
+
+        gruppe.addAusgabeToPerson("Pizza","MaxHub",List.of(personB.getName()), Money.of(20, "EUR"));
+
+        assertThat(gruppe.getPersonen().get(0).getAusgabe(0)).isEqualTo(new Ausgabe(new Aktivitaet("Pizza"), personA, List.of(personB), Money.of(20, "EUR")));
+    }
+
+
 
     @Test
     @DisplayName("Szenario 1: Summieren von Auslagen")

@@ -3,6 +3,7 @@ package propra2.splitter.domain;
 import org.javamoney.moneta.Money;
 
 import java.util.List;
+import java.util.Objects;
 
 public class Ausgabe {
     Aktivitaet aktivitaet;
@@ -23,6 +24,14 @@ public class Ausgabe {
         }else {
             return kosten;
         }
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Ausgabe)) return false;
+        Ausgabe ausgabe = (Ausgabe) o;
+        return Objects.equals(getAktivitaet(), ausgabe.getAktivitaet()) && Objects.equals(getAusleger(), ausgabe.getAusleger()) && Objects.equals(getPersonen(), ausgabe.getPersonen()) && Objects.equals(getKosten(), ausgabe.getKosten());
     }
 
     public Money getDurchschnittsKosten(){
