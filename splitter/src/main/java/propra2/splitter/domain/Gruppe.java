@@ -126,8 +126,8 @@ public class Gruppe {
         }
 
         // Rekursionsabbruch bei fertigem Ausgleich
-        if(personMaxGutschrift.getNettoBetrag().isEqualTo(Money.of(0, "EUR"))
-            && personMaxSchulden.getNettoBetrag().isEqualTo(Money.of(0, "EUR"))){
+        if(personMaxGutschrift.getNettoBetrag().toString().equals("EUR 0.00")
+            && personMaxSchulden.getNettoBetrag().toString().equals("EUR 0.00")){
             return;
         }
 

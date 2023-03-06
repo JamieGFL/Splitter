@@ -161,7 +161,7 @@ public class DomainTests {
 
     @Test
     @DisplayName("Szenario 5: ABC Beispiel aus der Einführung")
-    void test_010(){
+    void test_10(){
         Person personA = new Person("Anton", new ArrayList<>(), new ArrayList<>());
         Person personB = new Person("Berta", new ArrayList<>(), new ArrayList<>());
         Person personC = new Person("Christian", new ArrayList<>(), new ArrayList<>());
@@ -186,7 +186,7 @@ public class DomainTests {
 
     @Test
     @DisplayName("Szenario 6: Beispiel aus der Aufgabenstellung")
-    void test_011(){
+    void test_11(){
         Person personA = new Person("A", new ArrayList<>(), new ArrayList<>());
         Person personB = new Person("B", new ArrayList<>(), new ArrayList<>());
         Person personC = new Person("C", new ArrayList<>(), new ArrayList<>());
@@ -221,7 +221,7 @@ public class DomainTests {
 
     @Test
     @DisplayName("Szenario 7: Minimierung") //Hier wird ein möglicher Ausgleich ausgerechnet (nicht der, der gegeben wurde), ist jedoch nicht minimal
-    void test_012(){
+    void test_12(){
         Person personA = new Person("A", new ArrayList<>(), new ArrayList<>());
         Person personB = new Person("B", new ArrayList<>(), new ArrayList<>());
         Person personC = new Person("C", new ArrayList<>(), new ArrayList<>());
@@ -256,6 +256,28 @@ public class DomainTests {
 
 
         assertThat(transaktionen.stream().map(Transaktion::getTransaktionsNachricht)).containsExactlyInAnyOrder(transaction1, transaction2, transaction3, transaction4, transaction5, transaction6);
+    }
+
+    @Test
+    @DisplayName("Fehlerabstand von 1 Cent")
+    void test_13(){
+        Person personA = new Person("A", new ArrayList<>(), new ArrayList<>());
+        Person personB = new Person("B", new ArrayList<>(), new ArrayList<>());
+        Person personC = new Person("C", new ArrayList<>(), new ArrayList<>());
+
+        Gruppe gruppe = Gruppe.erstelleGruppe(1, personA.getName());
+        gruppe.addPerson(personB.getName());
+        gruppe.addPerson(personC.getName());
+
+        gruppe.addAusgabeToPerson("Hotelzimmer","A",List.of("A","B","C"), Money.of(100, "EUR"));
+
+        String transaktion1 = personB.getName() + " muss EUR 33.33 an "+ personA.getName() + " zahlen";
+        String transaktion2 = personC.getName() + " muss EUR 33.33 an "+ personA.getName() + " zahlen";
+
+        List<Transaktion> transaktionen = gruppe.getTransaktionen();
+
+        assertThat(transaktionen.stream().map(Transaktion::getTransaktionsNachricht))
+                .containsExactlyInAnyOrder(transaktion1, transaktion2);
     }
 
 }
