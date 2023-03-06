@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+    <h1>Willkommen bei Splitter</h1>
+
+    <form method="post" th:action="@{/}">
+        <button></button>
+    </form>
+
+    <table>
+
+        <thead>
+            <tr>
+                <th>Gruppen Nummer</th>
+                <th>Gruender</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <div th:if="${gruppen} != null"></div>
+            <tr th:each="gruppe : ${gruppen.details()}">
+                <td th:text="${gruppe.id}"></td>
+                <td th:text="${gruppe.gruender}"></td>
+            </tr>
+        </tbody>
+
+    </table>
+</body>
+</html>
