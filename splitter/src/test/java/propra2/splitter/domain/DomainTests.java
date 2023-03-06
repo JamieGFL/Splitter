@@ -26,6 +26,16 @@ public class DomainTests {
         assertThat(gruppe.getPersonen().get(1)).isEqualTo(new Person("GitLisa", new ArrayList<>(), new ArrayList<>()));
     }
 
+    @Test
+    @DisplayName("Gruppe wird mit korrektem Gründer erstellt")
+    void test_02(){
+        Person personA = new Person("MaxHub", new ArrayList<>(), new ArrayList<>());
+
+        Gruppe gruppe = Gruppe.erstelleGruppe(1, "MaxHub");
+
+        assertThat(gruppe.getPersonen().get(0)).isEqualTo(personA);
+    }
+
 
     @Test
     @DisplayName("Szenario 1: Summieren von Auslagen")
