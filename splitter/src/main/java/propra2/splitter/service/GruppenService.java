@@ -33,6 +33,6 @@ public class GruppenService {
         return new GruppenOnPage(gruppenDetails);
     }
 
-    
+
 
 }
