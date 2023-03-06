@@ -7,6 +7,7 @@ import propra2.splitter.domain.Person;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class GruppenService {
@@ -31,6 +32,13 @@ public class GruppenService {
     public GruppenOnPage getGruppen(){
         List<GruppenDetails> gruppenDetails = gruppen.stream().map(this::toGruppenDetails).toList();
         return new GruppenOnPage(gruppenDetails);
+    }
+
+    public void addPersonToGruppe(UUID id, String login){
+        Gruppe gruppe = gruppen.stream().filter(e -> e.getId().equals(id)).reduce((e1,e2) -> {
+            throw new IllegalArgumentException();
+        }).get();
+        gruppe.addPerson(login);
     }
 
 
