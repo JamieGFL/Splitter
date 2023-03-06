@@ -54,6 +54,21 @@ public class DomainTests {
     }
 
     @Test
+    @DisplayName("Ausgaben wird auch Gruppe hinzugefügt")
+    void test_03_1(){
+        Person personA = new Person("MaxHub", new ArrayList<>(), new ArrayList<>());
+        Person personB = new Person("GitLisa", new ArrayList<>(), new ArrayList<>());
+        Gruppe gruppe = Gruppe.erstelleGruppe( "MaxHub");
+        gruppe.addPerson(personB.getName());
+
+
+        gruppe.addAusgabeToPerson("Pizza","MaxHub",List.of("GitLisa"), Money.of(20, "EUR"));
+
+
+        assertThat(gruppe.getGruppenAusgaben().get(0)).isEqualTo(new Ausgabe(new Aktivitaet("Pizza"), personA, List.of(personB), Money.of(20, "EUR")));
+    }
+
+    @Test
     @DisplayName("Schulden können Person hinzugefügt werden")
     void test_04(){
         Gruppe gruppe = Gruppe.erstelleGruppe( "MaxHub");

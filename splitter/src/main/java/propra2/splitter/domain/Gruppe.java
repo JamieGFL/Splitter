@@ -7,9 +7,8 @@ import java.util.*;
 public class Gruppe {
     private UUID id;
     private Person gruender;
-    private List<Person> personen
-            ;
-    private List<Ausgabe> gruppenAusgaben;
+    private List<Person> personen;
+    private List<Ausgabe> gruppenAusgaben = new ArrayList<>();
     private List<Transaktion> transaktionen = new ArrayList<>();
     ArrayList<Person> nettoBetraege = new ArrayList<>();
     private Integer groesse = 0;
@@ -57,8 +56,10 @@ public class Gruppe {
         }
 
         // Ausgaben in Person, welche Ausgabe getätigt hat, speichern
-        zahlungsEmpfaenger.addAusgabe(new Ausgabe(new Aktivitaet(aktivitaet), zahlungsEmpfaenger, teilnehmer, kosten));
-
+        Ausgabe newAusgabe = new Ausgabe(new Aktivitaet(aktivitaet), zahlungsEmpfaenger, teilnehmer, kosten);
+        zahlungsEmpfaenger.addAusgabe(newAusgabe);
+        gruppenAusgaben.add(newAusgabe);
+        
         // speichert Schulden der payers
         for(Person person : teilnehmer) {
             if (!person.equals(zahlungsEmpfaenger)) {
@@ -175,6 +176,13 @@ public class Gruppe {
     }
 
 
+    public List<Ausgabe> getGruppenAusgaben() {
+        return gruppenAusgaben;
+    }
+
+    public void setGruppenAusgaben(List<Ausgabe> gruppenAusgaben) {
+        this.gruppenAusgaben = gruppenAusgaben;
+    }
 
     public UUID getId() {
         return id;
