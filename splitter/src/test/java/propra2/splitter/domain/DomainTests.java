@@ -69,7 +69,7 @@ public class DomainTests {
         nettoBetraege.put(personA, Money.of(100, "EUR"));
         nettoBetraege.put(personB, Money.of(50, "EUR"));
 
-        assertThat(gruppe.getMaxMapBetrag(nettoBetraege)).isEqualTo(personA);
+        assertThat(gruppe.getPersonWithMaxNettoBetrag(nettoBetraege)).isEqualTo(personA);
     }
 
     @Test
@@ -84,7 +84,7 @@ public class DomainTests {
         nettoBetraege.put(personA, Money.of(100, "EUR"));
         nettoBetraege.put(personB, Money.of(50, "EUR"));
 
-        assertThat(gruppe.getMinMapBetrag(nettoBetraege)).isEqualTo(personB);
+        assertThat(gruppe.getPersonWithMinNettoBetrag(nettoBetraege)).isEqualTo(personB);
     }
 
     @Test

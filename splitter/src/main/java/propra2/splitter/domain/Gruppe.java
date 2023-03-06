@@ -107,9 +107,9 @@ public class Gruppe {
 
     private void transaktionen(ArrayList<Person> nettoBetraege){
         //Person mit maximalem Netto-Betrag
-        Person personMaxGutschrift = getMaxMapBetrag(nettoBetraege);
+        Person personMaxGutschrift = getPersonWithMaxNettoBetrag(nettoBetraege);
         //Person mit minimalem Netto-Betrag
-        Person personMaxSchulden = getMinMapBetrag(nettoBetraege);
+        Person personMaxSchulden = getPersonWithMinNettoBetrag(nettoBetraege);
 
         //Falls alle Netto-Beträge 0 sind, ist bereits alles ausgeglichen
         for(var entry : nettoBetraege){
@@ -158,14 +158,14 @@ public class Gruppe {
         return Collections.min(personList, personComparator);
     }
 
-    public Person getMaxMapBetrag(Map<Person, Money> nettoBetraege){
-        return nettoBetraege.entrySet().stream()
-                .max((e1,e2) -> e1.getValue().getNumber().intValue() > e2.getValue().getNumber().intValue() ? 1 : -1).get().getKey();
+    public Person getPersonWithMaxNettoBetrag(List<Person> nettoBetraege){
+        PersonComparator personComparator = new PersonComparator();
+        return Collections.max(nettoBetraege, personComparator);
     }
 
-    public Person getMinMapBetrag(Map<Person, Money> nettoBetraege){
-        return nettoBetraege.entrySet().stream()
-                .min((e1,e2) -> e1.getValue().getNumber().intValue() > e2.getValue().getNumber().intValue() ? 1 : -1).get().getKey();
+    public Person getPersonWithMinNettoBetrag(List<Person> nettoBetraege){
+        PersonComparator personComparator = new PersonComparator();
+        return Collections.min(nettoBetraege, personComparator);
     }
 
 
