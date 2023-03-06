@@ -131,18 +131,29 @@ public class Gruppe {
             return;
         }
 
-        // Addiert maximale Schulden auf maximale Gutschriften
-        personMaxGutschrift.setNettoBetrag(personMaxGutschrift.getNettoBetrag().add(personMaxSchulden.getNettoBetrag()));
-        nettoBetraege.add(personMaxGutschrift, personMaxGutschrift.getNettoBetrag());
+        // Minimum der NettoBeträge von personMaxSchulden und personMaxGutschrift wird gespeichert
+        // personMaxSchulden's NettoBetrag muss für diesen Prozess negiert werden, damit Rechnung später korrekt ausgleicht
+        personMaxSchulden.setNettoBetrag(personMaxSchulden.getNettoBetrag().negate());
+        List<Person> list = List.of(personMaxSchulden, personMaxGutschrift);
+        Person minPerson = getPersonWithMinNettoBetrag(list);
+        Money min = minPerson.getNettoBetrag();
+        personMaxSchulden.setNettoBetrag(personMaxSchulden.getNettoBetrag().negate());
 
-        // Bearbeitete Person wird aus der Map genommen
-        nettoBetraege.remove(personMaxSchulden);
+        // NettoBetraege werden verrechnet > Ausgleich
+        personMaxGutschrift.setNettoBetrag(personMaxGutschrift.getNettoBetrag().subtract(min));
+        personMaxSchulden.setNettoBetrag(personMaxSchulden.getNettoBetrag().add(min));
 
-        String message = personMaxSchulden.getName() + " muss " + personMaxSchulden.getNettoBetrag().negate() + " an " + personMaxGutschrift.getName() + " zahlen";
-        personMaxSchulden.setNettoBetrag(personMaxSchulden.getNettoBetrag().subtract(personMaxSchulden.getNettoBetrag()));
+        // Bearbeitete Person wird aus der Liste genommen
+        if(personMaxGutschrift.getNettoBetrag().isEqualTo(Money.of(0.00, "EUR"))){
+            nettoBetraege.remove(personMaxGutschrift);
+        }
+        else if(personMaxSchulden.getNettoBetrag().isEqualTo(Money.of(0.00, "EUR"))){
+            nettoBetraege.remove(personMaxSchulden);
+        }
 
-        Transaktion notwendigeTransaktion = new Transaktion(message);
-        transaktionen.add(notwendigeTransaktion);
+        // Transaktion wird erstellt und gespeichert, Rollen werden vergeben
+        Transaktion newTransaktion = new Transaktion(personMaxSchulden, personMaxGutschrift, min);
+        transaktionen.add(newTransaktion);
 
         transaktionen(nettoBetraege);
     }
@@ -152,11 +163,6 @@ public class Gruppe {
         return transaktionen;
     }
 
-    private Person getPersonWithMinimalNettoBetrag(Person personA, Person personB){
-        List<Person> personList = List.of(personA, personB);
-        PersonComparator personComparator = new PersonComparator();
-        return Collections.min(personList, personComparator);
-    }
 
     public Person getPersonWithMaxNettoBetrag(List<Person> nettoBetraege){
         PersonComparator personComparator = new PersonComparator();
