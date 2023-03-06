@@ -12,6 +12,23 @@
         <button></button>
     </form>
 
-    
+    <table>
+
+        <thead>
+            <tr>
+                <th>Gruppen Nummer</th>
+                <th>Gruender</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <div th:if="${gruppen} != null"></div>
+            <tr th:each="gruppe : ${gruppen.details()}">
+                <td th:text="${gruppe.id}"></td>
+                <td th:text="${gruppe.gruender}"></td>
+            </tr>
+        </tbody>
+
+    </table>
 </body>
 </html>
