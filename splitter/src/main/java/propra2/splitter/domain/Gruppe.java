@@ -5,7 +5,7 @@ import org.javamoney.moneta.Money;
 import java.util.*;
 
 public class Gruppe {
-    private Integer id;
+    private UUID id;
     private Person gruender;
     private List<Person> personen
             ;
@@ -17,17 +17,17 @@ public class Gruppe {
     private boolean ausgleich = false;
     boolean geschlossen = false;
 
-    public Gruppe(Integer id, Person gruender, List<Person> personen) {
-        this.id = id;
+    public Gruppe(Person gruender, List<Person> personen) {
+        this.id = UUID.randomUUID();
         this.gruender = gruender;
         this.personen = personen;
     }
 
-    public static Gruppe erstelleGruppe(Integer id, String gruender){
+    public static Gruppe erstelleGruppe(String gruender){
         Person person = new Person(gruender, new ArrayList<>(), new ArrayList<>());
         List<Person> personen = new ArrayList<>();
         personen.add(person);
-        return new Gruppe(id, person, personen);
+        return new Gruppe(person, personen);
     }
 
     public void addPerson(String newPerson){
@@ -176,11 +176,11 @@ public class Gruppe {
 
 
 
-    public Integer getId() {
+    public UUID getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 

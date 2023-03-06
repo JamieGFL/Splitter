@@ -17,7 +17,7 @@ public class DomainTests {
     @DisplayName("Person kann Gruppe hinzugefügt werden")
     void test_01(){
         Person personA = new Person("MaxHub", new ArrayList<>(), new ArrayList<>());
-        Gruppe gruppe = Gruppe.erstelleGruppe(1, "MaxHub");
+        Gruppe gruppe = Gruppe.erstelleGruppe( "MaxHub");
 
 
         gruppe.addPerson("GitLisa");
@@ -32,7 +32,7 @@ public class DomainTests {
         Person personA = new Person("MaxHub", new ArrayList<>(), new ArrayList<>());
 
 
-        Gruppe gruppe = Gruppe.erstelleGruppe(1, "MaxHub");
+        Gruppe gruppe = Gruppe.erstelleGruppe( "MaxHub");
 
 
         assertThat(gruppe.getPersonen().get(0)).isEqualTo(personA);
@@ -43,7 +43,7 @@ public class DomainTests {
     void test_03(){
         Person personA = new Person("MaxHub", new ArrayList<>(), new ArrayList<>());
         Person personB = new Person("GitLisa", new ArrayList<>(), new ArrayList<>());
-        Gruppe gruppe = Gruppe.erstelleGruppe(1, "MaxHub");
+        Gruppe gruppe = Gruppe.erstelleGruppe( "MaxHub");
         gruppe.addPerson(personB.getName());
 
 
@@ -56,7 +56,7 @@ public class DomainTests {
     @Test
     @DisplayName("Schulden können Person hinzugefügt werden")
     void test_04(){
-        Gruppe gruppe = Gruppe.erstelleGruppe(1, "MaxHub");
+        Gruppe gruppe = Gruppe.erstelleGruppe( "MaxHub");
         gruppe.addPerson("GitLisa");
 
 
@@ -73,7 +73,7 @@ public class DomainTests {
     void test_05(){
         Person personA = new Person("MaxHub", new ArrayList<>(), new ArrayList<>());
         Person personB = new Person("GitLisa", new ArrayList<>(), new ArrayList<>());
-        Gruppe gruppe = Gruppe.erstelleGruppe(1, personA.getName());
+        Gruppe gruppe = Gruppe.erstelleGruppe( personA.getName());
         gruppe.addPerson(personB.getName());
         gruppe.addAusgabeToPerson("Pizza","MaxHub",List.of("MaxHub","GitLisa"), Money.of(10, "EUR"));
         gruppe.addAusgabeToPerson("Kino","MaxHub",List.of("MaxHub","GitLisa"), Money.of(20, "EUR"));
@@ -90,7 +90,7 @@ public class DomainTests {
     void test_06(){
         Person personA = new Person("MaxHub", new ArrayList<>(), new ArrayList<>());
         Person personB = new Person("GitLisa", new ArrayList<>(), new ArrayList<>());
-        Gruppe gruppe = Gruppe.erstelleGruppe(1, personA.getName());
+        Gruppe gruppe = Gruppe.erstelleGruppe( personA.getName());
         gruppe.addPerson(personB.getName());
         gruppe.addAusgabeToPerson("Pizza","MaxHub",List.of("MaxHub","GitLisa"), Money.of(10, "EUR"));
         gruppe.addAusgabeToPerson("Kino","GitLisa",List.of("MaxHub","GitLisa"), Money.of(20, "EUR"));
@@ -107,7 +107,7 @@ public class DomainTests {
     void test_07(){
         Person personA = new Person("MaxHub", new ArrayList<>(), new ArrayList<>());
         Person personB = new Person("GitLisa", new ArrayList<>(), new ArrayList<>());
-        Gruppe gruppe = Gruppe.erstelleGruppe(1, personA.getName());
+        Gruppe gruppe = Gruppe.erstelleGruppe( personA.getName());
         gruppe.addPerson(personB.getName());
         gruppe.addAusgabeToPerson("Pizza","MaxHub",List.of("GitLisa"), Money.of(10, "EUR"));
         gruppe.addAusgabeToPerson("Kino","MaxHub",List.of("MaxHub","GitLisa"), Money.of(20, "EUR"));
@@ -125,7 +125,7 @@ public class DomainTests {
         Person personA = new Person("MaxHub", new ArrayList<>(), new ArrayList<>());
         Person personB = new Person("GitLisa", new ArrayList<>(), new ArrayList<>());
         Person personC = new Person("ErixHub", new ArrayList<>(), new ArrayList<>());
-        Gruppe gruppe = Gruppe.erstelleGruppe(1, personA.getName());
+        Gruppe gruppe = Gruppe.erstelleGruppe( personA.getName());
         gruppe.addPerson(personB.getName());
         gruppe.addPerson(personC.getName());
         gruppe.addAusgabeToPerson("Pizza","MaxHub",List.of("MaxHub","GitLisa"), Money.of(10, "EUR"));
@@ -145,7 +145,7 @@ public class DomainTests {
         Person personA = new Person("MaxHub", new ArrayList<>(), new ArrayList<>());
         Person personB = new Person("GitLisa", new ArrayList<>(), new ArrayList<>());
         Person personC = new Person("ErixHub", new ArrayList<>(), new ArrayList<>());
-        Gruppe gruppe = Gruppe.erstelleGruppe(1, personA.getName());
+        Gruppe gruppe = Gruppe.erstelleGruppe( personA.getName());
         gruppe.addPerson(personB.getName());
         gruppe.addPerson(personC.getName());
         gruppe.addAusgabeToPerson("Pizza","MaxHub",List.of("MaxHub","GitLisa"), Money.of(10, "EUR"));
@@ -165,7 +165,7 @@ public class DomainTests {
         Person personA = new Person("Anton", new ArrayList<>(), new ArrayList<>());
         Person personB = new Person("Berta", new ArrayList<>(), new ArrayList<>());
         Person personC = new Person("Christian", new ArrayList<>(), new ArrayList<>());
-        Gruppe gruppe = Gruppe.erstelleGruppe(1, personA.getName());
+        Gruppe gruppe = Gruppe.erstelleGruppe( personA.getName());
         gruppe.addPerson(personB.getName());
         gruppe.addPerson(personC.getName());
         gruppe.addAusgabeToPerson("Pizza","Anton",List.of("Anton","Berta","Christian"), Money.of(60, "EUR"));
@@ -193,7 +193,7 @@ public class DomainTests {
         Person personD = new Person("D", new ArrayList<>(), new ArrayList<>());
         Person personE = new Person("E", new ArrayList<>(), new ArrayList<>());
         Person personF = new Person("F", new ArrayList<>(), new ArrayList<>());
-        Gruppe gruppe = Gruppe.erstelleGruppe(1, personA.getName());
+        Gruppe gruppe = Gruppe.erstelleGruppe( personA.getName());
         gruppe.addPerson(personB.getName());
         gruppe.addPerson(personC.getName());
         gruppe.addPerson(personD.getName());
@@ -229,7 +229,7 @@ public class DomainTests {
         Person personE = new Person("E", new ArrayList<>(), new ArrayList<>());
         Person personF = new Person("F", new ArrayList<>(), new ArrayList<>());
         Person personG = new Person("G", new ArrayList<>(), new ArrayList<>());
-        Gruppe gruppe = Gruppe.erstelleGruppe(1, personA.getName());
+        Gruppe gruppe = Gruppe.erstelleGruppe( personA.getName());
         gruppe.addPerson(personB.getName());
         gruppe.addPerson(personC.getName());
         gruppe.addPerson(personD.getName());
@@ -265,7 +265,7 @@ public class DomainTests {
         Person personB = new Person("B", new ArrayList<>(), new ArrayList<>());
         Person personC = new Person("C", new ArrayList<>(), new ArrayList<>());
 
-        Gruppe gruppe = Gruppe.erstelleGruppe(1, personA.getName());
+        Gruppe gruppe = Gruppe.erstelleGruppe( personA.getName());
         gruppe.addPerson(personB.getName());
         gruppe.addPerson(personC.getName());
 
