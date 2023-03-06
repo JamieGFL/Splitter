@@ -11,10 +11,10 @@ public class Gruppe {
             ;
     private List<Ausgabe> gruppenAusgaben;
     private List<Transaktion> transaktionen = new ArrayList<>();
-    Map<Person, Money> nettoBetraege = new HashMap<>();
+    ArrayList<Person> nettoBetraege = new ArrayList<>();
     private Integer groesse = 0;
 
-    private boolean ausgleich;
+    private boolean ausgleich = false;
     boolean geschlossen = false;
 
     public Gruppe(Integer id, Person gruender, List<Person> personen) {
@@ -28,6 +28,11 @@ public class Gruppe {
         List<Person> personen = new ArrayList<>();
         personen.add(person);
         return new Gruppe(id, person, personen);
+    }
+
+    public void addPerson(String newPerson){
+        Person person = new Person(newPerson, new ArrayList<>(), new ArrayList<>());
+        personen.add(person);
     }
 
     public void addAusgabeToPerson(String aktivitaet, String name, List<String> personen2, Money kosten){
@@ -62,7 +67,7 @@ public class Gruppe {
         }
     }
 
-    public void noetigeMinimaleTransaktion(){
+    public void noetigeTransaktionen(){
         Money[] sumAusgaben = new Money[personen.size()];
         for(int i = 0; i < personen.size(); i++){
             sumAusgaben[i] = Money.of(0, "EUR");
@@ -94,30 +99,30 @@ public class Gruppe {
 
         for(int i = 0; i < personen.size(); i++){
             Money betrag = sumAusgaben[i].subtract(sumSchuldenListe[i]);
-            nettoBetraege.put(personen.get(i), betrag);
             personen.get(i).setNettoBetrag(betrag);
+            nettoBetraege.add(personen.get(i));
         }
-        minimaleTransaktionen(nettoBetraege);
+        transaktionen(nettoBetraege);
     }
 
-    private void minimaleTransaktionen(Map<Person, Money> nettoBetraegeMap){
+    private void transaktionen(ArrayList<Person> nettoBetraege){
         //Person mit maximalem Netto-Betrag
-        Person personMaxGutschrift = getMaxMapBetrag(nettoBetraegeMap);
+        Person personMaxGutschrift = getMaxMapBetrag(nettoBetraege);
         //Person mit minimalem Netto-Betrag
-        Person personMaxSchulden = getMinMapBetrag(nettoBetraegeMap);
+        Person personMaxSchulden = getMinMapBetrag(nettoBetraege);
 
         //Falls alle Netto-Beträge 0 sind, ist bereits alles ausgeglichen
-        for(var entry : nettoBetraegeMap.entrySet()){
-            if(entry.getValue().isZero()){
+        for(var entry : nettoBetraege){
+            if(entry.getNettoBetrag().isZero()){
                 ausgleich = true;
             }
-            if(!entry.getValue().isZero()){
+            if(!entry.getNettoBetrag().isZero()){
                 ausgleich = false;
                 break;
             }
         }
         if(ausgleich && transaktionen.isEmpty()){
-            transaktionen.add(new Transaktion("Es sind keine Ausgleichszahlungen notwendig."));
+            transaktionen.add(new Transaktion());
         }
 
         // Rekursionsabbruch bei fertigem Ausgleich
@@ -128,10 +133,10 @@ public class Gruppe {
 
         // Addiert maximale Schulden auf maximale Gutschriften
         personMaxGutschrift.setNettoBetrag(personMaxGutschrift.getNettoBetrag().add(personMaxSchulden.getNettoBetrag()));
-        nettoBetraegeMap.put(personMaxGutschrift, personMaxGutschrift.getNettoBetrag());
+        nettoBetraege.add(personMaxGutschrift, personMaxGutschrift.getNettoBetrag());
 
         // Bearbeitete Person wird aus der Map genommen
-        nettoBetraegeMap.remove(personMaxSchulden);
+        nettoBetraege.remove(personMaxSchulden);
 
         String message = personMaxSchulden.getName() + " muss " + personMaxSchulden.getNettoBetrag().negate() + " an " + personMaxGutschrift.getName() + " zahlen";
         personMaxSchulden.setNettoBetrag(personMaxSchulden.getNettoBetrag().subtract(personMaxSchulden.getNettoBetrag()));
@@ -139,11 +144,11 @@ public class Gruppe {
         Transaktion notwendigeTransaktion = new Transaktion(message);
         transaktionen.add(notwendigeTransaktion);
 
-        minimaleTransaktionen(nettoBetraegeMap);
+        transaktionen(nettoBetraege);
     }
 
     public List<Transaktion> getTransaktionen() {
-        noetigeMinimaleTransaktion();
+        noetigeTransaktionen();
         return transaktionen;
     }
 
@@ -163,10 +168,7 @@ public class Gruppe {
                 .min((e1,e2) -> e1.getValue().getNumber().intValue() > e2.getValue().getNumber().intValue() ? 1 : -1).get().getKey();
     }
 
-    public void addPerson(String newPerson){
-        Person person = new Person(newPerson, new ArrayList<>(), new ArrayList<>());
-        personen.add(person);
-    }
+
 
     public Integer getId() {
         return id;
