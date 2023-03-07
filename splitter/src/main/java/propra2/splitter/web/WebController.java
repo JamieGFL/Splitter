@@ -2,6 +2,7 @@ package propra2.splitter.web;
 
 
 import jakarta.validation.Valid;
+import org.javamoney.moneta.Money;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -48,6 +49,7 @@ public class WebController {
         Gruppe gruppe = service.getSingleGruppe(id);
         model.addAttribute("gruppe", gruppe);
 
+
         return "gruppe";
     }
 
@@ -69,8 +71,9 @@ public class WebController {
 
 
     @PostMapping("/gruppe/add/ausgaben")
-    public String addAusgabeToGruppe(@RequestParam(name = "id", value = "id", required = false) UUID id){
+    public String addAusgabeToGruppe(@RequestParam(name = "id", value = "id", required = false) UUID id, String aktivitaet ,String zahler, String teilnehmer, Double betrag){
 
+        service.addAusgabeToGruppe(id,aktivitaet,zahler,teilnehmer,betrag);
 
         return "redirect:/gruppe?id="+id;
     }

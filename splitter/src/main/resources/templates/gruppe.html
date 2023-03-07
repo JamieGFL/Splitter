@@ -41,6 +41,40 @@
 </table>
 
 
+<form method="post" th:action="@{/gruppe/add/ausgaben}" >
+  <input type="hidden" name="id" value="id" th:value="${gruppe.id}">
+  <input type="text" name="aktivitaet">
+  <input type="text" name="zahler">
+  <input type="text" name="teilnehmer">
+  <input type="text" name="betrag">
+
+  <button class="btn btn-dark"  >Ausgabe hinzufügen</button>
+
+</form>
+
+
+<table class="table table-bordered table-dark w-25">
+
+  <thead>
+  <tr>
+    <th>Ausgaben</th>
+  </tr>
+  </thead>
+  <tbody>
+
+  <div th:if="${gruppe} != null">
+    <tr th:each="person : ${gruppe.gruppenAusgaben}">
+      <td th:text="${person.getAktivitaet().name()}"> </td>
+      <td th:text="${person.getAusleger().name}"> </td>
+      <td th:text="${person.personen.stream()}"> </td>
+      <td th:text="${person.getKosten()}"> </td>
+    </tr>
+  </div>
+
+  </tbody>
+
+</table>
+
 <a href="/"> zurück zur Gruppen-übersicht </a>
 
 </body>

@@ -47,10 +47,10 @@ public class GruppenService {
         gruppe.addPerson(login);
     }
 
-    public void addAusgabeToGruppe(UUID id, String aktivitaet, String login,String teilnehmer ,Money cost){
+    public void addAusgabeToGruppe(UUID id, String aktivitaet, String login,String teilnehmer ,Double cost){
         Gruppe gruppe = getSingleGruppe(id);
 
-        gruppe.addAusgabeToPerson(aktivitaet,login, Arrays.stream(teilnehmer.split(", ")).toList(),cost);
+        gruppe.addAusgabeToPerson(aktivitaet,login, Arrays.stream(teilnehmer.split(", ")).toList(),Money.of(cost, "EUR"));
     }
 
 
