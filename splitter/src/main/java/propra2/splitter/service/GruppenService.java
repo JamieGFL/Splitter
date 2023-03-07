@@ -1,11 +1,13 @@
 package propra2.splitter.service;
 
+import org.javamoney.moneta.Money;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 import propra2.splitter.domain.Gruppe;
 import propra2.splitter.domain.Person;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
@@ -45,6 +47,11 @@ public class GruppenService {
         gruppe.addPerson(login);
     }
 
+    public void addAusgabeToGruppe(UUID id, String aktivitaet, String login,String teilnehmer ,Money cost){
+        Gruppe gruppe = getSingleGruppe(id);
+
+        gruppe.addAusgabeToPerson(aktivitaet,login, Arrays.stream(teilnehmer.split(", ")).toList(),cost);
+    }
 
 
 }

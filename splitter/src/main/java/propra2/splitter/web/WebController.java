@@ -68,4 +68,12 @@ public class WebController {
     }
 
 
+    @PostMapping("/gruppe/add/ausgaben")
+    public String addAusgabeToGruppe(@RequestParam(name = "id", value = "id", required = false) UUID id){
+
+
+        return "redirect:/gruppe?id="+id;
+    }
+
+
 }
