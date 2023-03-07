@@ -6,6 +6,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import propra2.splitter.domain.Gruppe;
 import propra2.splitter.service.GruppenOnPage;
 import propra2.splitter.service.GruppenService;
@@ -38,7 +39,11 @@ public class WebController {
     }
 
     @GetMapping("/gruppe")
-    public String insideGruppe(){
+    public String insideGruppe(Model model,
+                               @RequestParam(name = "id", value = "id", required = false) UUID id){
+        Gruppe gruppe = service.getSingleGruppe(id);
+        model.addAttribute("gruppe", gruppe);
+
         return "gruppe";
     }
 
