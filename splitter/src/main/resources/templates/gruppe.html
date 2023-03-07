@@ -69,8 +69,8 @@
     <tr th:each="person : ${gruppe.gruppenAusgaben}">
       <td th:text="${person.getAktivitaet().name()}"> </td>
       <td th:text="${person.getAusleger().name}"> </td>
-      <td th:text="${person.getPersonenNamen()}"> </td>
-      <td th:text="${person.getKosten()}"> </td>
+      <td th:text="${person.getPersonenNamen()}"></td>
+      <td th:text="${person.getGesamtKosten()}"> </td>
     </tr>
   </div>
 

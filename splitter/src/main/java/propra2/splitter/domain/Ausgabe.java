@@ -61,6 +61,10 @@ public class Ausgabe {
         return personen.stream().map(Person::getName).toList();
     }
 
+    public Money getGesamtKosten(){
+        return kosten;
+    }
+
     public void setPersonen(List<Person> personen) {
         this.personen = personen;
     }
