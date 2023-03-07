@@ -57,7 +57,10 @@
 
   <thead>
   <tr>
-    <th>Ausgaben</th>
+    <th>Aktivität</th>
+    <th>Zahler</th>
+    <th>Teilnehmer</th>
+    <th>Betrag</th>
   </tr>
   </thead>
   <tbody>
@@ -66,7 +69,7 @@
     <tr th:each="person : ${gruppe.gruppenAusgaben}">
       <td th:text="${person.getAktivitaet().name()}"> </td>
       <td th:text="${person.getAusleger().name}"> </td>
-      <td th:text="${person.personen.stream()}"> </td>
+      <td th:text="${person.getPersonen()}"> </td>
       <td th:text="${person.getKosten()}"> </td>
     </tr>
   </div>
