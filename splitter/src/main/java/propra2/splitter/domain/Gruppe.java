@@ -68,7 +68,7 @@ public class Gruppe {
         }
     }
 
-    public void noetigeTransaktionen(){
+    public void berechneTransaktionen(){
         Money[] sumAusgaben = new Money[personen.size()];
         for(int i = 0; i < personen.size(); i++){
             sumAusgaben[i] = Money.of(0, "EUR");
@@ -160,8 +160,11 @@ public class Gruppe {
     }
 
     public List<Transaktion> getTransaktionen() {
-        noetigeTransaktionen();
         return transaktionen;
+    }
+
+    public List<String> getTransaktionsNachrichten(){
+        return transaktionen.stream().map(Transaktion::getTransaktionsNachricht).toList();
     }
 
 
