@@ -2,7 +2,6 @@ package propra2.splitter.web;
 
 
 import jakarta.validation.Valid;
-import org.javamoney.moneta.Money;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -49,7 +48,7 @@ public class WebController {
         Gruppe gruppe = service.getSingleGruppe(id);
         model.addAttribute("gruppe", gruppe);
 
-
+        model.addAttribute("transaktionen", gruppe.getTransaktionen());
         return "gruppe";
     }
 
@@ -81,7 +80,7 @@ public class WebController {
     @PostMapping("/gruppe/add/ausgaben/transaktion")
     public String berechneTransaktion(@RequestParam(name = "id", value = "id", required = false) UUID id){
 
-        service.trasnaktionBerechnen(id);
+        service.transaktionBerechnen(id);
 
         return "redirect:/gruppe?id="+id;
     }

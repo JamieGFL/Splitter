@@ -78,6 +78,38 @@
 
 </table>
 
+
+
+
+<form method="post" th:action="@{/gruppe/add/ausgaben/transaktion}" >
+  <input type="hidden" name="id" value="id" th:value="${gruppe.id}">
+
+
+  <button class="btn btn-dark"> Transaktion berechnen </button>
+
+</form>
+
+
+<table class="table table-bordered table-dark w-25">
+
+  <thead>
+  <tr>
+    <th>Transaktionen</th>
+
+  </tr>
+  </thead>
+  <tbody>
+
+  <div th:if="${transaktionen} != null">
+    <tr th:each="transaktion : ${transaktionen}">
+      <td th:text="${transaktion.getTransaktionsNachricht()}"></td>
+    </tr>
+  </div>
+
+  </tbody>
+
+</table>
+
 <a href="/"> zurück zur Gruppen-übersicht </a>
 
 </body>
