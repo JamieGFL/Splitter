@@ -100,9 +100,9 @@
   </thead>
   <tbody>
 
-  <div th:if="${transaktionen} != null">
-    <tr th:each="transaktion : ${transaktionen}">
-      <td th:text="${transaktion.getTransaktionsNachricht()}"></td>
+  <div th:if="${gruppe} != null">
+    <tr th:each="transaktion : ${gruppe.getTransaktionen()}">
+      <td th:text="${transaktion}"></td>
     </tr>
   </div>
 

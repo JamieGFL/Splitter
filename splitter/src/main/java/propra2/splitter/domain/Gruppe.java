@@ -163,6 +163,10 @@ public class Gruppe {
         return transaktionen;
     }
 
+    public List<String> getTransaktionsNachricht(){
+        return transaktionen.stream().map(Transaktion::getTransaktionsNachricht).toList();
+    }
+
 
     private Person getPersonWithMaxNettoBetrag(List<Person> nettoBetraege){
         PersonComparator personComparator = new PersonComparator();

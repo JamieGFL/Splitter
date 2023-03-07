@@ -48,7 +48,6 @@ public class WebController {
         Gruppe gruppe = service.getSingleGruppe(id);
         model.addAttribute("gruppe", gruppe);
 
-        model.addAttribute("transaktionen", gruppe.getTransaktionen());
         return "gruppe";
     }
 
