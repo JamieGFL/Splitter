@@ -57,6 +57,9 @@ public class Ausgabe {
     public List<Person> getPersonen() {
         return personen;
     }
+    public List<String> getPersonenNamen() {
+        return personen.stream().map(Person::getName).toList();
+    }
 
     public void setPersonen(List<Person> personen) {
         this.personen = personen;
