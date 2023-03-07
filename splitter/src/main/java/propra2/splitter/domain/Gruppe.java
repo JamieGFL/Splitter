@@ -5,29 +5,33 @@ import org.javamoney.moneta.Money;
 import java.util.*;
 
 public class Gruppe {
-    private Integer id;
+    private UUID id;
     private Person gruender;
-    private List<Person> personen
-            ;
-    private List<Ausgabe> gruppenAusgaben;
+    private List<Person> personen;
+    private List<Ausgabe> gruppenAusgaben = new ArrayList<>();
     private List<Transaktion> transaktionen = new ArrayList<>();
-    Map<Person, Money> nettoBetraege = new HashMap<>();
+    ArrayList<Person> nettoBetraege = new ArrayList<>();
     private Integer groesse = 0;
 
-    private boolean ausgleich;
+    private boolean ausgleich = false;
     boolean geschlossen = false;
 
-    public Gruppe(Integer id, Person gruender, List<Person> personen) {
-        this.id = id;
+    public Gruppe(Person gruender, List<Person> personen) {
+        this.id = UUID.randomUUID();
         this.gruender = gruender;
         this.personen = personen;
     }
 
-    public static Gruppe erstelleGruppe(Integer id, String gruender){
+    public static Gruppe erstelleGruppe(String gruender){
         Person person = new Person(gruender, new ArrayList<>(), new ArrayList<>());
         List<Person> personen = new ArrayList<>();
         personen.add(person);
-        return new Gruppe(id, person, personen);
+        return new Gruppe(person, personen);
+    }
+
+    public void addPerson(String newPerson){
+        Person person = new Person(newPerson, new ArrayList<>(), new ArrayList<>());
+        personen.add(person);
     }
 
     public void addAusgabeToPerson(String aktivitaet, String name, List<String> personen2, Money kosten){
@@ -52,17 +56,19 @@ public class Gruppe {
         }
 
         // Ausgaben in Person, welche Ausgabe getätigt hat, speichern
-        zahlungsEmpfaenger.addAusgabe(new Ausgabe(new Aktivitaet(aktivitaet), zahlungsEmpfaenger, teilnehmer, kosten));
-
+        Ausgabe newAusgabe = new Ausgabe(new Aktivitaet(aktivitaet), zahlungsEmpfaenger, teilnehmer, kosten);
+        zahlungsEmpfaenger.addAusgabe(newAusgabe);
+        gruppenAusgaben.add(newAusgabe);
+        
         // speichert Schulden der payers
         for(Person person : teilnehmer) {
             if (!person.equals(zahlungsEmpfaenger)) {
-                person.getSchuldenListe().add(new Schulden(person, zahlungsEmpfaenger));
+                person.addSchulden(new Schulden(person, zahlungsEmpfaenger));
             }
         }
     }
 
-    public void noetigeMinimaleTransaktion(){
+    public void noetigeTransaktionen(){
         Money[] sumAusgaben = new Money[personen.size()];
         for(int i = 0; i < personen.size(); i++){
             sumAusgaben[i] = Money.of(0, "EUR");
@@ -94,85 +100,95 @@ public class Gruppe {
 
         for(int i = 0; i < personen.size(); i++){
             Money betrag = sumAusgaben[i].subtract(sumSchuldenListe[i]);
-            nettoBetraege.put(personen.get(i), betrag);
             personen.get(i).setNettoBetrag(betrag);
+            nettoBetraege.add(personen.get(i));
         }
-        minimaleTransaktionen(nettoBetraege);
+        transaktionen(nettoBetraege);
     }
 
-    private void minimaleTransaktionen(Map<Person, Money> nettoBetraegeMap){
+    private void transaktionen(ArrayList<Person> nettoBetraege){
         //Person mit maximalem Netto-Betrag
-        Person personMaxGutschrift = getMaxMapBetrag(nettoBetraegeMap);
+        Person personMaxGutschrift = getPersonWithMaxNettoBetrag(nettoBetraege);
         //Person mit minimalem Netto-Betrag
-        Person personMaxSchulden = getMinMapBetrag(nettoBetraegeMap);
+        Person personMaxSchulden = getPersonWithMinNettoBetrag(nettoBetraege);
 
         //Falls alle Netto-Beträge 0 sind, ist bereits alles ausgeglichen
-        for(var entry : nettoBetraegeMap.entrySet()){
-            if(entry.getValue().isZero()){
+        for(var entry : nettoBetraege){
+            if(entry.getNettoBetrag().isZero()){
                 ausgleich = true;
             }
-            if(!entry.getValue().isZero()){
+            if(!entry.getNettoBetrag().isZero()){
                 ausgleich = false;
                 break;
             }
         }
         if(ausgleich && transaktionen.isEmpty()){
-            transaktionen.add(new Transaktion("Es sind keine Ausgleichszahlungen notwendig."));
+            transaktionen.add(new Transaktion());
         }
 
         // Rekursionsabbruch bei fertigem Ausgleich
-        if(personMaxGutschrift.getNettoBetrag().isEqualTo(Money.of(0, "EUR"))
-            && personMaxSchulden.getNettoBetrag().isEqualTo(Money.of(0, "EUR"))){
+        if(personMaxGutschrift.getNettoBetrag().toString().equals("EUR 0.00")
+            && personMaxSchulden.getNettoBetrag().toString().equals("EUR 0.00")){
             return;
         }
 
-        // Addiert maximale Schulden auf maximale Gutschriften
-        personMaxGutschrift.setNettoBetrag(personMaxGutschrift.getNettoBetrag().add(personMaxSchulden.getNettoBetrag()));
-        nettoBetraegeMap.put(personMaxGutschrift, personMaxGutschrift.getNettoBetrag());
+        // Minimum der NettoBeträge von personMaxSchulden und personMaxGutschrift wird gespeichert
+        // personMaxSchulden's NettoBetrag muss für diesen Prozess negiert werden, damit Rechnung später korrekt ausgleicht
+        personMaxSchulden.setNettoBetrag(personMaxSchulden.getNettoBetrag().negate());
+        List<Person> list = List.of(personMaxSchulden, personMaxGutschrift);
+        Person minPerson = getPersonWithMinNettoBetrag(list);
+        Money min = minPerson.getNettoBetrag();
+        personMaxSchulden.setNettoBetrag(personMaxSchulden.getNettoBetrag().negate());
 
-        // Bearbeitete Person wird aus der Map genommen
-        nettoBetraegeMap.remove(personMaxSchulden);
+        // NettoBetraege werden verrechnet > Ausgleich
+        personMaxGutschrift.setNettoBetrag(personMaxGutschrift.getNettoBetrag().subtract(min));
+        personMaxSchulden.setNettoBetrag(personMaxSchulden.getNettoBetrag().add(min));
 
-        String message = personMaxSchulden.getName() + " muss " + personMaxSchulden.getNettoBetrag().negate() + " an " + personMaxGutschrift.getName() + " zahlen";
-        personMaxSchulden.setNettoBetrag(personMaxSchulden.getNettoBetrag().subtract(personMaxSchulden.getNettoBetrag()));
+        // Bearbeitete Person wird aus der Liste genommen
+        if(personMaxGutschrift.getNettoBetrag().isEqualTo(Money.of(0.00, "EUR"))){
+            nettoBetraege.remove(personMaxGutschrift);
+        }
+        else if(personMaxSchulden.getNettoBetrag().isEqualTo(Money.of(0.00, "EUR"))){
+            nettoBetraege.remove(personMaxSchulden);
+        }
 
-        Transaktion notwendigeTransaktion = new Transaktion(message);
-        transaktionen.add(notwendigeTransaktion);
+        // Transaktion wird erstellt und gespeichert, Rollen werden vergeben
+        Transaktion newTransaktion = new Transaktion(personMaxSchulden, personMaxGutschrift, min);
+        transaktionen.add(newTransaktion);
 
-        minimaleTransaktionen(nettoBetraegeMap);
+        transaktionen(nettoBetraege);
     }
 
     public List<Transaktion> getTransaktionen() {
-        noetigeMinimaleTransaktion();
+        noetigeTransaktionen();
         return transaktionen;
     }
 
-    private Person getPersonWithMinimalNettoBetrag(Person personA, Person personB){
-        List<Person> personList = List.of(personA, personB);
+
+    private Person getPersonWithMaxNettoBetrag(List<Person> nettoBetraege){
         PersonComparator personComparator = new PersonComparator();
-        return Collections.min(personList, personComparator);
+        return Collections.max(nettoBetraege, personComparator);
     }
 
-    public Person getMaxMapBetrag(Map<Person, Money> nettoBetraege){
-        return nettoBetraege.entrySet().stream()
-                .max((e1,e2) -> e1.getValue().getNumber().intValue() > e2.getValue().getNumber().intValue() ? 1 : -1).get().getKey();
+    private Person getPersonWithMinNettoBetrag(List<Person> nettoBetraege){
+        PersonComparator personComparator = new PersonComparator();
+        return Collections.min(nettoBetraege, personComparator);
     }
 
-    public Person getMinMapBetrag(Map<Person, Money> nettoBetraege){
-        return nettoBetraege.entrySet().stream()
-                .min((e1,e2) -> e1.getValue().getNumber().intValue() > e2.getValue().getNumber().intValue() ? 1 : -1).get().getKey();
+
+    public List<Ausgabe> getGruppenAusgaben() {
+        return gruppenAusgaben;
     }
 
-    public void addPerson(String newPerson){
-        Person person = new Person(newPerson, new ArrayList<>(), new ArrayList<>());
-        personen.add(person);
+    public void setGruppenAusgaben(List<Ausgabe> gruppenAusgaben) {
+        this.gruppenAusgaben = gruppenAusgaben;
     }
 
-    public Integer getId() {
+    public UUID getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 

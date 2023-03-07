@@ -2,6 +2,8 @@ package propra2.splitter.domain;
 
 import org.javamoney.moneta.Money;
 
+import java.util.Objects;
+
 public class Schulden {
 
     Person zahler;
@@ -22,6 +24,14 @@ public class Schulden {
             }
         }
         return schulden;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Schulden)) return false;
+        Schulden schulden = (Schulden) o;
+        return Objects.equals(getZahler(), schulden.getZahler()) && Objects.equals(getZahlungsEmpfaenger(), schulden.getZahlungsEmpfaenger()) && Objects.equals(getBetrag(), schulden.getBetrag());
     }
 
     public Person getZahler() {

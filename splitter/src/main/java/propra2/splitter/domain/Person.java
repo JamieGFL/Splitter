@@ -3,6 +3,7 @@ package propra2.splitter.domain;
 import org.javamoney.moneta.Money;
 
 import java.util.List;
+import java.util.Objects;
 
 public class Person{
 
@@ -18,15 +19,12 @@ public class Person{
         this.schuldenListe = schuldenList;
     }
 
-    public Schulden getMaxValue(Person person){
-        Schulden maxSchulden = schuldenListe.get(0);
-        for(Schulden schulden : schuldenListe){
-            if(maxSchulden.betrag.isLessThan(schulden.betrag)){
-                maxSchulden = schulden;
-            }
-        }
-        return maxSchulden;
-//        return person.debts.stream().max((e1,e2) -> e1.amount.getNumber().intValue() > e2.amount.getNumber().intValue() ? 1 : -1).get();
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Person)) return false;
+        Person person = (Person) o;
+        return getName().equals(person.getName());
     }
 
     public void addAusgabe(Ausgabe ausgabe){
