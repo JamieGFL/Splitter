@@ -163,7 +163,7 @@ public class Gruppe {
         return transaktionen;
     }
 
-    public List<String> getTransaktionsNachricht(){
+    public List<String> getTransaktionsNachrichten(){
         return transaktionen.stream().map(Transaktion::getTransaktionsNachricht).toList();
     }
 

@@ -98,10 +98,10 @@
 
   </tr>
   </thead>
-  <tbody>
+  <tbody th:remove="all-but-first" >
 
   <div th:if="${gruppe} != null">
-    <tr th:each="transaktion : ${gruppe.getTransaktionen()}">
+    <tr th:each="transaktion : ${gruppe.getTransaktionsNachrichten()}">
       <td th:text="${transaktion}"></td>
     </tr>
   </div>
