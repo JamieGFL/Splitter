@@ -28,10 +28,13 @@ public class WebController {
         return "index";
     }
 
-    @PostMapping("/")
+    @PostMapping("/add")
     public String addGruppen(OAuth2AuthenticationToken token){
         Gruppe gruppe = service.addGruppe(token.getPrincipal());
-        return "redirect:/";
+
+        UUID id = gruppe.getId();
+
+        return "redirect:/gruppe?id="+id;
     }
 
     @GetMapping("/gruppe")
