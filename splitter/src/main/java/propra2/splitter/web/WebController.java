@@ -39,13 +39,14 @@ public class WebController {
     }
 
     @GetMapping("/gruppe")
-    public String insideGruppe(Model model,
+    public String getSingleGruppePage(Model model,
                                @RequestParam(name = "id", value = "id", required = false) UUID id){
         Gruppe gruppe = service.getSingleGruppe(id);
         model.addAttribute("gruppe", gruppe);
 
         return "gruppe";
     }
+
 
 
 }
