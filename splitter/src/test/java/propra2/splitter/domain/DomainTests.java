@@ -75,6 +75,7 @@ public class DomainTests {
         gruppe.addPerson("GitLisa");
 
 
+
         gruppe.addAusgabeToPerson("Pizza","MaxHub",List.of("GitLisa"), Money.of(20, "EUR"));
 
 
@@ -94,6 +95,7 @@ public class DomainTests {
         gruppe.addAusgabeToPerson("Kino","MaxHub",List.of("MaxHub","GitLisa"), Money.of(20, "EUR"));
 
 
+        gruppe.berechneTransaktionen();
         List<Transaktion> transaktionen = gruppe.getTransaktionen();
 
 
@@ -111,6 +113,7 @@ public class DomainTests {
         gruppe.addAusgabeToPerson("Kino","GitLisa",List.of("MaxHub","GitLisa"), Money.of(20, "EUR"));
 
 
+        gruppe.berechneTransaktionen();
         List<Transaktion> transaktionen = gruppe.getTransaktionen();
 
 
@@ -128,6 +131,7 @@ public class DomainTests {
         gruppe.addAusgabeToPerson("Kino","MaxHub",List.of("MaxHub","GitLisa"), Money.of(20, "EUR"));
 
 
+        gruppe.berechneTransaktionen();
         List<Transaktion> transaktionen = gruppe.getTransaktionen();
 
 
@@ -148,6 +152,7 @@ public class DomainTests {
         gruppe.addAusgabeToPerson("Kino","ErixHub",List.of("ErixHub","MaxHub"), Money.of(10, "EUR"));
 
 
+        gruppe.berechneTransaktionen();
         List<Transaktion> transaktionen = gruppe.getTransaktionen();
 
 
@@ -168,6 +173,7 @@ public class DomainTests {
         gruppe.addAusgabeToPerson("Kino","ErixHub",List.of("ErixHub","MaxHub"), Money.of(5, "EUR"));
 
 
+        gruppe.berechneTransaktionen();
         List<Transaktion> transaktionen = gruppe.getTransaktionen();
 
 
@@ -192,6 +198,7 @@ public class DomainTests {
         String transaktion4 = personA.getName() + " muss EUR 20.00 an " + personC.getName() + " zahlen";
 
 
+        gruppe.berechneTransaktionen();
         List<Transaktion> transaktionen = gruppe.getTransaktionen();
 
 
@@ -227,6 +234,7 @@ public class DomainTests {
         String transaction5 = personF.getName() + " muss EUR 73.79 an " + personA.getName() + " zahlen";
 
 
+        gruppe.berechneTransaktionen();
         List<Transaktion> transaktionen = gruppe.getTransaktionen();
 
 
@@ -267,6 +275,7 @@ public class DomainTests {
         String transaction6 = personD.getName() + " muss EUR 10.00 an " + personG.getName() + " zahlen";
 
 
+        gruppe.berechneTransaktionen();
         List<Transaktion> transaktionen = gruppe.getTransaktionen();
 
 
@@ -289,6 +298,8 @@ public class DomainTests {
         String transaktion1 = personB.getName() + " muss EUR 33.33 an "+ personA.getName() + " zahlen";
         String transaktion2 = personC.getName() + " muss EUR 33.33 an "+ personA.getName() + " zahlen";
 
+
+        gruppe.berechneTransaktionen();
         List<Transaktion> transaktionen = gruppe.getTransaktionen();
 
         assertThat(transaktionen.stream().map(Transaktion::getTransaktionsNachricht))
