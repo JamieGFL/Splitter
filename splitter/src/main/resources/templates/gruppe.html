@@ -11,10 +11,11 @@
 <h1>Gruppe</h1>
 
 
-<form method="post" th:action="@{/gruppe/add}">
+<form method="post" th:action="@{/gruppe/add}" th:object="${loginForm}">
   <input type="hidden" name="id" value="id" th:value="${gruppe.id}">
   <label for="name">Fuege Leute in deine Gruppe hinzu:</label>
-  <input class="form-control z-depth-1 w-25" id="name" type="text" name="login">
+  <input class="form-control z-depth-1 w-25" id="name" type="text" name="login" th:field="*{login}">
+  <small class="text-danger" th:if="${#fields.hasErrors('login')}" th:errors="*{login}" ></small>
   <button class="btn btn-dark"> Zur Gruppe Hinzufügen</button>
 </form>
 

@@ -1,12 +1,16 @@
 package propra2.splitter.web;
 
 
+import jakarta.validation.Valid;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import propra2.splitter.domain.Gruppe;
 import propra2.splitter.service.GruppenOnPage;
 import propra2.splitter.service.GruppenService;
@@ -40,7 +44,7 @@ public class WebController {
 
     @GetMapping("/gruppe")
     public String getSingleGruppePage(Model model,
-                               @RequestParam(name = "id", value = "id", required = false) UUID id){
+                                      @RequestParam(name = "id", value = "id", required = false) UUID id, @ModelAttribute("loginForm") LoginForm loginForm){
         Gruppe gruppe = service.getSingleGruppe(id);
         model.addAttribute("gruppe", gruppe);
 
@@ -48,9 +52,17 @@ public class WebController {
     }
 
     @PostMapping("/gruppe/add")
-    public String addPersonToSingleGruppe(@RequestParam(name = "id", value = "id", required = false) UUID id, String login){
+    public String addPersonToSingleGruppe(@RequestParam(name = "id", value = "id", required = false) UUID id, @Valid LoginForm loginForm,BindingResult bindingResult,RedirectAttributes attributes){
 
-        service.addPersonToGruppe(id, login);
+
+        if (bindingResult.hasErrors()){
+            attributes.addFlashAttribute("org.springframework.validation.BindingResult.LoginForm", bindingResult);
+            attributes.addFlashAttribute("loginForm", loginForm);
+
+            return "redirect:/gruppe?id="+id;
+        }
+
+        service.addPersonToGruppe(id, loginForm.getLogin());
 
         return "redirect:/gruppe?id="+id;
     }
