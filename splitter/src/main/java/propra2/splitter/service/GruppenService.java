@@ -41,9 +41,7 @@ public class GruppenService {
     }
 
     public void addPersonToGruppe(UUID id, String login){
-        Gruppe gruppe = gruppen.stream().filter(e -> e.getId().equals(id)).reduce((e1,e2) -> {
-            throw new IllegalArgumentException();
-        }).get();
+        Gruppe gruppe = getSingleGruppe(id);
         gruppe.addPerson(login);
     }
 
