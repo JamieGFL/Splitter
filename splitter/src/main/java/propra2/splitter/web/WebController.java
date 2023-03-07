@@ -78,5 +78,13 @@ public class WebController {
         return "redirect:/gruppe?id="+id;
     }
 
+    @PostMapping("/gruppe/add/ausgaben/transaktion")
+    public String berechneTransaktion(@RequestParam(name = "id", value = "id", required = false) UUID id){
+
+        service.trasnaktionBerechnen(id);
+
+        return "redirect:/gruppe?id="+id;
+    }
+
 
 }

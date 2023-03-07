@@ -53,5 +53,10 @@ public class GruppenService {
         gruppe.addAusgabeToPerson(aktivitaet,login, Arrays.stream(teilnehmer.split(", ")).toList(),Money.of(cost, "EUR"));
     }
 
+    public void trasnaktionBerechnen(UUID id){
+        Gruppe gruppe = getSingleGruppe(id);
+        gruppe.getTransaktionen();
+    }
+
 
 }
