@@ -47,6 +47,13 @@ public class WebController {
         return "gruppe";
     }
 
+    @PostMapping("/gruppe/add")
+    public String addPersonToSingleGruppe(@RequestParam(name = "id", value = "id", required = false) UUID id, String login){
+
+        service.addPersonToGruppe(id, login);
+
+        return "redirect:/gruppe?id="+id;
+    }
 
 
 }
