@@ -84,5 +84,11 @@ public class WebController {
         return "redirect:/gruppe?id="+id;
     }
 
+    @PostMapping("/gruppe/close")
+    public String schließGruppe(@RequestParam(name = "id", value = "id", required = false) UUID id){
+        service.closeGruppe(id);
+        return "redirect:/gruppe?id="+id;
+    }
+
 
 }

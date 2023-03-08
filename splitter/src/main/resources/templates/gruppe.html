@@ -6,12 +6,13 @@
         integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2"
         crossorigin="anonymous">
   <title>Title</title>
+  <script type="text/javascript" src="../static/script.js" th:src="@{/script.js}"></script>
 </head>
 <body>
 <h1>Gruppe</h1>
 
 
-<form method="post" th:action="@{/gruppe/add}" th:object="${loginForm}">
+<form id="1" method="post" th:action="@{/gruppe/add}" th:object="${loginForm}">
   <input type="hidden" name="id" value="id" th:value="${gruppe.id}">
   <label for="name">Fuege Leute in deine Gruppe hinzu:</label>
   <input class="form-control z-depth-1 w-25" id="name" type="text" name="login" th:field="*{login}">
@@ -41,7 +42,7 @@
 </table>
 
 
-<form method="post" th:action="@{/gruppe/add/ausgaben}" >
+<form id="2" method="post" th:action="@{/gruppe/add/ausgaben}" >
   <input type="hidden" name="id" value="id" th:value="${gruppe.id}">
   <input type="text" name="aktivitaet">
   <input type="text" name="zahler">
@@ -81,7 +82,7 @@
 
 
 
-<form method="post" th:action="@{/gruppe/add/ausgaben/transaktion}" >
+<form id="3" method="post" th:action="@{/gruppe/add/ausgaben/transaktion}" >
   <input type="hidden" name="id" value="id" th:value="${gruppe.id}">
 
 
@@ -109,6 +110,12 @@
   </tbody>
 
 </table>
+
+
+<form method="post" th:action="@{/gruppe/close}">
+  <input type="hidden" name="id" value="id" th:value="${gruppe.id}">
+  <button id="4" onclick="toggleGeschlossen(this)">Gruppe schließen</button>
+</form>
 
 <a href="/"> zurück zur Gruppen-übersicht </a>
 

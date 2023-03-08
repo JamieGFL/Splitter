@@ -14,6 +14,7 @@ public class Gruppe {
     private Integer groesse = 0;
 
     private boolean ausgleich = false;
+    boolean ausgabeGetaetigt = false;
     boolean geschlossen = false;
 
     public Gruppe(Person gruender, List<Person> personen) {
@@ -29,41 +30,48 @@ public class Gruppe {
         return new Gruppe(person, personen);
     }
 
+    public void closeGroup(){
+        geschlossen = true;
+    }
+
     public void addPerson(String newPerson){
-        Person person = new Person(newPerson, new ArrayList<>(), new ArrayList<>());
-        personen.add(person);
+        if (!geschlossen) {
+            Person person = new Person(newPerson, new ArrayList<>(), new ArrayList<>());
+            personen.add(person);
+        }
     }
 
     public void addAusgabeToPerson(String aktivitaet, String name, List<String> personen2, Money kosten){
+        if (!geschlossen){
+            ausgabeGetaetigt = true;
 
-        geschlossen = true;
-
-        Person zahlungsEmpfaenger = new Person("platzhalter", new ArrayList<>(), new ArrayList<>());
-        for(Person person : personen){
-            if(person.getName().equals(name)){
-                zahlungsEmpfaenger = person;
-            }
-        }
-
-        // payer/Personen, die ausgelegt bekommen haben und später Geld zurückzahlen müssen
-        List<Person> teilnehmer = new ArrayList<>();
-        for(Person person: personen){
-            for(String personName : personen2) {
-                if (person.getName().equals(personName)) {
-                    teilnehmer.add(person);
+            Person zahlungsEmpfaenger = new Person("platzhalter", new ArrayList<>(), new ArrayList<>());
+            for(Person person : personen){
+                if(person.getName().equals(name)){
+                    zahlungsEmpfaenger = person;
                 }
             }
-        }
 
-        // Ausgaben in Person, welche Ausgabe getätigt hat, speichern
-        Ausgabe newAusgabe = new Ausgabe(new Aktivitaet(aktivitaet), zahlungsEmpfaenger, teilnehmer, kosten);
-        zahlungsEmpfaenger.addAusgabe(newAusgabe);
-        gruppenAusgaben.add(newAusgabe);
-        
-        // speichert Schulden der payers
-        for(Person person : teilnehmer) {
-            if (!person.equals(zahlungsEmpfaenger)) {
-                person.addSchulden(new Schulden(person, zahlungsEmpfaenger));
+            // payer/Personen, die ausgelegt bekommen haben und später Geld zurückzahlen müssen
+            List<Person> teilnehmer = new ArrayList<>();
+            for(Person person: personen){
+                for(String personName : personen2) {
+                    if (person.getName().equals(personName)) {
+                        teilnehmer.add(person);
+                    }
+                }
+            }
+
+            // Ausgaben in Person, welche Ausgabe getätigt hat, speichern
+            Ausgabe newAusgabe = new Ausgabe(new Aktivitaet(aktivitaet), zahlungsEmpfaenger, teilnehmer, kosten);
+            zahlungsEmpfaenger.addAusgabe(newAusgabe);
+            gruppenAusgaben.add(newAusgabe);
+
+            // speichert Schulden der payers
+            for(Person person : teilnehmer) {
+                if (!person.equals(zahlungsEmpfaenger)) {
+                    person.addSchulden(new Schulden(person, zahlungsEmpfaenger));
+                }
             }
         }
     }
@@ -219,12 +227,12 @@ public class Gruppe {
         this.groesse = groesse;
     }
 
-    public boolean isGeschlossen() {
-        return geschlossen;
+    public boolean isAusgabeGetaetigt() {
+        return ausgabeGetaetigt;
     }
 
-    public void setGeschlossen(boolean geschlossen) {
-        this.geschlossen = geschlossen;
+    public void setAusgabeGetaetigt(boolean ausgabeGetaetigt) {
+        this.ausgabeGetaetigt = ausgabeGetaetigt;
     }
 
 }

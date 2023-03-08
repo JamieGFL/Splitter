@@ -24,6 +24,10 @@ public class GruppenService {
         return gruppe;
     }
 
+    public void closeGruppe(UUID id){
+        getSingleGruppe(id).closeGroup();
+    }
+
     private GruppenDetails toGruppenDetails(Gruppe gruppe){
         return new GruppenDetails(gruppe.getId(),gruppe.getCreator().getName(),gruppe.getPersonen().stream().map(Person::getName).toList());
     }
@@ -41,7 +45,9 @@ public class GruppenService {
 
     public void addPersonToGruppe(UUID id, String login){
         Gruppe gruppe = getSingleGruppe(id);
-        gruppe.addPerson(login);
+        if(!gruppe.isAusgabeGetaetigt()){
+            gruppe.addPerson(login);
+        }
     }
 
     public void addAusgabeToGruppe(UUID id, String aktivitaet, String login,String teilnehmer ,Double cost){
