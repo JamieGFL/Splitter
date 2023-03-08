@@ -408,7 +408,7 @@ public class DomainTests {
     }
 
     @Test
-    @DisplayName("Fehlerabstand von 1 Cent")
+    @DisplayName("Transaktion wird mit Fehlerabstand von 1 Cent korrekt berechnet")
     void test_19(){
         Person personA = new Person("A", new ArrayList<>(), new ArrayList<>());
         Person personB = new Person("B", new ArrayList<>(), new ArrayList<>());
