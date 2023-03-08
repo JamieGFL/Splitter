@@ -23,9 +23,23 @@ public class GruppenServiceTests {
 
     @Test
     @DisplayName("Service kann Gruppen hinzufügen")
-    public void test_01(){
+    void test_01(){
         GruppenService service = new GruppenService();
         Gruppe gruppe = service.addGruppe(mkUser("James"));
         assertThat(service.getGruppen().details()).contains(new GruppenDetails(gruppe.getId(),"James", List.of("James")));
+    }
+
+    @Test
+    @DisplayName("Service kann mehrere Gruppen speichern")
+    void test_02(){
+        GruppenService service = new GruppenService();
+        Gruppe gruppe1 = service.addGruppe(mkUser("James"));
+        Gruppe gruppe2 = service.addGruppe(mkUser("GitLisa"));
+        Gruppe gruppe3 = service.addGruppe(mkUser("GitMax"));
+
+        assertThat(service.getGruppen().details())
+                .containsExactlyInAnyOrder(new GruppenDetails(gruppe1.getId(),"James",List.of("James")),
+                                           new GruppenDetails(gruppe2.getId(),"GitLisa",List.of("GitLisa")),
+                                           new GruppenDetails(gruppe3.getId(),"GitMax", List.of("GitMax")));
     }
 }
