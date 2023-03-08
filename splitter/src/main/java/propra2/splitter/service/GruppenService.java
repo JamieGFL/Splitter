@@ -52,6 +52,7 @@ public class GruppenService {
 
     public void transaktionBerechnen(UUID id){
         Gruppe gruppe = getSingleGruppe(id);
+        gruppe.getTransaktionen().clear();
         gruppe.berechneTransaktionen();
     }
 

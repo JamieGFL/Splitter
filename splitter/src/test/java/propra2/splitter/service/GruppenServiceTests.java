@@ -141,4 +141,34 @@ public class GruppenServiceTests {
                         Money.of(40,"EUR"), Money.of(40, "EUR"));
     }
 
+    @Test
+    @DisplayName("Service kann Transaktionen für eine Gruppe hinzufügen")
+    void test_10(){
+        GruppenService service = new GruppenService();
+        Gruppe gruppe = service.addGruppe(mkUser("James"));
+        gruppe.addPerson("GitLisa");
+        Double d = 40.00;
+        service.addAusgabeToGruppe(gruppe.getId(),"pizza","James","James, GitLisa", d);
+        service.transaktionBerechnen(gruppe.getId());
+
+        assertThat(service.getSingleGruppe(gruppe.getId()).getTransaktionen()).hasSize(1);
+    }
+
+    @Test
+    @DisplayName("Service speichert nur Transaktionsnachricht für Gesamtheit der Ausgaben")
+    void test_11(){
+        GruppenService service = new GruppenService();
+        Gruppe gruppe = service.addGruppe(mkUser("James"));
+        gruppe.addPerson("GitLisa");
+        Double d = 40.00;
+        service.addAusgabeToGruppe(gruppe.getId(),"pizza","James","James, GitLisa", d);
+        service.transaktionBerechnen(gruppe.getId());
+        service.addAusgabeToGruppe(gruppe.getId(),"club","James","James, GitLisa", d);
+        service.transaktionBerechnen(gruppe.getId());
+
+        assertThat(service.getSingleGruppe(gruppe.getId()).getTransaktionen()).hasSize(1);
+    }
+
+    
+
 }
