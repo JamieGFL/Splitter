@@ -2,6 +2,8 @@ package propra2.splitter.domain;
 
 import org.javamoney.moneta.Money;
 
+import java.util.Objects;
+
 public class Transaktion {
     private Person person1;
     private Person person2;
@@ -17,6 +19,14 @@ public class Transaktion {
 
     public Transaktion(){
         this.transaktionsNachricht = "Es sind keine Ausgleichszahlungen notwendig.";
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Transaktion)) return false;
+        Transaktion that = (Transaktion) o;
+        return Objects.equals(getPerson1(), that.getPerson1()) && Objects.equals(getPerson2(), that.getPerson2());
     }
 
     public Person getPerson1() {

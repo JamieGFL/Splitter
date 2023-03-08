@@ -1,6 +1,7 @@
 package propra2.splitter.domain;
 
 import org.javamoney.moneta.Money;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -13,6 +14,50 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.verify;
 
 public class DomainTests {
+
+    List<Transaktion> transaktionen = new ArrayList<>();
+
+    public boolean isValid(List<Transaktion> transaktionen){
+        List<Person> Zahler = new ArrayList<>();
+        List<Person> Zahlungsempfaenger = new ArrayList<>();
+        boolean isValid = true;
+        List<Transaktion> transaktionen2 = new ArrayList<>();
+        if (!transaktionen.isEmpty()&&!(transaktionen.size() < 2)) {
+            for (Transaktion transaktion : transaktionen) {
+                // Verletzung von Kriterum 2, mehr als eine Überweisung zwischen zwei Personen
+                if(transaktionen2.contains(transaktion)){
+                    isValid = false;
+                    break;
+                }
+                // Verletzung von Kriterium 2, Person überweist sich selber Geld
+                if(transaktion.getPerson1().equals(transaktion.getPerson2())){
+                    isValid = false;
+                    break;
+                }
+                Zahler.add(transaktion.getPerson1());
+                Zahlungsempfaenger.add(transaktion.getPerson2());
+                transaktionen2.add(transaktion);
+            }
+            for (Person person : Zahlungsempfaenger) {
+                // Verletzung von Kriterium 1, Person ist Zahler und Zahlungsempfänger
+                if (Zahler.contains(person)) {
+                    isValid = false;
+                    break;
+                }
+
+            }
+        }
+        return isValid;
+    }
+
+    @Test
+    @DisplayName("prüft, ob Kriterium1/2 nach einem Test verletzt wurden")
+    @AfterEach
+    void test_00(){
+        assertThat(isValid(transaktionen)).isTrue();
+        transaktionen.clear();
+    }
+
     @Test
     @DisplayName("Person kann Gruppe hinzugefügt werden")
     void test_01(){
@@ -50,7 +95,8 @@ public class DomainTests {
         gruppe.addAusgabeToPerson("Pizza","MaxHub",List.of("GitLisa"), Money.of(20, "EUR"));
 
 
-        assertThat(gruppe.getPersonen().get(0).getAusgabe(0)).isEqualTo(new Ausgabe(new Aktivitaet("Pizza"), personA, List.of(personB), Money.of(20, "EUR")));
+        assertThat(gruppe.getPersonen().get(0).getAusgabe(0)).isEqualTo
+                (new Ausgabe(new Aktivitaet("Pizza"), personA, List.of(personB), Money.of(20, "EUR")));
     }
 
     @Test
@@ -75,14 +121,27 @@ public class DomainTests {
         gruppe.addPerson("GitLisa");
 
 
-
         gruppe.addAusgabeToPerson("Pizza","MaxHub",List.of("GitLisa"), Money.of(20, "EUR"));
 
 
         assertThat(gruppe.getPersonen().get(1).getSchulden(0)).isEqualTo(new Schulden(gruppe.getPersonen().get(1), gruppe.getPersonen().get(0)));
     }
 
+    @Test
+    @DisplayName("isValid Utility Methode bestimmt richtig, wenn Kriterium 1 und 2 nicht erfüllt sind")
+    void test_525(){
+        Person personA = new Person("MaxHub", new ArrayList<>(), new ArrayList<>());
+        Person personB = new Person("GitLisa", new ArrayList<>(), new ArrayList<>());
 
+
+        Transaktion transaktion1 = new Transaktion(personA, personB, Money.of(50, "EUR"));
+        Transaktion transaktion2 = new Transaktion(personB, personA, Money.of(60, "EUR"));
+        Transaktion transaktion3 = new Transaktion(personA, personB, Money.of(10, "EUR"));
+        List<Transaktion> transaktionen = new ArrayList<>(List.of(transaktion1, transaktion2, transaktion3));
+
+
+        assertThat(isValid(transaktionen)).isFalse();
+    }
 
     @Test
     @DisplayName("Szenario 1: Summieren von Auslagen")
@@ -96,7 +155,7 @@ public class DomainTests {
 
 
         gruppe.berechneTransaktionen();
-        List<Transaktion> transaktionen = gruppe.getTransaktionen();
+        transaktionen = gruppe.getTransaktionen();
 
 
         assertThat(transaktionen.get(0).getTransaktionsNachricht()).isEqualTo(personB.getName() + " muss EUR 15.00 an " + personA.getName() + " zahlen");
@@ -114,7 +173,7 @@ public class DomainTests {
 
 
         gruppe.berechneTransaktionen();
-        List<Transaktion> transaktionen = gruppe.getTransaktionen();
+        transaktionen = gruppe.getTransaktionen();
 
 
         assertThat(transaktionen.get(0).getTransaktionsNachricht()).isEqualTo(personA.getName() + " muss EUR 5.00 an " + personB.getName() + " zahlen");
@@ -132,7 +191,7 @@ public class DomainTests {
 
 
         gruppe.berechneTransaktionen();
-        List<Transaktion> transaktionen = gruppe.getTransaktionen();
+        transaktionen = gruppe.getTransaktionen();
 
 
         assertThat(transaktionen.get(0).getTransaktionsNachricht()).isEqualTo(personB.getName() + " muss EUR 20.00 an " + personA.getName() + " zahlen");
@@ -174,7 +233,7 @@ public class DomainTests {
 
 
         gruppe.berechneTransaktionen();
-        List<Transaktion> transaktionen = gruppe.getTransaktionen();
+        transaktionen = gruppe.getTransaktionen();
 
 
         assertThat(transaktionen.get(0).getTransaktionsNachricht()).isEqualTo(personC.getName() + " muss EUR 2.50 an " + personA.getName() + " zahlen");
@@ -199,7 +258,7 @@ public class DomainTests {
 
 
         gruppe.berechneTransaktionen();
-        List<Transaktion> transaktionen = gruppe.getTransaktionen();
+        transaktionen = gruppe.getTransaktionen();
 
 
         assertThat(transaktionen.get(0).getTransaktionsNachricht().equals(transaktion1)|| transaktionen.get(0).getTransaktionsNachricht().equals(transaktion3)).isTrue();
@@ -235,7 +294,7 @@ public class DomainTests {
 
 
         gruppe.berechneTransaktionen();
-        List<Transaktion> transaktionen = gruppe.getTransaktionen();
+        transaktionen = gruppe.getTransaktionen();
 
 
         assertThat(transaktionen.stream().map(Transaktion::getTransaktionsNachricht)).containsExactlyInAnyOrder(transaction1, transaction2, transaction3, transaction4, transaction5);
@@ -276,7 +335,7 @@ public class DomainTests {
 
 
         gruppe.berechneTransaktionen();
-        List<Transaktion> transaktionen = gruppe.getTransaktionen();
+        transaktionen = gruppe.getTransaktionen();
 
 
         assertThat(transaktionen.stream().map(Transaktion::getTransaktionsNachricht)).containsExactlyInAnyOrder(transaction1, transaction2, transaction3, transaction4, transaction5, transaction6);
@@ -300,7 +359,7 @@ public class DomainTests {
 
 
         gruppe.berechneTransaktionen();
-        List<Transaktion> transaktionen = gruppe.getTransaktionen();
+        transaktionen = gruppe.getTransaktionen();
 
         assertThat(transaktionen.stream().map(Transaktion::getTransaktionsNachricht))
                 .containsExactlyInAnyOrder(transaktion1, transaktion2);
