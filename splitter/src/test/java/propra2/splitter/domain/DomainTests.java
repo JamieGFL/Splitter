@@ -128,6 +128,39 @@ public class DomainTests {
     }
 
     @Test
+    @DisplayName("Person mit maximalem Netto-Betrag wird gefunden")
+    void test_5(){
+        Person personA = new Person("MaxHub", new ArrayList<>(), new ArrayList<>());
+        Person personB = new Person("GitLisa", new ArrayList<>(), new ArrayList<>());
+        personA.setNettoBetrag(Money.of(20, "EUR"));
+        personB.setNettoBetrag(Money.of(-20, "EUR"));
+        Gruppe gruppe = Gruppe.erstelleGruppe("MaxHub");
+
+
+        Person maxPerson = gruppe.getPersonWithMaxNettoBetrag(List.of(personA, personB));
+
+
+        assertThat(maxPerson).isEqualTo(personA);
+    }
+
+    @Test
+    @DisplayName("Person mit minimalem Netto-Betrag wird gefunden")
+    void test_6(){
+        Person personA = new Person("MaxHub", new ArrayList<>(), new ArrayList<>());
+        Person personB = new Person("GitLisa", new ArrayList<>(), new ArrayList<>());
+        personA.setNettoBetrag(Money.of(20, "EUR"));
+        personB.setNettoBetrag(Money.of(-20, "EUR"));
+        Gruppe gruppe = Gruppe.erstelleGruppe("MaxHub");
+
+
+        Person minPerson = gruppe.getPersonWithMinNettoBetrag(List.of(personA, personB));
+
+
+        assertThat(minPerson).isEqualTo(personB);
+    }
+
+
+    @Test
     @DisplayName("isValid Utility Methode bestimmt richtig, wenn Kriterium 1 und 2 nicht erfüllt sind")
     void test_525(){
         Person personA = new Person("MaxHub", new ArrayList<>(), new ArrayList<>());
