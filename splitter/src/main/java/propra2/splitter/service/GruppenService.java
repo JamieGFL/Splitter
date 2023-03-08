@@ -6,10 +6,7 @@ import org.springframework.stereotype.Service;
 import propra2.splitter.domain.Gruppe;
 import propra2.splitter.domain.Person;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 public class GruppenService {
@@ -55,7 +52,15 @@ public class GruppenService {
 
     public void transaktionBerechnen(UUID id){
         Gruppe gruppe = getSingleGruppe(id);
+        gruppe.getTransaktionen().clear();
         gruppe.berechneTransaktionen();
+    }
+
+    public GruppenOnPage personToGruppeMatch(OAuth2User principle){
+        List<GruppenDetails> currentDetails = getGruppen().details();
+        return new GruppenOnPage(currentDetails.stream()
+                .filter(details -> details.personen().stream()
+                        .anyMatch(p -> Objects.equals(p,principle.getAttribute("login")))).toList());
     }
 
 
