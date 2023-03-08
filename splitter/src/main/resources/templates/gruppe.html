@@ -110,6 +110,12 @@
 
 </table>
 
+
+<form method="post" th:action="@{/gruppe/close}">
+  <input type="hidden" name="id" value="id" th:value="${gruppe.id}">
+  <button>Gruppe schließen</button>
+</form>
+
 <a href="/"> zurück zur Gruppen-übersicht </a>
 
 </body>

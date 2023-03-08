@@ -24,6 +24,10 @@ public class GruppenService {
         return gruppe;
     }
 
+    public void closeGruppe(UUID id){
+        getSingleGruppe(id).closeGroup();
+    }
+
     private GruppenDetails toGruppenDetails(Gruppe gruppe){
         return new GruppenDetails(gruppe.getId(),gruppe.getCreator().getName(),gruppe.getPersonen().stream().map(Person::getName).toList());
     }
