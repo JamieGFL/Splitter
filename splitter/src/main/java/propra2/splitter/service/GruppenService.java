@@ -41,7 +41,9 @@ public class GruppenService {
 
     public void addPersonToGruppe(UUID id, String login){
         Gruppe gruppe = getSingleGruppe(id);
-        gruppe.addPerson(login);
+        if(!gruppe.isAusgabeGetaetigt()){
+            gruppe.addPerson(login);
+        }
     }
 
     public void addAusgabeToGruppe(UUID id, String aktivitaet, String login,String teilnehmer ,Double cost){

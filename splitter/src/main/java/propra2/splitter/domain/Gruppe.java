@@ -14,7 +14,7 @@ public class Gruppe {
     private Integer groesse = 0;
 
     private boolean ausgleich = false;
-    boolean geschlossen = false;
+    boolean ausgabeGetaetigt = false;
 
     public Gruppe(Person gruender, List<Person> personen) {
         this.id = UUID.randomUUID();
@@ -36,7 +36,7 @@ public class Gruppe {
 
     public void addAusgabeToPerson(String aktivitaet, String name, List<String> personen2, Money kosten){
 
-        geschlossen = true;
+        ausgabeGetaetigt = true;
 
         Person zahlungsEmpfaenger = new Person("platzhalter", new ArrayList<>(), new ArrayList<>());
         for(Person person : personen){
@@ -219,12 +219,12 @@ public class Gruppe {
         this.groesse = groesse;
     }
 
-    public boolean isGeschlossen() {
-        return geschlossen;
+    public boolean isAusgabeGetaetigt() {
+        return ausgabeGetaetigt;
     }
 
-    public void setGeschlossen(boolean geschlossen) {
-        this.geschlossen = geschlossen;
+    public void setAusgabeGetaetigt(boolean ausgabeGetaetigt) {
+        this.ausgabeGetaetigt = ausgabeGetaetigt;
     }
 
 }
