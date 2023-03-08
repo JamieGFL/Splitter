@@ -1,8 +1,10 @@
 package propra2.splitter.service;
 
+import org.javamoney.moneta.Money;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
+import propra2.splitter.domain.Ausgabe;
 import propra2.splitter.domain.Gruppe;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -84,5 +86,59 @@ public class GruppenServiceTests {
                                            new GruppenDetails(gruppe2.getId(),"James",List.of("James")),
                                            new GruppenDetails(gruppe3.getId(),"James",List.of("James")));
     }
-    
+
+    @Test
+    @DisplayName("Es werden einem nur Gruppen angezeigt wo man auch Mitglied ist")
+    void test_06(){
+        GruppenService service = new GruppenService();
+        Gruppe gruppe = service.addGruppe(mkUser("James"));
+        Gruppe gruppe2 = service.addGruppe(mkUser("GitLisa"));
+        Gruppe gruppe3 = service.addGruppe(mkUser("GitMax"));
+        gruppe2.addPerson("James");
+
+        assertThat(service.personToGruppeMatch(mkUser("James")).details())
+                .containsExactlyInAnyOrder(new GruppenDetails(gruppe.getId(),"James", List.of("James")),
+                                           new GruppenDetails(gruppe2.getId(), "GitLisa", List.of("GitLisa", "James")));
+    }
+
+    @Test
+    @DisplayName("Service kann nach beliebigen Gruppen durch die ID filtern")
+    void test_07(){
+        GruppenService service = new GruppenService();
+        Gruppe gruppe = service.addGruppe(mkUser("James"));
+        Gruppe gruppe2 = service.addGruppe(mkUser("GitLisa"));
+        Gruppe gruppe3 = service.addGruppe(mkUser("GitMax"));
+        Gruppe gruppe4 = service.addGruppe(mkUser("ErixHub"));
+
+        assertThat(service.getSingleGruppe(gruppe3.getId())).isEqualTo(gruppe3);
+    }
+
+    @Test
+    @DisplayName("Der Service kann Ausgaben eintragen")
+    void test_08(){
+        GruppenService service = new GruppenService();
+        Gruppe gruppe = service.addGruppe(mkUser("James"));
+        gruppe.addPerson("GitLisa");
+        Double d = 40.00;
+        service.addAusgabeToGruppe(gruppe.getId(),"pizza","James","James, GitLisa", d);
+
+        assertThat(service.getSingleGruppe(gruppe.getId()).getGruppenAusgaben().stream()
+                .map(Ausgabe::getGesamtKosten)).containsExactly(Money.of(40,"EUR"));
+    }
+
+    @Test
+    @DisplayName("Der Service kann mehrere Ausgaben eintragen")
+    void test_09(){
+        GruppenService service = new GruppenService();
+        Gruppe gruppe = service.addGruppe(mkUser("James"));
+        gruppe.addPerson("GitLisa");
+        Double d = 40.00;
+        service.addAusgabeToGruppe(gruppe.getId(),"pizza","James","James, GitLisa", d);
+        service.addAusgabeToGruppe(gruppe.getId(),"club","James","James, GitLisa", d);
+
+        assertThat(service.getSingleGruppe(gruppe.getId()).getGruppenAusgaben().stream()
+                .map(Ausgabe::getGesamtKosten)).containsExactly(
+                        Money.of(40,"EUR"), Money.of(40, "EUR"));
+    }
+
 }
