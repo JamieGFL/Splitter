@@ -13,21 +13,24 @@ public class Gruppe {
     ArrayList<Person> nettoBetraege = new ArrayList<>();
     private Integer groesse = 0;
 
+    private String gruppenName;
+
     private boolean ausgleich = false;
     boolean ausgabeGetaetigt = false;
     boolean geschlossen = false;
 
-    public Gruppe(Person gruender, List<Person> personen) {
+    public Gruppe(Person gruender, List<Person> personen, String gruppenName) {
         this.id = UUID.randomUUID();
         this.gruender = gruender;
         this.personen = personen;
+        this.gruppenName = gruppenName;
     }
 
-    public static Gruppe erstelleGruppe(String gruender){
+    public static Gruppe erstelleGruppe(String gruender, String gruppenName){
         Person person = new Person(gruender, new ArrayList<>(), new ArrayList<>());
         List<Person> personen = new ArrayList<>();
         personen.add(person);
-        return new Gruppe(person, personen);
+        return new Gruppe(person, personen, gruppenName);
     }
 
     public void closeGroup(){
@@ -235,4 +238,20 @@ public class Gruppe {
         this.ausgabeGetaetigt = ausgabeGetaetigt;
     }
 
+
+    public boolean isGeschlossen() {
+        return geschlossen;
+    }
+
+    public void setGeschlossen(boolean geschlossen) {
+        this.geschlossen = geschlossen;
+    }
+
+    public String getGruppenName() {
+        return gruppenName;
+    }
+
+    public void setGruppenName(String gruppenName) {
+        this.gruppenName = gruppenName;
+    }
 }

@@ -26,6 +26,22 @@ public class Ausgabe {
         }
     }
 
+    public boolean personPresent(String name){
+        if(ausleger.getName().equals(name)){
+            return true;
+        }
+        for (Person person: personen){
+            if(person.getName().equals(name)){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean personNotPresent(String name){
+        return !personPresent(name);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

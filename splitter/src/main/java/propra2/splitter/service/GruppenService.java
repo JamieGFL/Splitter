@@ -17,9 +17,9 @@ public class GruppenService {
         gruppen.add(gruppe);
     }
 
-    public Gruppe addGruppe(OAuth2User principle){
+    public Gruppe addGruppe(OAuth2User principle, String gruppenName){
         String login = principle.getAttribute("login");
-        Gruppe gruppe = Gruppe.erstelleGruppe(login);
+        Gruppe gruppe = Gruppe.erstelleGruppe(login, gruppenName);
         add(gruppe);
         return gruppe;
     }
@@ -29,7 +29,7 @@ public class GruppenService {
     }
 
     private GruppenDetails toGruppenDetails(Gruppe gruppe){
-        return new GruppenDetails(gruppe.getId(),gruppe.getCreator().getName(),gruppe.getPersonen().stream().map(Person::getName).toList());
+        return new GruppenDetails(gruppe.getId(),gruppe.getGruppenName(),gruppe.getCreator().getName(),gruppe.getPersonen().stream().map(Person::getName).toList(), gruppe.isGeschlossen());
     }
 
     public GruppenOnPage getGruppen(){

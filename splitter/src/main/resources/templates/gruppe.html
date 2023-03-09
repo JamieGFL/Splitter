@@ -7,16 +7,21 @@
         crossorigin="anonymous">
   <title>Title</title>
   <script type="text/javascript" src="../static/script.js" th:src="@{/script.js}"></script>
+
+
+
+
 </head>
 <body>
-<h1>Gruppe</h1>
+<h1 th:text="${gruppe.getGruppenName()}"></h1>
 
 
 <form id="1" method="post" th:action="@{/gruppe/add}" th:object="${loginForm}">
   <input type="hidden" name="id" value="id" th:value="${gruppe.id}">
   <label for="name">Fuege Leute in deine Gruppe hinzu:</label>
   <input class="form-control z-depth-1 w-25" id="name" type="text" name="login" th:field="*{login}">
-  <small class="text-danger" th:if="${#fields.hasErrors('login')}" th:errors="*{login}" ></small>
+  <small class="text-danger" th:if="${message}" th:text="${message}" ></small>
+  <br>
   <button class="btn btn-dark"> Zur Gruppe Hinzufügen</button>
 </form>
 
@@ -45,8 +50,15 @@
 <form id="2" method="post" th:action="@{/gruppe/add/ausgaben}" >
   <input type="hidden" name="id" value="id" th:value="${gruppe.id}">
   <input type="text" name="aktivitaet">
-  <input type="text" name="zahler">
+
+  <select name="zahler" >
+    <div th:each="personen : ${gruppe.getPersonen()}" >
+      <option th:text="${personen.getName()}" ></option>
+    </div>
+  </select>
+
   <input type="text" name="teilnehmer">
+
   <input type="text" name="betrag">
 
   <button class="btn btn-dark"  >Ausgabe hinzufügen</button>
@@ -67,12 +79,23 @@
   <tbody>
 
   <div th:if="${gruppe} != null">
-    <tr th:each="person : ${gruppe.gruppenAusgaben}">
-      <td th:text="${person.getAktivitaet().name()}"> </td>
-      <td th:text="${person.getAusleger().name}"> </td>
-      <td th:text="${person.getPersonenNamen()}"></td>
-      <td th:text="${person.getGesamtKosten()}"> </td>
+
+    <tr th:each="ausgabe : ${gruppe.gruppenAusgaben}">
+      <div th:if="${ausgabe.personPresent(login)}" >
+      <td style="background-color: cornflowerblue"  th:text="${ausgabe.getAktivitaet().name()}"> </td>
+      <td style="background-color: cornflowerblue" th:text="${ausgabe.getAusleger().name}"> </td>
+      <td style="background-color: cornflowerblue" th:text="${ausgabe.getPersonenNamen()}"></td>
+      <td style="background-color: cornflowerblue" th:text="${ausgabe.getGesamtKosten()}"> </td>
+      </div>
+
+      <div th:unless="${ausgabe.personPresent(login)}" >
+        <td th:text="${ausgabe.getAktivitaet().name()}"> </td>
+        <td th:text="${ausgabe.getAusleger().name}"> </td>
+        <td th:text="${ausgabe.getPersonenNamen()}"></td>
+        <td th:text="${ausgabe.getGesamtKosten()}"> </td>
+      </div>
     </tr>
+
   </div>
 
   </tbody>
@@ -118,6 +141,9 @@
 </form>
 
 <a href="/"> zurück zur Gruppen-übersicht </a>
+
+
+
 
 </body>
 </html>
