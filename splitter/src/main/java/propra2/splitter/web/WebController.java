@@ -44,7 +44,14 @@ public class WebController {
 
     @GetMapping("/gruppe")
     public String getSingleGruppePage(Model model,
-                                      @RequestParam(name = "id", value = "id", required = false) UUID id, @ModelAttribute("loginForm") LoginForm loginForm){
+                                      @RequestParam(name = "id", value = "id", required = false) UUID id,
+                                      @ModelAttribute("loginForm") LoginForm loginForm,
+                                      String error){
+
+        if (error != null){
+            model.addAttribute("message", error);
+        }
+
         Gruppe gruppe = service.getSingleGruppe(id);
         model.addAttribute("gruppe", gruppe);
 
@@ -52,12 +59,14 @@ public class WebController {
     }
 
     @PostMapping("/gruppe/add")
-    public String addPersonToSingleGruppe(@RequestParam(name = "id", value = "id", required = false) UUID id, @Valid LoginForm loginForm,BindingResult bindingResult,RedirectAttributes attributes){
+    public String addPersonToSingleGruppe(@RequestParam(name = "id", value = "id", required = false) UUID id,
+                                          @Valid LoginForm loginForm,
+                                          BindingResult bindingResult,
+                                          RedirectAttributes attributes){
 
 
         if (bindingResult.hasErrors()){
-            attributes.addFlashAttribute("org.springframework.validation.BindingResult.LoginForm", bindingResult);
-            attributes.addFlashAttribute("loginForm", loginForm);
+            attributes.addAttribute("error", "Invalider GitHub Name");
 
             return "redirect:/gruppe?id="+id;
         }
