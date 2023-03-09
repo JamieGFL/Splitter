@@ -38,16 +38,17 @@ public class Ausgabe {
         return false;
     }
 
-    public boolean personNotPresent(String name){
-        return !personPresent(name);
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof Ausgabe)) return false;
         Ausgabe ausgabe = (Ausgabe) o;
         return Objects.equals(getAktivitaet(), ausgabe.getAktivitaet()) && Objects.equals(getAusleger(), ausgabe.getAusleger()) && Objects.equals(getPersonen(), ausgabe.getPersonen()) && Objects.equals(getKosten(), ausgabe.getKosten());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getAktivitaet(), getAusleger(), getPersonen(), getKosten());
     }
 
     public Money getDurchschnittsKosten(){
@@ -58,16 +59,8 @@ public class Ausgabe {
         return aktivitaet;
     }
 
-    public void setAktivitaetName(Aktivitaet aktivitaet) {
-        this.aktivitaet = aktivitaet;
-    }
-
     public Person getAusleger() {
         return ausleger;
-    }
-
-    public void setAusleger(Person ausleger) {
-        this.ausleger = ausleger;
     }
 
     public List<Person> getPersonen() {
@@ -79,13 +72,5 @@ public class Ausgabe {
 
     public Money getGesamtKosten(){
         return kosten;
-    }
-
-    public void setPersonen(List<Person> personen) {
-        this.personen = personen;
-    }
-
-    public void setKosten(Money kosten) {
-        this.kosten = kosten;
     }
 }

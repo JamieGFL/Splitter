@@ -49,13 +49,17 @@
 
 <form id="2" method="post" th:action="@{/gruppe/add/ausgaben}" >
   <input type="hidden" name="id" value="id" th:value="${gruppe.id}">
-  <input type="text" name="aktivitaet">
+  <label for=aktivitaetID>Aktivität:</label><br>
+  <input id="aktivitaetID" type="text" name="aktivitaet">
 
-  <select name="zahler" >
-    <div th:each="personen : ${gruppe.getPersonen()}" >
-      <option th:text="${personen.getName()}" ></option>
-    </div>
-  </select>
+  <label for="zahlerID">Ausleger:
+    <br>
+    <select id="zahlerID" name="zahler" >
+      <div th:each="personen : ${gruppe.getPersonen()}" >
+        <option th:text="${personen.getName()}" ></option>
+      </div>
+    </select>
+  </label>
 
   <input type="text" name="teilnehmer">
 

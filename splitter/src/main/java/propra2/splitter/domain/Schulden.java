@@ -34,27 +34,18 @@ public class Schulden {
         return Objects.equals(getZahler(), schulden.getZahler()) && Objects.equals(getZahlungsEmpfaenger(), schulden.getZahlungsEmpfaenger()) && Objects.equals(getBetrag(), schulden.getBetrag());
     }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(getZahler(), getZahlungsEmpfaenger(), getBetrag());
+    }
+
     public Person getZahler() {
         return zahler;
     }
-
-    public void setZahler(Person zahler) {
-        this.zahler = zahler;
-    }
-
     public Person getZahlungsEmpfaenger() {
         return zahlungsEmpfaenger;
     }
-
-    public void setZahlungsEmpfaenger(Person zahlungsEmpfaenger) {
-        this.zahlungsEmpfaenger = zahlungsEmpfaenger;
-    }
-
     public Money getBetrag() {
         return betrag;
-    }
-
-    public void setBetrag(Money betrag) {
-        this.betrag = betrag;
     }
 }
