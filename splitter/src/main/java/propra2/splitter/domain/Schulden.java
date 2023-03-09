@@ -34,6 +34,11 @@ public class Schulden {
         return Objects.equals(getZahler(), schulden.getZahler()) && Objects.equals(getZahlungsEmpfaenger(), schulden.getZahlungsEmpfaenger()) && Objects.equals(getBetrag(), schulden.getBetrag());
     }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(getZahler(), getZahlungsEmpfaenger(), getBetrag());
+    }
+
     public Person getZahler() {
         return zahler;
     }

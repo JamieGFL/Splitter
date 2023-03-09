@@ -46,6 +46,11 @@ public class Ausgabe {
         return Objects.equals(getAktivitaet(), ausgabe.getAktivitaet()) && Objects.equals(getAusleger(), ausgabe.getAusleger()) && Objects.equals(getPersonen(), ausgabe.getPersonen()) && Objects.equals(getKosten(), ausgabe.getKosten());
     }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(getAktivitaet(), getAusleger(), getPersonen(), getKosten());
+    }
+
     public Money getDurchschnittsKosten(){
         return kosten.divide(personen.size());
     }

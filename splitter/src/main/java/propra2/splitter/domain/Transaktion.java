@@ -29,6 +29,11 @@ public class Transaktion {
         return Objects.equals(getPerson1(), that.getPerson1()) && Objects.equals(getPerson2(), that.getPerson2());
     }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(getPerson1(), getPerson2());
+    }
+
     public Person getPerson1() {
         return person1;
     }

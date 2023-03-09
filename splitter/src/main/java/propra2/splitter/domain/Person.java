@@ -2,6 +2,7 @@ package propra2.splitter.domain;
 
 import org.javamoney.moneta.Money;
 import java.util.List;
+import java.util.Objects;
 
 public class Person{
 
@@ -23,6 +24,11 @@ public class Person{
         if (!(o instanceof Person)) return false;
         Person person = (Person) o;
         return getName().equals(person.getName());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getName());
     }
 
     public void addAusgabe(Ausgabe ausgabe){
