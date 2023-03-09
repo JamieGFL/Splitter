@@ -31,7 +31,7 @@
         </thead>
 
         <tbody>
-            <div th:if="${gruppen} != null"></div>
+            <div th:if="${gruppen != null}">
 
             <tr th:each="gruppe : ${gruppen.details()}">
                 <div th:if="${!gruppe.geschlossen()}" >
@@ -40,6 +40,7 @@
                 <td> <a href="#" th:href="@{gruppe(id=*{gruppe.id()})}"> Anzeigen </a> </td>
                 </div>
             </tr>
+            </div>
 
         </tbody>
 
@@ -60,7 +61,7 @@
         </thead>
 
         <tbody>
-        <div th:if="${gruppen} != null"></div>
+        <div th:if="${gruppen != null}">
 
         <tr th:each="gruppe : ${gruppen.details()}">
             <div th:if="${gruppe.geschlossen()}" >
@@ -69,6 +70,7 @@
             <td> <a href="#" th:href="@{gruppe(id=*{gruppe.id()})}"> Anzeigen </a> </td>
             </div>
         </tr>
+        </div>
 
         </tbody>
 
