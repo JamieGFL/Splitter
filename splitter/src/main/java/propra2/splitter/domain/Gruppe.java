@@ -9,8 +9,8 @@ public class Gruppe {
     private Person gruender;
     private List<Person> personen;
     private List<Ausgabe> gruppenAusgaben = new ArrayList<>();
-    private List<Transaktion> transaktionen = new ArrayList<>();
-    ArrayList<Person> nettoBetraege = new ArrayList<>();
+    private final List<Transaktion> transaktionen = new ArrayList<>();
+    private final ArrayList<Person> nettoBetraege = new ArrayList<>();
     private Integer groesse = 0;
 
     private String gruppenName;
@@ -48,10 +48,10 @@ public class Gruppe {
         if (!geschlossen){
             ausgabeGetaetigt = true;
 
-            Person zahlungsEmpfaenger = new Person("platzhalter", new ArrayList<>(), new ArrayList<>());
+            Person zahlungsempfaenger = new Person("platzhalter", new ArrayList<>(), new ArrayList<>());
             for(Person person : personen){
                 if(person.getName().equals(name)){
-                    zahlungsEmpfaenger = person;
+                    zahlungsempfaenger = person;
                 }
             }
 
@@ -66,14 +66,14 @@ public class Gruppe {
             }
 
             // Ausgaben in Person, welche Ausgabe getätigt hat, speichern
-            Ausgabe newAusgabe = new Ausgabe(new Aktivitaet(aktivitaet), zahlungsEmpfaenger, teilnehmer, kosten);
-            zahlungsEmpfaenger.addAusgabe(newAusgabe);
+            Ausgabe newAusgabe = new Ausgabe(new Aktivitaet(aktivitaet), zahlungsempfaenger, teilnehmer, kosten);
+            zahlungsempfaenger.addAusgabe(newAusgabe);
             gruppenAusgaben.add(newAusgabe);
 
             // speichert Schulden der payers
             for(Person person : teilnehmer) {
-                if (!person.equals(zahlungsEmpfaenger)) {
-                    person.addSchulden(new Schulden(person, zahlungsEmpfaenger));
+                if (!person.equals(zahlungsempfaenger)) {
+                    person.addSchulden(new Schulden(person, zahlungsempfaenger));
                 }
             }
         }
@@ -194,64 +194,27 @@ public class Gruppe {
         return gruppenAusgaben;
     }
 
-    public void setGruppenAusgaben(List<Ausgabe> gruppenAusgaben) {
-        this.gruppenAusgaben = gruppenAusgaben;
-    }
-
     public UUID getId() {
         return id;
-    }
-
-    public void setId(UUID id) {
-        this.id = id;
     }
 
     public Person getCreator() {
         return gruender;
     }
 
-    public void setCreator(Person creator) {
-        this.gruender = creator;
-    }
-
     public List<Person> getPersonen() {
         return List.copyOf(personen);
-    }
-
-    public void setPersonen(List<Person> personen) {
-        this.personen = personen;
-    }
-
-    public Integer getGroesse() {
-        return groesse;
-    }
-
-    public void setGroesse(Integer groesse) {
-        this.groesse = groesse;
     }
 
     public boolean isAusgabeGetaetigt() {
         return ausgabeGetaetigt;
     }
 
-    public void setAusgabeGetaetigt(boolean ausgabeGetaetigt) {
-        this.ausgabeGetaetigt = ausgabeGetaetigt;
-    }
-
-
     public boolean isGeschlossen() {
         return geschlossen;
     }
 
-    public void setGeschlossen(boolean geschlossen) {
-        this.geschlossen = geschlossen;
-    }
-
     public String getGruppenName() {
         return gruppenName;
-    }
-
-    public void setGruppenName(String gruppenName) {
-        this.gruppenName = gruppenName;
     }
 }

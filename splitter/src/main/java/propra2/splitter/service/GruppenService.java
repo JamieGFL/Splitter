@@ -11,7 +11,7 @@ import java.util.*;
 @Service
 public class GruppenService {
 
-    private List<Gruppe> gruppen = new ArrayList<>();
+    private final List<Gruppe> gruppen = new ArrayList<>();
 
     private void add(Gruppe gruppe){
         gruppen.add(gruppe);

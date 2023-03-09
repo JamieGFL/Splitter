@@ -33,31 +33,11 @@ public class Transaktion {
         return person1;
     }
 
-    public void setPerson1(Person person1) {
-        this.person1 = person1;
-    }
-
     public Person getPerson2() {
         return person2;
     }
 
-    public void setPerson2(Person person2) {
-        this.person2 = person2;
-    }
-
-    public Money getNettoBetrag() {
-        return nettoBetrag;
-    }
-
-    public void setNettoBetrag(Money nettoBetrag) {
-        this.nettoBetrag = nettoBetrag;
-    }
-
     public String getTransaktionsNachricht() {
         return transaktionsNachricht;
-    }
-
-    public void setTransaktionsNachricht(String transaktionsNachricht) {
-        this.transaktionsNachricht = transaktionsNachricht;
     }
 }

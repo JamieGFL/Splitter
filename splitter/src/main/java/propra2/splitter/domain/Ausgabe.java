@@ -38,10 +38,6 @@ public class Ausgabe {
         return false;
     }
 
-    public boolean personNotPresent(String name){
-        return !personPresent(name);
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -58,16 +54,8 @@ public class Ausgabe {
         return aktivitaet;
     }
 
-    public void setAktivitaetName(Aktivitaet aktivitaet) {
-        this.aktivitaet = aktivitaet;
-    }
-
     public Person getAusleger() {
         return ausleger;
-    }
-
-    public void setAusleger(Person ausleger) {
-        this.ausleger = ausleger;
     }
 
     public List<Person> getPersonen() {
@@ -79,13 +67,5 @@ public class Ausgabe {
 
     public Money getGesamtKosten(){
         return kosten;
-    }
-
-    public void setPersonen(List<Person> personen) {
-        this.personen = personen;
-    }
-
-    public void setKosten(Money kosten) {
-        this.kosten = kosten;
     }
 }

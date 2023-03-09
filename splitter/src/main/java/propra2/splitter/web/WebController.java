@@ -27,7 +27,7 @@ public class WebController {
     }
 
     @GetMapping("/")
-    public String gruppenSeite(Model model, OAuth2AuthenticationToken token){
+    public String gruppenSeite(Model model){
         GruppenOnPage liste = service.getGruppen();
         model.addAttribute("gruppen", liste);
         return "index";

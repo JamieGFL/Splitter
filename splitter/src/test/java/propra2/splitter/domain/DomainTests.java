@@ -6,12 +6,9 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.verify;
 
 public class DomainTests {
 
@@ -24,7 +21,7 @@ public class DomainTests {
         List<Transaktion> transaktionen2 = new ArrayList<>();
         if (!transaktionen.isEmpty()&&!(transaktionen.size() < 2)) {
             for (Transaktion transaktion : transaktionen) {
-                // Verletzung von Kriterum 2, mehr als eine Überweisung zwischen zwei Personen
+                // Verletzung von Kriterium 2, mehr als eine Überweisung zwischen zwei Personen
                 if(transaktionen2.contains(transaktion)){
                     isValid = false;
                     break;
@@ -61,7 +58,6 @@ public class DomainTests {
     @Test
     @DisplayName("Person kann Gruppe hinzugefügt werden")
     void test_01(){
-        Person personA = new Person("MaxHub", new ArrayList<>(), new ArrayList<>());
         Gruppe gruppe = Gruppe.erstelleGruppe( "MaxHub", "Reisegruppe");
 
 
@@ -380,7 +376,7 @@ public class DomainTests {
         gruppe.addAusgabeToPerson("Benzin (Hinweg)","B",List.of("B","A"), Money.of(38.58, "EUR"));
         gruppe.addAusgabeToPerson("Benzin (Rückweg)","B",List.of("B","A","D"), Money.of(38.58, "EUR"));
         gruppe.addAusgabeToPerson("Benzin","C",List.of("C","E","F"), Money.of(82.11, "EUR"));
-        gruppe.addAusgabeToPerson("Staedtour","D",List.of("A","B","C","D","E","F"), Money.of(96, "EUR"));
+        gruppe.addAusgabeToPerson("Stadtour","D",List.of("A","B","C","D","E","F"), Money.of(96, "EUR"));
         gruppe.addAusgabeToPerson("Theatervorstellung","F",List.of("B","E","F"), Money.of(95.37, "EUR"));
         String transaction1 = personB.getName() + " muss EUR 96.78 an " + personA.getName() + " zahlen";
         String transaction2 = personC.getName() + " muss EUR 55.26 an " + personA.getName() + " zahlen";
@@ -418,7 +414,7 @@ public class DomainTests {
         gruppe.addAusgabeToPerson("Benzin (Hinweg)","G",List.of("B"), Money.of(10, "EUR"));
         gruppe.addAusgabeToPerson("Benzin (Rückweg)","E",List.of("A","C","E"), Money.of(75, "EUR"));
         gruppe.addAusgabeToPerson("Benzin","F",List.of("A","F"), Money.of(50, "EUR"));
-        gruppe.addAusgabeToPerson("Staedtour","E",List.of("D"), Money.of(40, "EUR"));
+        gruppe.addAusgabeToPerson("Stadtour","E",List.of("D"), Money.of(40, "EUR"));
         gruppe.addAusgabeToPerson("Theatervorstellung","F",List.of("B","F"), Money.of(40, "EUR"));
         gruppe.addAusgabeToPerson("Club","F",List.of("C"), Money.of(5, "EUR"));
         gruppe.addAusgabeToPerson("Juan","G",List.of("A"), Money.of(30, "EUR"));
