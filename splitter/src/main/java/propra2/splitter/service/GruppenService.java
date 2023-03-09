@@ -29,7 +29,7 @@ public class GruppenService {
     }
 
     private GruppenDetails toGruppenDetails(Gruppe gruppe){
-        return new GruppenDetails(gruppe.getId(),gruppe.getCreator().getName(),gruppe.getPersonen().stream().map(Person::getName).toList());
+        return new GruppenDetails(gruppe.getId(),gruppe.getCreator().getName(),gruppe.getPersonen().stream().map(Person::getName).toList(), gruppe.isGeschlossen());
     }
 
     public GruppenOnPage getGruppen(){

@@ -235,4 +235,12 @@ public class Gruppe {
         this.ausgabeGetaetigt = ausgabeGetaetigt;
     }
 
+
+    public boolean isGeschlossen() {
+        return geschlossen;
+    }
+
+    public void setGeschlossen(boolean geschlossen) {
+        this.geschlossen = geschlossen;
+    }
 }

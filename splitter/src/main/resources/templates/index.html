@@ -14,6 +14,10 @@
     <form method="post" th:action="@{/add}">
         <button class="btn btn-dark"> Hinzufuegen</button>
     </form>
+    <br>
+    <h3>Geöffnete Gruppen</h3>
+
+    <br>
 
     <table class="table table-bordered table-dark w-50">
 
@@ -21,18 +25,53 @@
             <tr>
                 <th>Gruppen Nummer</th>
                 <th>Gruender</th>
+                <th>Geoeffnet</th>
             </tr>
         </thead>
 
         <tbody>
             <div th:if="${gruppen} != null"></div>
+
             <tr th:each="gruppe : ${gruppen.details()}">
+                <div th:if="${!gruppe.geschlossen()}" >
                 <td th:text="${gruppe.id}"></td>
                 <td th:text="${gruppe.gruender}"></td>
                 <td> <a href="#" th:href="@{gruppe(id=*{gruppe.id()})}"> Anzeigen </a> </td>
+                </div>
             </tr>
+
         </tbody>
 
     </table>
+
+    <br>
+
+    <h3>Geschlossene Gruppen</h3>
+
+    <table class="table table-bordered table-dark w-50">
+
+        <thead>
+        <tr>
+            <th>Gruppen Nummer</th>
+            <th>Gruender</th>
+            <th>Geschlossen</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        <div th:if="${gruppen} != null"></div>
+
+        <tr th:each="gruppe : ${gruppen.details()}">
+            <div th:if="${gruppe.geschlossen()}" >
+            <td th:text="${gruppe.id}"></td>
+            <td th:text="${gruppe.gruender}"></td>
+            <td> <a href="#" th:href="@{gruppe(id=*{gruppe.id()})}"> Anzeigen </a> </td>
+            </div>
+        </tr>
+
+        </tbody>
+
+    </table>
+
 </body>
 </html>
