@@ -64,6 +64,7 @@ public class GruppenServiceTests {
         Gruppe gruppe = service.addGruppe(mkUser("James"), "Reisegruppe1");
         Gruppe gruppe2 = service.addGruppe(mkUser("GitLisa"), "Reisegruppe2");
         Gruppe gruppe3 = service.addGruppe(mkUser("GitMax"), "Reisegruppe3");
+
         gruppe2.addPerson("James");
         gruppe3.addPerson("James");
 
@@ -94,6 +95,7 @@ public class GruppenServiceTests {
         Gruppe gruppe = service.addGruppe(mkUser("James"), "Reisegruppe");
         Gruppe gruppe2 = service.addGruppe(mkUser("GitLisa"), "Reisegruppe");
         Gruppe gruppe3 = service.addGruppe(mkUser("GitMax"), "Reisegruppe");
+
         gruppe2.addPerson("James");
 
         assertThat(service.personToGruppeMatch(mkUser("James")).details())
@@ -120,6 +122,7 @@ public class GruppenServiceTests {
         Gruppe gruppe = service.addGruppe(mkUser("James"), "Reisegruppe");
         gruppe.addPerson("GitLisa");
         Double d = 40.00;
+
         service.addAusgabeToGruppe(gruppe.getId(),"pizza","James","James, GitLisa", d);
 
         assertThat(service.getSingleGruppe(gruppe.getId()).getGruppenAusgaben()).hasSize(1);
@@ -132,6 +135,7 @@ public class GruppenServiceTests {
         Gruppe gruppe = service.addGruppe(mkUser("James"), "Reisegruppe");
         gruppe.addPerson("GitLisa");
         Double d = 40.00;
+
         service.addAusgabeToGruppe(gruppe.getId(),"pizza","James","James, GitLisa", d);
         service.addAusgabeToGruppe(gruppe.getId(),"club","James","James, GitLisa", d);
 
@@ -145,6 +149,7 @@ public class GruppenServiceTests {
         Gruppe gruppe = service.addGruppe(mkUser("James"), "Reisegruppe");
         gruppe.addPerson("GitLisa");
         Double d = 40.00;
+
         service.addAusgabeToGruppe(gruppe.getId(),"pizza","James","James, GitLisa", d);
         service.transaktionBerechnen(gruppe.getId());
 
@@ -158,6 +163,7 @@ public class GruppenServiceTests {
         Gruppe gruppe = service.addGruppe(mkUser("James"), "Reisegruppe");
         gruppe.addPerson("GitLisa");
         Double d = 40.00;
+
         service.addAusgabeToGruppe(gruppe.getId(),"pizza","James","James, GitLisa", d);
         service.transaktionBerechnen(gruppe.getId());
         service.addAusgabeToGruppe(gruppe.getId(),"club","James","James, GitLisa", d);
@@ -166,6 +172,30 @@ public class GruppenServiceTests {
         assertThat(service.getSingleGruppe(gruppe.getId()).getTransaktionen()).hasSize(1);
     }
 
+    @Test
+    @DisplayName("Service kann Gruppen schließen")
+    void test_12(){
+        GruppenService service = new GruppenService();
+        Gruppe gruppe = service.addGruppe(mkUser("James"), "Reisegruppe");
+        gruppe.addPerson("GitLisa");
+
+        service.closeGruppe(gruppe.getId());
+
+        assertThat(service.getSingleGruppe(gruppe.getId()).isGeschlossen()).isTrue();
+
+    }
+
+    @Test
+    @DisplayName("Nicht geschlossene Gruppen sind offen")
+    void test_13(){
+        GruppenService service = new GruppenService();
+        Gruppe gruppe = service.addGruppe(mkUser("James"), "Reisegruppe");
+        gruppe.addPerson("GitLisa");
+
+
+        assertThat(service.getSingleGruppe(gruppe.getId()).isGeschlossen()).isFalse();
+
+    }
 
 
 }
