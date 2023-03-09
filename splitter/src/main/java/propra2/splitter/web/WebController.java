@@ -46,7 +46,7 @@ public class WebController {
     public String getSingleGruppePage(Model model,
                                       @RequestParam(name = "id", value = "id", required = false) UUID id,
                                       @ModelAttribute("loginForm") LoginForm loginForm,
-                                      String error){
+                                      String error, OAuth2AuthenticationToken token){
 
         if (error != null){
             model.addAttribute("message", error);
@@ -54,7 +54,7 @@ public class WebController {
 
         Gruppe gruppe = service.getSingleGruppe(id);
         model.addAttribute("gruppe", gruppe);
-        model.addAttribute("login", loginForm.getLogin());
+        model.addAttribute("login", token.getPrincipal().getAttribute("login"));
 
         return "gruppe";
     }
