@@ -7,6 +7,10 @@
         crossorigin="anonymous">
   <title>Title</title>
   <script type="text/javascript" src="../static/script.js" th:src="@{/script.js}"></script>
+
+
+
+
 </head>
 <body>
 <h1>Gruppe</h1>
@@ -46,8 +50,15 @@
 <form id="2" method="post" th:action="@{/gruppe/add/ausgaben}" >
   <input type="hidden" name="id" value="id" th:value="${gruppe.id}">
   <input type="text" name="aktivitaet">
-  <input type="text" name="zahler">
+
+  <select name="zahler" >
+    <div th:each="personen : ${gruppe.getPersonen()}" >
+      <option th:text="${personen.getName()}" ></option>
+    </div>
+  </select>
+
   <input type="text" name="teilnehmer">
+
   <input type="text" name="betrag">
 
   <button class="btn btn-dark"  >Ausgabe hinzufügen</button>
@@ -68,12 +79,16 @@
   <tbody>
 
   <div th:if="${gruppe} != null">
+
     <tr th:each="person : ${gruppe.gruppenAusgaben}">
+
       <td th:text="${person.getAktivitaet().name()}"> </td>
       <td th:text="${person.getAusleger().name}"> </td>
       <td th:text="${person.getPersonenNamen()}"></td>
       <td th:text="${person.getGesamtKosten()}"> </td>
+
     </tr>
+
   </div>
 
   </tbody>
@@ -119,6 +134,9 @@
 </form>
 
 <a href="/"> zurück zur Gruppen-übersicht </a>
+
+
+
 
 </body>
 </html>

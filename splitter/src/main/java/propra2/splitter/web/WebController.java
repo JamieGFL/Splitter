@@ -54,6 +54,7 @@ public class WebController {
 
         Gruppe gruppe = service.getSingleGruppe(id);
         model.addAttribute("gruppe", gruppe);
+        model.addAttribute("login", loginForm.getLogin());
 
         return "gruppe";
     }
