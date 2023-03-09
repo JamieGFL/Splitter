@@ -13,7 +13,7 @@
 
 </head>
 <body>
-<h1>Gruppe</h1>
+<h1 th:text="${gruppe.getGruppenName()}"></h1>
 
 
 <form id="1" method="post" th:action="@{/gruppe/add}" th:object="${loginForm}">

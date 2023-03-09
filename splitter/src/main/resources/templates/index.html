@@ -12,6 +12,7 @@
     <h1>Willkommen bei Splitter</h1>
 
     <form method="post" th:action="@{/add}">
+        <input type="text" name="gruppenName" >
         <button class="btn btn-dark"> Hinzufuegen</button>
     </form>
     <br>
@@ -23,7 +24,7 @@
 
         <thead>
             <tr>
-                <th>Gruppen Nummer</th>
+                <th>Gruppen Name</th>
                 <th>Gruender</th>
                 <th>Geoeffnet</th>
             </tr>
@@ -34,7 +35,7 @@
 
             <tr th:each="gruppe : ${gruppen.details()}">
                 <div th:if="${!gruppe.geschlossen()}" >
-                <td th:text="${gruppe.id}"></td>
+                <td th:text="${gruppe.gruppenName()}"></td>
                 <td th:text="${gruppe.gruender}"></td>
                 <td> <a href="#" th:href="@{gruppe(id=*{gruppe.id()})}"> Anzeigen </a> </td>
                 </div>
@@ -63,7 +64,7 @@
 
         <tr th:each="gruppe : ${gruppen.details()}">
             <div th:if="${gruppe.geschlossen()}" >
-            <td th:text="${gruppe.id}"></td>
+            <td th:text="${gruppe.gruppenName()}"></td>
             <td th:text="${gruppe.gruender}"></td>
             <td> <a href="#" th:href="@{gruppe(id=*{gruppe.id()})}"> Anzeigen </a> </td>
             </div>

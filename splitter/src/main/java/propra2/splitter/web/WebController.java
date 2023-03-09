@@ -34,8 +34,8 @@ public class WebController {
     }
 
     @PostMapping("/add")
-    public String addGruppen(OAuth2AuthenticationToken token){
-        Gruppe gruppe = service.addGruppe(token.getPrincipal());
+    public String addGruppen(OAuth2AuthenticationToken token, String gruppenName){
+        Gruppe gruppe = service.addGruppe(token.getPrincipal(), gruppenName);
 
         UUID id = gruppe.getId();
 
