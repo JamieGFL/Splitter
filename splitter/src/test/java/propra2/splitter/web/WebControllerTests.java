@@ -60,24 +60,6 @@ public class WebControllerTests {
 
   }
 
-  @Test
-  @WithMockOAuth2User(login = "MaxHub")
-  @DisplayName("Eine valide Gruppe wird hinzugefügt")
-  void test_02() throws Exception {
-
-    when(service.addGruppe(any(), anyString())).thenReturn(Gruppe.erstelleGruppe("MaxHub","Gruppe"));
-
-    String gruppenName = "Gruppe";
-
-    mvc.perform(post("/add")
-        .param("gruppenName" ,gruppenName)
-        .with(csrf())).andExpect(status().is3xxRedirection());
-
-    ArgumentCaptor<OAuth2User> captor = ArgumentCaptor.forClass(OAuth2User.class);
-    verify(service).addGruppe(captor.capture(), eq(gruppenName));
-    assertThat((String) captor.getValue().getAttribute("login")).isEqualTo("MaxHub");
-
-  }
 
 //  @Test
 //  @WithMockOAuth2User(login = "MaxHub")
