@@ -26,11 +26,24 @@ public class Gruppe {
         this.gruppenName = gruppenName;
     }
 
+    public Gruppe(String gruppenName, List<Person> personen){
+        this.gruppenName = gruppenName;
+        this.personen = personen;
+    }
+
     public static Gruppe erstelleGruppe(String gruender, String gruppenName){
         Person person = new Person(gruender, new ArrayList<>(), new ArrayList<>());
         List<Person> personen = new ArrayList<>();
         personen.add(person);
         return new Gruppe(person, personen, gruppenName);
+    }
+
+    public static Gruppe erstelleRestGruppe(String gruppenName, List<String> personen) {
+        List<Person> personenListe = new ArrayList<>();
+        for(String person: personen){
+            personenListe.add(new Person(person, new ArrayList<>(), new ArrayList<>()));
+        }
+        return new Gruppe(gruppenName, personenListe);
     }
 
     public void closeGroup(){
