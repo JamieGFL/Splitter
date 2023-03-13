@@ -7,6 +7,7 @@ import propra2.splitter.domain.Person;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 @Service
@@ -76,7 +77,23 @@ public class RestGruppenService {
                 ausgabenEntity.schuldner(), Money.of(ausgabenEntity.cent()/100, "EUR"));
     }
 
+    public List<TransaktionEntity> getRestTransaktionen(String id){
+        UUID uuid = UUID.fromString(id);
+        Gruppe gruppe = getSingleGruppe(uuid);
+        gruppe.berechneTransaktionen();
+        return gruppe.getTransaktionen().stream()
+                .map(transaktion -> new TransaktionEntity
+                        (transaktion.getPerson1().getName(), transaktion.getPerson2().getName(),
+                                transaktion.getNettoBetrag().getNumberStripped().intValue()*100)).toList();
+    }
 
+    public List<GruppeEntity> personRestMatch (String login) {
+        List<GruppeEntity> currentDetails = getRestGruppen();
+
+        return currentDetails.stream()
+                .filter(groupDetails -> groupDetails.personen().stream()
+                        .anyMatch(Person -> Objects.equals(Person, login))).toList();
+    }
 
 
 
