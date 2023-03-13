@@ -30,6 +30,20 @@ import java.util.UUID;
             return new ResponseEntity<>(service.personRestMatch(githublogin), HttpStatus.OK);
         }
 
+        @PostMapping("/api/gruppen")
+        public ResponseEntity<UUID> addGruppen(@RequestBody GruppeEntity gruppenEntity){
+
+            if (gruppenEntity.name() == null){
+                return ResponseEntity.badRequest().body(null);
+            } else if (gruppenEntity.personen().size() < 1 ) {
+                return ResponseEntity.badRequest().body(null);
+            }
+
+            return new ResponseEntity<>(service.addRestGruppe(gruppenEntity), HttpStatus.CREATED);
+        }
+
+
+
 
 
 
