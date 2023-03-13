@@ -59,6 +59,25 @@ import java.util.UUID;
             return new ResponseEntity<>(service.setRestGruppeGeschlossen(id), HttpStatus.OK);
         }
 
+        @PostMapping("/api/gruppen/{id}/auslagen")
+        public ResponseEntity<AusgabeEntity> addAusgabe(@PathVariable String id, @RequestBody AusgabeEntity ausgabenEntity){
+
+            if(service.getGruppeInformationEntity(id) == null){
+                return ResponseEntity.notFound().build();
+            }
+            if(service.getGruppeInformationEntity(id).geschlossen()){
+                return ResponseEntity.status(409).build();
+            }
+            // If check wenn JSON Dokument fehlerhaft ist
+            if(ausgabenEntity.grund() == null || ausgabenEntity.glaeubiger() == null || ausgabenEntity.schuldner() == null || ausgabenEntity.cent() == null
+                    || ausgabenEntity.cent() <= 0 || ausgabenEntity.schuldner().isEmpty()){
+                return ResponseEntity.badRequest().build();
+            }
+
+            service.addRestAusgabenToGruppe(id, ausgabenEntity);
+            return new ResponseEntity<>(ausgabenEntity, HttpStatus.CREATED);
+        }
+
 
 
 
