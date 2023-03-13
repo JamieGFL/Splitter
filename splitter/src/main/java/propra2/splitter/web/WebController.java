@@ -58,7 +58,6 @@ public class WebController {
         if (error != null){
             model.addAttribute("loginMessage", error);
         }
-
         if (aktivitaetError != null) {
             model.addAttribute("aktivitaetMessage", aktivitaetError);
         }
@@ -84,7 +83,6 @@ public class WebController {
                                           @Valid LoginForm loginForm,
                                           BindingResult bindingResult,
                                           RedirectAttributes attributes){
-
 
         if (bindingResult.hasErrors()){
             attributes.addAttribute("error", "Invalider GitHub Name");
@@ -123,8 +121,9 @@ public class WebController {
         }
         if (bindingResult.hasFieldErrors("betrag")){
             bet = true;
-            attributes.addAttribute("betragError","Invalidet Betrag");
+            attributes.addAttribute("betragError","Invalider Betrag");
         }
+
 
         if (akt){
             return "redirect:/gruppe?id=" + id;
