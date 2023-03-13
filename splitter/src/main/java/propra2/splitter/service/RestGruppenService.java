@@ -36,6 +36,31 @@ public class RestGruppenService {
         return new GruppeEntity(gruppe.getGruppenName(), gruppe.getPersonen().stream().map(Person::getName).toList());
     }
 
+    public GruppeInformationEntity getGruppeInformationEntity(String id) {
+        try{
+            UUID uuid = UUID.fromString(id);
+            Gruppe gruppe = gruppen.stream().filter(g -> g.getId().equals(uuid)).reduce((a, b) -> {
+                throw new IllegalArgumentException();
+            }).orElse(null);
+            if (gruppe == null){
+                System.out.println("Test1");
+                return null;
+            }
+            System.out.println("Test2");
+            return toGruppeInformationsEntity(gruppe);
+        }
+        catch(Exception exception){
+            return null;
+        }
+    }
+
+    public GruppeInformationEntity toGruppeInformationsEntity(Gruppe gruppe){
+        return new GruppeInformationEntity(gruppe.getId(), gruppe.getGruppenName(), gruppe.getPersonen().stream().map(Person::getName).toList(),
+                gruppe.isGeschlossen(), gruppe.getGruppenAusgaben().stream().
+                map(ausgabe -> new AusgabeEntity(ausgabe.getAktivitaet().name(), ausgabe.getAusleger().getName(),
+                        ausgabe.getPersonen().stream().map(Person::getName).toList(), ausgabe.getGesamtKosten().getNumber().intValue())).toList());
+    }
+
 
 
 
