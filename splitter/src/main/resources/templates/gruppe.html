@@ -6,15 +6,20 @@
         integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2"
         crossorigin="anonymous">
   <title>Title</title>
-  <script type="text/javascript" src="../static/script.js" th:src="@{/script.js}"></script>
-
-
+  <link rel="stylesheet" href="../static/css/style.css" th:href="@{/css/style.css}">
+  <script type="text/javascript" src="../static/js/script.js" th:src="@{/js/script.js}"></script>
+  <script src="https://kit.fontawesome.com/e17460c3d0.js" crossorigin="anonymous"></script>
 
 
 </head>
 <body>
-<h1 th:text="${gruppe.getGruppenName()}"></h1>
+<h1 th:if="${!gruppe.isGeschlossen()}" th:text="${gruppe.getGruppenName()}" ></h1>
+<div class="lockContainer">
+<h1 th:unless="${!gruppe.isGeschlossen()}" th:text="${gruppe.getGruppenName()} + ' ' + '(geschlossen)'  "  > </h1>
 
+  <div th:if="${gruppe.isGeschlossen()}" class="fa-solid fa-lock"></div>
+
+</div>
 
 <form id="1" method="post" th:action="@{/gruppe/add}" th:object="${loginForm}">
   <input type="hidden" name="id" value="id" th:value="${gruppe.id}">
@@ -50,8 +55,9 @@
 <form id="2" method="post" th:action="@{/gruppe/add/ausgaben}" th:object="${ausgabenForm}" >
   <input type="hidden" name="id" value="id" th:value="${gruppe.id}">
 
-  <label for=aktivitaetID>Aktivität:</label><br>
+  <label for=aktivitaetID>Aktivität:
   <input id="aktivitaetID" type="text" name="aktivitaet" th:field="*{aktivitaet}" >
+  </label>
   <small class="text-danger" th:if="${aktivitaetMessage}" th:text="${aktivitaetMessage}" ></small>
 
   <label for="zahlerID">Ausleger:
@@ -63,10 +69,12 @@
     </select>
   </label>
 
-  <input type="text" name="teilnehmer" th:field="*{teilnehmer}" >
+  <label for="teilnehmerID"> Teilnehmer: </label>
+  <input id="teilnehmerID" type="text" name="teilnehmer" th:field="*{teilnehmer}" >
   <small class="text-danger" th:if="${teilnehmerMessage}" th:text="${teilnehmerMessage}" ></small>
 
-  <input type="text" name="betrag" th:field="*{betrag}" >
+  <label for="betragID"> Betrag: </label>
+  <input id="betragID" type="text" name="betrag" th:field="*{betrag}" >
   <small class="text-danger" th:if="${betragMessage}" th:text="${betragMessage}" ></small>
 
   <button class="btn btn-dark"  >Ausgabe hinzufügen</button>
@@ -149,6 +157,7 @@
 </form>
 
 <a href="/"> zurück zur Gruppen-Übersicht </a>
+
 
 
 
