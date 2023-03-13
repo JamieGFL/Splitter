@@ -13,6 +13,7 @@ import propra2.splitter.config.WebSecurityKonfiguration;
 import propra2.splitter.domain.Gruppe;
 import propra2.splitter.helper.WithMockOAuth2User;
 import propra2.splitter.service.GruppenService;
+import propra2.splitter.service.RestGruppenService;
 
 import java.util.UUID;
 
@@ -23,7 +24,7 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest
+@WebMvcTest(controllers = WebController.class)
 @Import(WebSecurityKonfiguration.class)
 public class AddTests {
 

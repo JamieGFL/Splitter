@@ -30,9 +30,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
-
+@WebMvcTest(controllers = WebController.class)
 @Import(WebSecurityKonfiguration.class)
-@WebMvcTest(WebController.class)
 public class GruppenAnzeigeTest {
 
 
@@ -126,7 +125,7 @@ public class GruppenAnzeigeTest {
     UUID id = UUID.randomUUID();
 
     when(service.personToGruppeMatch(any()))
-        .thenReturn(new GruppenOnPage(List.of(new GruppenDetails(id, "Reisegruppe", "MaxHub", List.of("MaxHub"), true))));
+        .thenReturn(new GruppenOnPage(List.of(new GruppenDetails(id, "Reisegruppe", List.of("MaxHub"), true))));
 
     MvcResult result = mvc.perform(get("/")).andReturn();
 
@@ -135,7 +134,6 @@ public class GruppenAnzeigeTest {
 
     assertThat(html).contains("Geschlossene Gruppen");
     assertThat(html).contains("Reisegruppe");
-    assertThat(html).contains("MaxHub");
     assertThat(html).contains("Geschlossen");
 
   }
