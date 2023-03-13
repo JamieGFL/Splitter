@@ -23,7 +23,7 @@ public class GruppenServiceTests {
     void test_01(){
         GruppenService service = new GruppenService();
         Gruppe gruppe = service.addGruppe(mkUser("James"), "Reisegruppe");
-        assertThat(service.getGruppen().details()).contains(new GruppenDetails(gruppe.getId(),gruppe.getGruppenName(),"James", List.of("James"), false));
+        assertThat(service.getGruppen().details()).contains(new GruppenDetails(gruppe.getId(),gruppe.getGruppenName(), List.of("James"), false));
     }
 
     @Test
@@ -35,9 +35,9 @@ public class GruppenServiceTests {
         Gruppe gruppe3 = service.addGruppe(mkUser("GitMax"), "Reisegruppe3");
 
         assertThat(service.getGruppen().details())
-                .containsExactlyInAnyOrder(new GruppenDetails(gruppe1.getId(),gruppe1.getGruppenName(),"James",List.of("James"), false),
-                                           new GruppenDetails(gruppe2.getId(),gruppe2.getGruppenName(),"GitLisa",List.of("GitLisa"), false),
-                                           new GruppenDetails(gruppe3.getId(),gruppe3.getGruppenName(),"GitMax", List.of("GitMax"), false));
+                .containsExactlyInAnyOrder(new GruppenDetails(gruppe1.getId(),gruppe1.getGruppenName(),List.of("James"), false),
+                                           new GruppenDetails(gruppe2.getId(),gruppe2.getGruppenName(),List.of("GitLisa"), false),
+                                           new GruppenDetails(gruppe3.getId(),gruppe3.getGruppenName(),List.of("GitMax"), false));
     }
 
     @Test
@@ -49,7 +49,7 @@ public class GruppenServiceTests {
         gruppe.addPerson("GitLisa");
 
         assertThat(service.getGruppen().details())
-                .containsExactly(new GruppenDetails(gruppe.getId(),gruppe.getGruppenName(),"James", List.of("James","GitMax","GitLisa"), false));
+                .containsExactly(new GruppenDetails(gruppe.getId(),gruppe.getGruppenName(), List.of("James","GitMax","GitLisa"), false));
     }
 
     @Test
@@ -64,9 +64,9 @@ public class GruppenServiceTests {
         gruppe3.addPerson("James");
 
         assertThat(service.getGruppen().details())
-                .containsExactlyInAnyOrder(new GruppenDetails(gruppe.getId(),gruppe.getGruppenName(),"James",List.of("James"), false),
-                                           new GruppenDetails(gruppe2.getId(),gruppe2.getGruppenName(),"GitLisa", List.of("GitLisa", "James"), false),
-                                           new GruppenDetails(gruppe3.getId(),gruppe3.getGruppenName(),"GitMax", List.of("GitMax", "James"), false));
+                .containsExactlyInAnyOrder(new GruppenDetails(gruppe.getId(),gruppe.getGruppenName(), List.of("James"), false),
+                                           new GruppenDetails(gruppe2.getId(),gruppe2.getGruppenName(), List.of("GitLisa", "James"), false),
+                                           new GruppenDetails(gruppe3.getId(),gruppe3.getGruppenName(), List.of("GitMax", "James"), false));
     }
 
     @Test
@@ -78,9 +78,9 @@ public class GruppenServiceTests {
         Gruppe gruppe3 = service.addGruppe(mkUser("James"), "Reisegruppe");
 
         assertThat(service.getGruppen().details())
-                .containsExactlyInAnyOrder(new GruppenDetails(gruppe.getId(),gruppe.getGruppenName(),"James",List.of("James"), false),
-                                           new GruppenDetails(gruppe2.getId(),gruppe2.getGruppenName(),"James",List.of("James"), false),
-                                           new GruppenDetails(gruppe3.getId(),gruppe3.getGruppenName(),"James",List.of("James"), false));
+                .containsExactlyInAnyOrder(new GruppenDetails(gruppe.getId(),gruppe.getGruppenName(), List.of("James"), false),
+                                           new GruppenDetails(gruppe2.getId(),gruppe2.getGruppenName(), List.of("James"), false),
+                                           new GruppenDetails(gruppe3.getId(),gruppe3.getGruppenName(), List.of("James"), false));
     }
 
     @Test
@@ -94,8 +94,8 @@ public class GruppenServiceTests {
         gruppe2.addPerson("James");
 
         assertThat(service.personToGruppeMatch(mkUser("James")).details())
-                .containsExactlyInAnyOrder(new GruppenDetails(gruppe.getId(),gruppe.getGruppenName(),"James", List.of("James"), false),
-                                           new GruppenDetails(gruppe2.getId(),gruppe2.getGruppenName(), "GitLisa", List.of("GitLisa", "James"), false));
+                .containsExactlyInAnyOrder(new GruppenDetails(gruppe.getId(),gruppe.getGruppenName(), List.of("James"), false),
+                                           new GruppenDetails(gruppe2.getId(),gruppe2.getGruppenName(), List.of("GitLisa", "James"), false));
     }
 
     @Test

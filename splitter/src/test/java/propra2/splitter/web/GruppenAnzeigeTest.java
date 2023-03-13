@@ -61,12 +61,11 @@ public class GruppenAnzeigeTest {
   void test_02() throws Exception{
 
     when(service.personToGruppeMatch(any()))
-            .thenReturn(new GruppenOnPage(List.of(new GruppenDetails(UUID.randomUUID(), "Reisegruppe", "MaxHub", List.of("MaxHub"), false))));
+            .thenReturn(new GruppenOnPage(List.of(new GruppenDetails(UUID.randomUUID(), "Reisegruppe", List.of("MaxHub"), false))));
 
     MvcResult result = mvc.perform(get("/")).andReturn();
 
     assertThat(result.getResponse().getContentAsString()).contains("Reisegruppe");
-    assertThat(result.getResponse().getContentAsString()).contains("MaxHub");
 
   }
 
@@ -76,7 +75,7 @@ public class GruppenAnzeigeTest {
   void test_03() throws Exception{
 
     when(service.personToGruppeMatch(any()))
-            .thenReturn(new GruppenOnPage(List.of(new GruppenDetails(UUID.randomUUID(), "Reisegruppe", "MaxHub", List.of("MaxHub"), false))));
+            .thenReturn(new GruppenOnPage(List.of(new GruppenDetails(UUID.randomUUID(), "Reisegruppe", List.of("MaxHub"), false))));
 
     MvcResult result = mvc.perform(get("/")).andReturn();
 
@@ -90,7 +89,7 @@ public class GruppenAnzeigeTest {
   void test_04() throws Exception{
 
     when(service.personToGruppeMatch(any()))
-            .thenReturn(new GruppenOnPage(List.of(new GruppenDetails(UUID.randomUUID(), "Reisegruppe", "MaxHub", List.of("MaxHub"), false))));
+            .thenReturn(new GruppenOnPage(List.of(new GruppenDetails(UUID.randomUUID(), "Reisegruppe",  List.of("MaxHub"), false))));
 
     MvcResult result = mvc.perform(get("/")).andReturn();
 
@@ -108,7 +107,7 @@ public class GruppenAnzeigeTest {
     UUID id = UUID.randomUUID();
 
     when(service.personToGruppeMatch(any()))
-            .thenReturn(new GruppenOnPage(List.of(new GruppenDetails(id, "Reisegruppe", "MaxHub", List.of("MaxHub"), false))));
+            .thenReturn(new GruppenOnPage(List.of(new GruppenDetails(id, "Reisegruppe", List.of("MaxHub"), false))));
 
     MvcResult result = mvc.perform(get("/")).andReturn();
 

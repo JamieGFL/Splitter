@@ -6,7 +6,6 @@ import java.util.*;
 
 public class Gruppe {
     private UUID id;
-    private Person gruender;
     private List<Person> personen;
     private List<Ausgabe> gruppenAusgaben = new ArrayList<>();
     private final List<Transaktion> transaktionen = new ArrayList<>();
@@ -19,23 +18,17 @@ public class Gruppe {
     boolean ausgabeGetaetigt = false;
     boolean geschlossen = false;
 
-    public Gruppe(Person gruender, List<Person> personen, String gruppenName) {
+    public Gruppe(List<Person> personen, String gruppenName) {
         this.id = UUID.randomUUID();
-        this.gruender = gruender;
         this.personen = personen;
         this.gruppenName = gruppenName;
-    }
-
-    public Gruppe(String gruppenName, List<Person> personen){
-        this.gruppenName = gruppenName;
-        this.personen = personen;
     }
 
     public static Gruppe erstelleGruppe(String gruender, String gruppenName){
         Person person = new Person(gruender, new ArrayList<>(), new ArrayList<>());
         List<Person> personen = new ArrayList<>();
         personen.add(person);
-        return new Gruppe(person, personen, gruppenName);
+        return new Gruppe(personen, gruppenName);
     }
 
     public static Gruppe erstelleRestGruppe(String gruppenName, List<String> personen) {
@@ -43,7 +36,7 @@ public class Gruppe {
         for(String person: personen){
             personenListe.add(new Person(person, new ArrayList<>(), new ArrayList<>()));
         }
-        return new Gruppe(gruppenName, personenListe);
+        return new Gruppe(personenListe, gruppenName);
     }
 
     public void closeGroup(){
@@ -209,10 +202,6 @@ public class Gruppe {
 
     public UUID getId() {
         return id;
-    }
-
-    public Person getCreator() {
-        return gruender;
     }
 
     public List<Person> getPersonen() {

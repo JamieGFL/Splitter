@@ -45,4 +45,8 @@ public class Transaktion {
     public String getTransaktionsNachricht() {
         return transaktionsNachricht;
     }
+
+    public Money getNettoBetrag() {
+        return nettoBetrag;
+    }
 }
