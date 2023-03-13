@@ -8,10 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import propra2.splitter.service.GruppeEntity;
-import propra2.splitter.service.GruppenOnPage;
-import propra2.splitter.service.GruppenService;
-import propra2.splitter.service.RestGruppenService;
+import propra2.splitter.service.*;
 
 import java.util.List;
 import java.util.UUID;
@@ -40,6 +37,16 @@ import java.util.UUID;
             }
 
             return new ResponseEntity<>(service.addRestGruppe(gruppenEntity), HttpStatus.CREATED);
+        }
+
+        @GetMapping("/api/gruppen/{id}")
+        public ResponseEntity<GruppeInformationEntity> gruppenInfo(@PathVariable String id){
+
+            if (service.getGruppeInformationEntity(id) == null){
+                return ResponseEntity.notFound().build();
+            }
+
+            return new ResponseEntity<>(service.getGruppeInformationEntity(id), HttpStatus.OK);
         }
 
 
