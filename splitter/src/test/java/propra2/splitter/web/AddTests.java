@@ -122,7 +122,7 @@ public class AddTests {
             .param("betrag", "40.00")
             .with(csrf())).andExpect(status().is3xxRedirection());
 
-        verify(service, never()).addAusgabeToGruppe(gruppe.getId(), "", "MaxHub", "GitLisa", 40.00);
+        verify(service, never()).addAusgabeToGruppe(any(), anyString(), anyString(), anyString(), anyDouble());
 
     }
 
@@ -143,7 +143,7 @@ public class AddTests {
             .param("betrag", "40.00")
             .with(csrf())).andExpect(status().is3xxRedirection());
 
-        verify(service, never()).addAusgabeToGruppe(gruppe.getId(), "Pizza", "MaxHub", "", 40.00);
+        verify(service, never()).addAusgabeToGruppe(any(), anyString(), anyString(), anyString(), anyDouble());
 
     }
 
@@ -185,11 +185,10 @@ public class AddTests {
             .param("betrag", "-20")
             .with(csrf())).andExpect(status().is3xxRedirection());
 
-        verify(service, never()).addAusgabeToGruppe(gruppe.getId(), "Pizza", "MaxHub", "GitLisa", -20.00);
+        verify(service, never()).addAusgabeToGruppe(any(), anyString(), anyString(), anyString(), anyDouble());
 
     }
 
-    //Validation Tests hier noch machen!!!
 
 
     @Test
