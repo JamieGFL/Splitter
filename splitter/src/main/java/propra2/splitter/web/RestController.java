@@ -8,10 +8,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import propra2.splitter.service.GruppeEntity;
 import propra2.splitter.service.GruppenOnPage;
 import propra2.splitter.service.GruppenService;
 import propra2.splitter.service.RestGruppenService;
 
+import java.util.List;
 import java.util.UUID;
 
     @org.springframework.web.bind.annotation.RestController
@@ -23,11 +25,12 @@ import java.util.UUID;
             this.service = service;
         }
 
-        @GetMapping("/api/user/{login}/gruppen")
-        public String gruppenSeite(@PathVariable String login){
-
-            return "index";
+        @GetMapping("/api/user/{githublogin}/gruppen")
+        public ResponseEntity<List<GruppeEntity>> gruppenSeite(@PathVariable String githublogin){
+            return new ResponseEntity<>(service.personRestMatch(githublogin), HttpStatus.OK);
         }
+
+
 
 
 
