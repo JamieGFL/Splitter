@@ -90,20 +90,106 @@ public class AddTests {
     void test_04() throws Exception{
 
         Gruppe gruppe = Gruppe.erstelleGruppe("MaxHub", "Reisegruppe");
+        gruppe.addPerson("GitLisa");
+
 
         mvc.perform(post("/gruppe/add/ausgaben")
                 .param("id", gruppe.getId().toString())
                 .param("aktivitaet", "pizza")
                 .param("zahler", "MaxHub")
-                .param("teilnehmer", "MaxHub")
+                .param("teilnehmer", "GitLisa")
                 .param("betrag", "40.00")
                 .with(csrf())).andExpect(status().is3xxRedirection());
 
-        verify(service).addAusgabeToGruppe(gruppe.getId(), "pizza", "MaxHub", "MaxHub", 40.00);
+        verify(service).addAusgabeToGruppe(gruppe.getId(), "pizza", "MaxHub", "GitLisa", 40.00);
 
     }
 
-    //Validation Tests hier noch machen!!!
+    @Test
+    @WithMockOAuth2User(login = "MaxHub")
+    @DisplayName("Ausgabe mit ungültiger Aktivität wird nicht hinzugefügt")
+    void test_05() throws Exception{
+
+        Gruppe gruppe = Gruppe.erstelleGruppe("MaxHub", "Reisegruppe");
+        gruppe.addPerson("GitLisa");
+
+
+        mvc.perform(post("/gruppe/add/ausgaben")
+            .param("id", gruppe.getId().toString())
+            .param("aktivitaet", "")
+            .param("zahler", "MaxHub")
+            .param("teilnehmer", "GitLisa")
+            .param("betrag", "40.00")
+            .with(csrf())).andExpect(status().is3xxRedirection());
+
+        verify(service, never()).addAusgabeToGruppe(any(), anyString(), anyString(), anyString(), anyDouble());
+
+    }
+
+    @Test
+    @WithMockOAuth2User(login = "MaxHub")
+    @DisplayName("Ausgabe mit ungültigen Teilnehmer Eintrag wird nicht hinzugefügt")
+    void test_06() throws Exception{
+
+        Gruppe gruppe = Gruppe.erstelleGruppe("MaxHub", "Reisegruppe");
+        gruppe.addPerson("GitLisa");
+
+
+        mvc.perform(post("/gruppe/add/ausgaben")
+            .param("id", gruppe.getId().toString())
+            .param("aktivitaet", "Pizza")
+            .param("zahler", "MaxHub")
+            .param("teilnehmer", "")
+            .param("betrag", "40.00")
+            .with(csrf())).andExpect(status().is3xxRedirection());
+
+        verify(service, never()).addAusgabeToGruppe(any(), anyString(), anyString(), anyString(), anyDouble());
+
+    }
+
+    @Test
+    @WithMockOAuth2User(login = "MaxHub")
+    @DisplayName("Ausgabe mit ungültigen Betrag wird nicht hinzugefügt")
+    void test_07() throws Exception{
+
+        Gruppe gruppe = Gruppe.erstelleGruppe("MaxHub", "Reisegruppe");
+        gruppe.addPerson("GitLisa");
+
+
+        mvc.perform(post("/gruppe/add/ausgaben")
+            .param("id", gruppe.getId().toString())
+            .param("aktivitaet", "Pizza")
+            .param("zahler", "MaxHub")
+            .param("teilnehmer", "GitLisa")
+            .param("betrag", "sdfg")
+            .with(csrf())).andExpect(status().is3xxRedirection());
+
+        verify(service, never()).addAusgabeToGruppe(any(), anyString(), anyString(), anyString(), anyDouble());
+
+    }
+
+    @Test
+    @WithMockOAuth2User(login = "MaxHub")
+    @DisplayName("Ausgabe mit negativen Betrag wird nicht hinzugefügt")
+    void test_08() throws Exception{
+
+        Gruppe gruppe = Gruppe.erstelleGruppe("MaxHub", "Reisegruppe");
+        gruppe.addPerson("GitLisa");
+
+
+        mvc.perform(post("/gruppe/add/ausgaben")
+            .param("id", gruppe.getId().toString())
+            .param("aktivitaet", "Pizza")
+            .param("zahler", "MaxHub")
+            .param("teilnehmer", "GitLisa")
+            .param("betrag", "-20")
+            .with(csrf())).andExpect(status().is3xxRedirection());
+
+        verify(service, never()).addAusgabeToGruppe(any(), anyString(), anyString(), anyString(), anyDouble());
+
+    }
+
+
 
     @Test
     @WithMockOAuth2User(login = "MaxHub")
