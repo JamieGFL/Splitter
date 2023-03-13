@@ -24,8 +24,7 @@
 
         <thead>
             <tr>
-                <th>Gruppen Name</th>
-                <th>Gruender</th>
+                <th>Gruppenname</th>
                 <th>Geoeffnet</th>
             </tr>
         </thead>
@@ -36,7 +35,6 @@
             <tr th:each="gruppe : ${gruppen.details()}">
                 <div th:if="${!gruppe.geschlossen()}" >
                 <td th:text="${gruppe.gruppenName()}"></td>
-                <td th:text="${gruppe.gruender}"></td>
                 <td> <a href="#" th:href="@{gruppe(id=*{gruppe.id()})}"> Anzeigen </a> </td>
                 </div>
             </tr>
@@ -54,8 +52,7 @@
 
         <thead>
         <tr>
-            <th>Gruppen Nummer</th>
-            <th>Gruender</th>
+            <th>Gruppenname</th>
             <th>Geschlossen</th>
         </tr>
         </thead>
@@ -66,7 +63,6 @@
         <tr th:each="gruppe : ${gruppen.details()}">
             <div th:if="${gruppe.geschlossen()}" >
             <td th:text="${gruppe.gruppenName()}"></td>
-            <td th:text="${gruppe.gruender}"></td>
             <td> <a href="#" th:href="@{gruppe(id=*{gruppe.id()})}"> Anzeigen </a> </td>
             </div>
         </tr>

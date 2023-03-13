@@ -19,7 +19,7 @@ import java.util.UUID;
 
         private final RestGruppenService service;
 
-        public RestController(GruppenService service) {
+        public RestController(RestGruppenService service) {
             this.service = service;
         }
 
