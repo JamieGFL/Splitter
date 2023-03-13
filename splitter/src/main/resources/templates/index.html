@@ -11,8 +11,10 @@
 
     <h1>Willkommen bei Splitter</h1>
 
-    <form method="post" th:action="@{/add}">
-        <input type="text" name="gruppenName" >
+    <form method="post" th:action="@{/add}" th:object="${gruppenForm}">
+        <label for="gName">Name:</label>
+        <input id="gName" type="text" name="gruppenName" th:field="*{gruppenName}" >
+        <small class="text-danger" th:if="${#fields.hasErrors('gruppenName')}" th:errors="*{gruppenName}" ></small>
         <button class="btn btn-dark"> Hinzufuegen</button>
     </form>
     <br>
