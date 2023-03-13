@@ -1,5 +1,6 @@
 package propra2.splitter.service;
 
+import org.javamoney.moneta.Money;
 import org.springframework.stereotype.Service;
 import propra2.splitter.domain.Gruppe;
 import propra2.splitter.domain.Person;
@@ -66,6 +67,13 @@ public class RestGruppenService {
         Gruppe gruppe = getSingleGruppe(uuid);
         gruppe.closeGroup();
         return gruppe.getGruppenName()+" wurde geschlossen";
+    }
+
+    public void addRestAusgabenToGruppe(String id, AusgabeEntity ausgabenEntity){
+        UUID uuid = UUID.fromString(id);
+        Gruppe gruppe = getSingleGruppe(uuid);
+        gruppe.addAusgabeToPerson(ausgabenEntity.grund(), ausgabenEntity.glaeubiger(),
+                ausgabenEntity.schuldner(), Money.of(ausgabenEntity.cent()/100, "EUR"));
     }
 
 
