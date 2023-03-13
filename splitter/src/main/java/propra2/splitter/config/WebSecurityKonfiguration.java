@@ -3,6 +3,7 @@ package propra2.splitter.config;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
@@ -20,5 +21,8 @@ public class WebSecurityKonfiguration {
         return chainbuilder.build();
     }
 
-
+    @Bean
+    public WebSecurityCustomizer customizer(){
+        return web -> web.ignoring().antMatchers("/api/**");
+    }
 }

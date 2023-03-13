@@ -84,7 +84,7 @@ public class GruppenServiceTests {
     }
 
     @Test
-    @DisplayName("Es werden einem nur Gruppen angezeigt wo man auch Mitglied ist")
+    @DisplayName("Es werden einem nur Gruppen angezeigt, in welchen man auch Mitglied ist")
     void test_06(){
         GruppenService service = new GruppenService();
         Gruppe gruppe = service.addGruppe(mkUser("James"), "Reisegruppe");
