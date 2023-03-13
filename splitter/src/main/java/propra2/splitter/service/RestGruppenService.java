@@ -23,6 +23,10 @@ public class RestGruppenService {
         }).orElseThrow();
     }
 
+    public UUID addRestGruppe(GruppeEntity gruppe){
+        return add(Gruppe.erstelleRestGruppe(gruppe.name(), gruppe.personen()));
+    }
+
 
 
 
