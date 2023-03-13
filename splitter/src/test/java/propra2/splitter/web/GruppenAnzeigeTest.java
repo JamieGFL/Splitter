@@ -95,7 +95,8 @@ public class GruppenAnzeigeTest {
     String html = result.getResponse().getContentAsString();
 
     assertThat(html).contains("<form method=\"post\" action=\"/add\">");
-    assertThat(html).contains("<input type=\"text\" name=\"gruppenName\" >");
+    assertThat(html).contains("<input id=\"gName\" type=\"text\" name=\"gruppenName\" value=\"\" >");
+
 
   }
 
