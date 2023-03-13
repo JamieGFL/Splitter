@@ -78,10 +78,13 @@ import java.util.UUID;
             return new ResponseEntity<>(ausgabenEntity, HttpStatus.CREATED);
         }
 
-
-
-
-
+        @GetMapping("/api/gruppen/{id}/ausgleich")
+        public ResponseEntity<List<TransaktionEntity>> GetAusgleichszahlungen(@PathVariable String id){
+            if(service.getGruppeInformationEntity(id) == null){
+                return ResponseEntity.notFound().build();
+            }
+            return new ResponseEntity<>(service.getRestTransaktionen(id), HttpStatus.OK);
+        }
 
 
 }
