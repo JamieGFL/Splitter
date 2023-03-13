@@ -61,6 +61,13 @@ public class RestGruppenService {
                         ausgabe.getPersonen().stream().map(Person::getName).toList(), ausgabe.getGesamtKosten().getNumber().intValue())).toList());
     }
 
+    public String setRestGruppeGeschlossen(String id){
+        UUID uuid = UUID.fromString(id);
+        Gruppe gruppe = getSingleGruppe(uuid);
+        gruppe.closeGroup();
+        return gruppe.getGruppenName()+" wurde geschlossen";
+    }
+
 
 
 
