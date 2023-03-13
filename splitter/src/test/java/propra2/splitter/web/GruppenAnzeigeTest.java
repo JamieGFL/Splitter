@@ -119,4 +119,26 @@ public class GruppenAnzeigeTest {
 
   }
 
+
+  @Test
+  @WithMockOAuth2User(login = "MaxHub")
+  @DisplayName("Geschlossene Gruppen in denen man Mitglied war werden einem Seperat angezeigt")
+  void test_06() throws Exception{
+    UUID id = UUID.randomUUID();
+
+    when(service.personToGruppeMatch(any()))
+        .thenReturn(new GruppenOnPage(List.of(new GruppenDetails(id, "Reisegruppe", "MaxHub", List.of("MaxHub"), true))));
+
+    MvcResult result = mvc.perform(get("/")).andReturn();
+
+    String html = result.getResponse().getContentAsString();
+    String idToString = id.toString();
+
+    assertThat(html).contains("Geschlossene Gruppen");
+    assertThat(html).contains("Reisegruppe");
+    assertThat(html).contains("MaxHub");
+    assertThat(html).contains("Geschlossen");
+
+  }
+
 }
