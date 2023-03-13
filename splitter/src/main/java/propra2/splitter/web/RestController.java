@@ -49,6 +49,16 @@ import java.util.UUID;
             return new ResponseEntity<>(service.getGruppeInformationEntity(id), HttpStatus.OK);
         }
 
+        @PostMapping("/api/gruppen/{id}/schliessen")
+        public ResponseEntity<String> schliesseGruppe(@PathVariable String id){
+
+            if (service.getGruppeInformationEntity(id) == null){
+                return ResponseEntity.notFound().build();
+            }
+
+            return new ResponseEntity<>(service.setRestGruppeGeschlossen(id), HttpStatus.OK);
+        }
+
 
 
 
