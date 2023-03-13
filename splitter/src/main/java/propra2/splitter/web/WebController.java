@@ -1,7 +1,6 @@
 package propra2.splitter.web;
 
 
-import jakarta.validation.Valid;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,6 +14,7 @@ import propra2.splitter.domain.Gruppe;
 import propra2.splitter.service.GruppenOnPage;
 import propra2.splitter.service.GruppenService;
 
+import javax.validation.Valid;
 import java.util.UUID;
 
 @Controller
