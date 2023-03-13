@@ -10,13 +10,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import propra2.splitter.service.GruppenOnPage;
 import propra2.splitter.service.GruppenService;
+import propra2.splitter.service.RestGruppenService;
 
 import java.util.UUID;
 
     @org.springframework.web.bind.annotation.RestController
     public class RestController {
 
-        private final GruppenService service;
+        private final RestGruppenService service;
 
         public RestController(GruppenService service) {
             this.service = service;
@@ -28,9 +29,6 @@ import java.util.UUID;
             return "index";
         }
 
-      @PostMapping("/api/gruppen")
-      public ResponseEntity<UUID> addGruppen(@RequestBody GruppenForm gruppenForm) {
-        return new ResponseEntity<>(service.addRestGruppe(gruppenForm.getName(), gruppenForm.getPersonen()), HttpStatus.CREATED);
-        }
+
 
 }
