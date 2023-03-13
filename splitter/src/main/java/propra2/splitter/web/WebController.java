@@ -27,16 +27,23 @@ public class WebController {
     }
 
     @GetMapping("/")
-    public String gruppenSeite(Model model, OAuth2AuthenticationToken token){
+    public String gruppenSeite(Model model,@ModelAttribute("gruppenForm") GruppenForm gruppenForm, OAuth2AuthenticationToken token){
         GruppenOnPage liste = service.personToGruppeMatch(token.getPrincipal());
         model.addAttribute("gruppen", liste);
         return "index";
     }
 
     @PostMapping("/add")
-    public String addGruppen(OAuth2AuthenticationToken token,
-                             String gruppenName){
-        Gruppe gruppe = service.addGruppe(token.getPrincipal(), gruppenName);
+    public String addGruppen(@Valid GruppenForm gruppenForm,
+                             BindingResult bindingResult,
+                             OAuth2AuthenticationToken token){
+
+        if (bindingResult.hasErrors()){
+            return "index";
+        }
+
+
+        Gruppe gruppe = service.addGruppe(token.getPrincipal(), gruppenForm.getGruppenName());
 
         UUID id = gruppe.getId();
 
