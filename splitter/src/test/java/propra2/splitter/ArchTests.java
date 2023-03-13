@@ -15,4 +15,6 @@ public class ArchTests {
             .domainServices("propra2.splitter.domain..")
             .applicationServices("propra2.splitter.service..")
             .adapter("web", "propra2.splitter.web..");
+
+
 }
