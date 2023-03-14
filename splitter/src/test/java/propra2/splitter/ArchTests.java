@@ -4,14 +4,18 @@ import com.tngtech.archunit.core.importer.ImportOption;
 import com.tngtech.archunit.junit.AnalyzeClasses;
 import com.tngtech.archunit.junit.ArchTest;
 import com.tngtech.archunit.lang.ArchRule;
+import java.util.Comparator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Service;
+import propra2.splitter.stereotypes.AggregateRoot;
+import propra2.splitter.stereotypes.Wertobjekt;
 import rules.OneAggregateRootExists;
 
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.classes;
+import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.noClasses;
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.noFields;
 import static com.tngtech.archunit.library.Architectures.onionArchitecture;
 import static com.tngtech.archunit.library.dependencies.SlicesRuleDefinition.slices;
@@ -42,6 +46,22 @@ public class ArchTests {
 
     @ArchTest
     static final ArchRule rule5 = slices().matching("..domain..").should(ONE_AGGREGATE_ROOT_EXISTS);
+
+    @ArchTest
+    static final ArchRule rule6 = noClasses().should().beAnnotatedWith(Deprecated.class);
+
+    @ArchTest
+    static final ArchRule rule7 = classes()
+        .that()
+        .resideInAPackage("..domain..")
+        .and()
+        .doNotImplement(Comparator.class)
+        .should()
+        .beAnnotatedWith(AggregateRoot.class)
+        .orShould()
+        .beAnnotatedWith(Wertobjekt.class);
+
+
 
 
 }
