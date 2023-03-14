@@ -3,6 +3,8 @@ package propra2.splitter.domain;
 import org.javamoney.moneta.Money;
 import java.util.List;
 import java.util.Objects;
+import org.springframework.context.annotation.Configuration;
+import propra2.splitter.stereotypes.AggregateRoot;
 
 public class Person{
 

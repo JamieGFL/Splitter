@@ -3,7 +3,9 @@ package propra2.splitter.domain;
 import org.javamoney.moneta.Money;
 
 import java.util.*;
+import propra2.splitter.stereotypes.AggregateRoot;
 
+@AggregateRoot
 public class Gruppe {
     private UUID id;
     private List<Person> personen;
