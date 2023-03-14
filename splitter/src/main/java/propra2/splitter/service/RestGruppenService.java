@@ -81,7 +81,7 @@ public class RestGruppenService {
         UUID uuid = UUID.fromString(id);
         Gruppe gruppe = getSingleGruppe(uuid);
         gruppe.berechneTransaktionen();
-        return gruppe.getTransaktionen().stream()
+        return gruppe.getTransaktionenCopy().stream()
                 .map(transaktion -> new TransaktionEntity
                         (transaktion.getPerson1().getName(), transaktion.getPerson2().getName(),
                                 transaktion.getNettoBetrag().getNumberStripped().intValue()*100)).toList();

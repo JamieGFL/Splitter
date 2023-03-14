@@ -164,8 +164,17 @@ public class Gruppe {
         transaktionen(nettoBetraege);
     }
 
-    public List<Transaktion> getTransaktionen() {
+    public List<Transaktion> getTransaktionenCopy() {
         return List.copyOf(transaktionen);
+    }
+
+    List<Transaktion> getTransaktionen() {
+        return transaktionen;
+    }
+
+
+    public void clearTransaktionen(){
+        transaktionen.clear();
     }
 
     public List<String> getTransaktionsNachrichten(){
