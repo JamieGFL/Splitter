@@ -70,7 +70,7 @@ Nun sollte die Anwendung laufen.
 
 Schritt 4: 
 
-Um die Anwendung zu starten müssen sie nach diesem Schema ./gradlew bootRun aufrufen: CLIENT_SECRET=SECRET CLIENT_ID=ID ./gradlew bootRun.
+Um die Anwendung zu starten müssen Sie nach diesem Schema ./gradlew bootRun aufrufen: CLIENT_SECRET=SECRET CLIENT_ID=ID ./gradlew bootRun.
 
 == Anleitung auf der Seite
 
