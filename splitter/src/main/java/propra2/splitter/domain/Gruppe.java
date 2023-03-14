@@ -53,75 +53,63 @@ public class Gruppe {
     public void addAusgabeToPerson(String aktivitaet, String name, List<String> personen2, Money kosten){
         if (!geschlossen){
             ausgabeGetaetigt = true;
+            Person ausleger = getPersonFromName(name);
 
-            Person zahlungsempfaenger = new Person("platzhalter", new ArrayList<>(), new ArrayList<>());
-            for(Person person : personen){
-                if(person.getName().equals(name)){
-                    zahlungsempfaenger = person;
-                }
-            }
-
-            // payer/Personen, die ausgelegt bekommen haben und später Geld zurückzahlen müssen
-            List<Person> teilnehmer = new ArrayList<>();
-            for(Person person: personen){
-                for(String personName : personen2) {
-                    if (person.getName().equals(personName)) {
-                        teilnehmer.add(person);
-                    }
-                }
-            }
+            // Personen, die ausgelegt bekommen haben und später Geld zurückzahlen müssen, wenn sie nicht Ausleger sind
+            List<Person> teilnehmer = getPersonenFromNames(personen2);
 
             // Ausgaben in Person, welche Ausgabe getätigt hat, speichern
-            Ausgabe newAusgabe = new Ausgabe(new Aktivitaet(aktivitaet), zahlungsempfaenger, teilnehmer, kosten);
-            zahlungsempfaenger.addAusgabe(newAusgabe);
+            Ausgabe newAusgabe = new Ausgabe(new Aktivitaet(aktivitaet), ausleger, teilnehmer, kosten);
+            ausleger.addAusgabe(newAusgabe);
             gruppenAusgaben.add(newAusgabe);
 
-            // speichert Schulden der payers
+            // speichert Schulden der Teilnehmer mit Ausnahme vom Ausleger, falls dieser für sich selber bezahlt hat
             for(Person person : teilnehmer) {
-                if (!person.equals(zahlungsempfaenger)) {
-                    person.addSchulden(new Schulden(person, zahlungsempfaenger));
+                if (!person.equals(ausleger)) {
+                    person.addSchulden(new Schulden(person, ausleger));
                 }
             }
         }
     }
 
+    private List<Person> getPersonenFromNames(List<String> personen2) {
+        List<Person> newPersonen = new ArrayList<>();
+        for(Person person: personen){
+            for(String personName : personen2) {
+                if (person.getName().equals(personName)) {
+                    newPersonen.add(person);
+                }
+            }
+        }
+        return newPersonen;
+    }
+
+    private Person getPersonFromName(String name) {
+        Person newPerson = new Person("platzhalter", new ArrayList<>(), new ArrayList<>());
+        for(Person person : personen){
+            if(person.getName().equals(name)){
+                newPerson = person;
+            }
+        }
+        return newPerson;
+    }
+
     public void berechneTransaktionen(){
-        Money[] sumAusgaben = new Money[personen.size()];
-        for(int i = 0; i < personen.size(); i++){
-            sumAusgaben[i] = Money.of(0, "EUR");
-        }
+        // Rechnet die Ausgaben jeder Person aus und speichert sie im Ausgabenarray sumAusgaben
+        Money[] sumAusgaben = berechneAusgaben();
 
-        Money ausgabeSum = Money.of(0, "EUR");
-        for (int i = 0; i < personen.size(); i++) {
-            ausgabeSum = Money.of(0, "EUR");
-            for (int j = 0; j < personen.get(i).getAusgaben().size(); j++){
-                ausgabeSum = ausgabeSum.add(personen.get(i).getAusgabe(j).getKosten());
-                sumAusgaben[i] = ausgabeSum;
-            }
-        }
-
-        Money[] sumSchuldenListe = new Money[personen.size()];
-        for(int i = 0; i < personen.size(); i++){
-            sumSchuldenListe[i] = Money.of(0, "EUR");
-        }
-
-        Money schuldenSum = Money.of(0, "EUR");
-        for (int i = 0; i < personen.size(); i++) {
-            schuldenSum = Money.of(0, "EUR");
-            for (int j = 0; j < personen.get(i).getSchuldenListe().size(); j++){
-                schuldenSum = schuldenSum.add(personen.get(i).getSchulden(j).getBetrag());
-                sumSchuldenListe[i] = schuldenSum;
-            }
-        }
-
+        // Rechnet die Schulden jeder Person aus und speichert sie im Schuldenarray sumSchulden
+        Money[] sumSchulden = berechneSchulden();
 
         for(int i = 0; i < personen.size(); i++){
-            Money betrag = sumAusgaben[i].subtract(sumSchuldenListe[i]);
+            Money betrag = sumAusgaben[i].subtract(sumSchulden[i]);
             personen.get(i).setNettoBetrag(betrag);
             nettoBetraege.add(personen.get(i));
         }
         transaktionen(nettoBetraege);
     }
+
+
 
     private void transaktionen(ArrayList<Person> nettoBetraege){
         //Person mit maximalem Netto-Betrag
@@ -169,7 +157,7 @@ public class Gruppe {
             nettoBetraege.remove(personMaxSchulden);
         }
 
-        // Transaktion wird erstellt und gespeichert, Rollen werden vergeben
+        // Transaktion wird erstellt und gespeichert
         Transaktion newTransaktion = new Transaktion(personMaxSchulden, personMaxGutschrift, min);
         transaktionen.add(newTransaktion);
 
@@ -177,13 +165,48 @@ public class Gruppe {
     }
 
     public List<Transaktion> getTransaktionen() {
-        return transaktionen;
+        return List.copyOf(transaktionen);
     }
 
     public List<String> getTransaktionsNachrichten(){
         return transaktionen.stream().map(Transaktion::getTransaktionsNachricht).toList();
     }
 
+    private Money[] berechneAusgaben() {
+        Money[] sumAusgaben = getEmptyArray();
+        Money ausgabeSum = Money.of(0, "EUR");
+
+        for (int i = 0; i < personen.size(); i++) {
+            ausgabeSum = Money.of(0, "EUR");
+            for (int j = 0; j < personen.get(i).getAusgaben().size(); j++){
+                ausgabeSum = ausgabeSum.add(personen.get(i).getAusgabe(j).getKosten());
+                sumAusgaben[i] = ausgabeSum;
+            }
+        }
+        return sumAusgaben;
+    }
+
+    private Money[] berechneSchulden() {
+        Money[] sumSchuldenListe = getEmptyArray();
+        Money schuldenSum = Money.of(0, "EUR");
+
+        for (int i = 0; i < personen.size(); i++) {
+            schuldenSum = Money.of(0, "EUR");
+            for (int j = 0; j < personen.get(i).getSchuldenListe().size(); j++){
+                schuldenSum = schuldenSum.add(personen.get(i).getSchulden(j).getBetrag());
+                sumSchuldenListe[i] = schuldenSum;
+            }
+        }
+        return sumSchuldenListe;
+    }
+
+    private Money[] getEmptyArray() {
+        Money[] arr = new Money[personen.size()];
+        for(int i = 0; i < personen.size(); i++){
+            arr[i] = Money.of(0, "EUR");
+        }
+        return arr;
+    }
 
     Person getPersonWithMaxNettoBetrag(List<Person> nettoBetraege){
         PersonComparator personComparator = new PersonComparator();
