@@ -4,6 +4,8 @@ package propra2.splitter.web;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -32,6 +34,7 @@ import propra2.splitter.service.AusgabeEntity;
 import propra2.splitter.service.GruppeEntity;
 import propra2.splitter.service.GruppeInformationEntity;
 import propra2.splitter.service.RestGruppenService;
+import propra2.splitter.service.TransaktionEntity;
 
 @WebMvcTest(controllers = RestController.class)
 @Import(WebSecurityKonfiguration.class)
@@ -73,6 +76,8 @@ public class RestControllerTests {
         .accept(MediaType.APPLICATION_JSON)
         .content(mapper.writeValueAsString(entity))).andExpect(status().isBadRequest());
 
+    verify(service, never()).addRestGruppe(any());
+
   }
 
   @Test
@@ -85,6 +90,8 @@ public class RestControllerTests {
         .contentType(MediaType.APPLICATION_JSON)
         .accept(MediaType.APPLICATION_JSON)
         .content(mapper.writeValueAsString(entity))).andExpect(status().isBadRequest());
+
+    verify(service, never()).addRestGruppe(any());
 
   }
 
@@ -157,6 +164,12 @@ public class RestControllerTests {
 //            .andExpect(content().string("Reisegruppe wurde geschlossen"));
 //
 //  }
+
+
+
+
+
+
 
 
 }
