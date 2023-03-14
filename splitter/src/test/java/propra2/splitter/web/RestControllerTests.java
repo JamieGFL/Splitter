@@ -1,23 +1,20 @@
 package propra2.splitter.web;
 
 
-import static org.assertj.core.api.Assertions.assertThat;
+
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
-import com.fasterxml.jackson.core.JsonFactoryBuilder;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
-import org.json.JSONObject;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,9 +23,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import propra2.splitter.config.WebSecurityKonfiguration;
 import propra2.splitter.service.AusgabeEntity;
 import propra2.splitter.service.GruppeEntity;
@@ -65,6 +60,8 @@ public class RestControllerTests {
             .contentType(MediaType.APPLICATION_JSON)
             .accept(MediaType.APPLICATION_JSON)
             .content(mapper.writeValueAsString(entity))).andExpect(status().isCreated()).andDo(print());
+
+    verify(service).addRestGruppe(any());
 
   }
 
@@ -104,17 +101,54 @@ public class RestControllerTests {
   @DisplayName("status OK wird zurück gegeben wenn eine Gruppe für eine bestimmte Person angezeigt wird")
   void test_04() throws Exception {
 
-    GruppeEntity entity = new GruppeEntity("Reisen", List.of("MaxHub"));
+    GruppeEntity entity = new GruppeEntity(UUID.randomUUID(),"Reisen", List.of("MaxHub"));
     when(service.personRestMatch(anyString())).thenReturn(Collections.singletonList(entity));
 
     mvc.perform(MockMvcRequestBuilders.get("/api/user/{githublogin}/gruppen", "MaxHub").accept(MediaType.APPLICATION_JSON))
         .andDo(print()).andExpect(status().isOk());
+
+    verify(service).personRestMatch(anyString());
+  }
+
+
+  @Test
+  @DisplayName("Die Gruppe steht im Body der Response")
+  void test_05() throws Exception {
+
+    GruppeEntity entity = new GruppeEntity(UUID.randomUUID(),"Reisen", List.of("MaxHub"));
+    when(service.personRestMatch(anyString())).thenReturn(List.of(entity));
+
+    mvc.perform(MockMvcRequestBuilders.get("/api/user/{githublogin}/gruppen", "MaxHub")
+            .contentType(MediaType.APPLICATION_JSON)
+            .accept(MediaType.APPLICATION_JSON))
+        .andDo(print()).andExpect(status().isOk()).andExpect(content().string("["+mapper.writeValueAsString(entity)+"]"));
+
+    verify(service).personRestMatch(anyString());
+
+  }
+
+
+  @Test
+  @DisplayName("Leeres Array wenn es keine passende Gruppe gibt")
+  void test_06() throws Exception {
+
+    GruppeEntity entity = new GruppeEntity(UUID.randomUUID(),"Reisen", List.of("MaxHub"));
+    String githublogin = "GitLisa";
+    when(service.personRestMatch("GitLisa")).thenReturn(anyList());
+
+
+    mvc.perform(MockMvcRequestBuilders.get("/api/user/{githublogin}/gruppen", githublogin)
+            .contentType(MediaType.APPLICATION_JSON)
+            .accept(MediaType.APPLICATION_JSON))
+        .andDo(print()).andExpect(status().isOk()).andExpect(content().string("[]"));
+
+    verify(service).personRestMatch(anyString());
   }
 
 
   @Test
   @DisplayName("Gruppeninformation für die jeweilige Gruppe ist vorhanden und wirft Status OK")
-  void test_05() throws Exception {
+  void test_07() throws Exception {
 
     UUID id = UUID.randomUUID();
 
@@ -125,14 +159,31 @@ public class RestControllerTests {
 
     mvc.perform(MockMvcRequestBuilders.get("/api/gruppen/{id}", id)
         .contentType(MediaType.APPLICATION_JSON)
-        .accept(MediaType.APPLICATION_JSON)
-        .content(mapper.writeValueAsString(entity))).andDo(print()).andExpect(status().isOk());
+        .accept(MediaType.APPLICATION_JSON))
+        .andDo(print()).andExpect(status().isOk());
+
+
+
+  }
+
+  @Test
+  @DisplayName("Gruppeninformation für die jeweilige Gruppe ist nicht vorhanden, falls keine Gruppe mit der ID existiert und wirft Status NOTFOUND")
+  void test_08() throws Exception {
+
+    UUID id = UUID.randomUUID();
+
+    when(service.getGruppeInformationEntity(any())).thenReturn(any());
+
+    mvc.perform(MockMvcRequestBuilders.get("/api/gruppen/{id}", id)
+            .contentType(MediaType.APPLICATION_JSON)
+            .accept(MediaType.APPLICATION_JSON))
+            .andDo(print()).andExpect(status().isNotFound());
 
   }
 
   @Test
   @DisplayName("Gruppeninformation für die jeweilige Gruppe steht im Body von dem Response")
-  void test_06() throws Exception {
+  void test_09() throws Exception {
 
     UUID id = UUID.randomUUID();
 
@@ -143,36 +194,160 @@ public class RestControllerTests {
 
     mvc.perform(MockMvcRequestBuilders.get("/api/gruppen/{id}", id)
         .contentType(MediaType.APPLICATION_JSON)
-        .accept(MediaType.APPLICATION_JSON)
-        .content(mapper.writeValueAsString(entity))).andDo(print())
-        .andExpect(content().string(mapper.writeValueAsString(entity)));
+        .accept(MediaType.APPLICATION_JSON))
+        .andExpect(content().string(mapper.writeValueAsString(entity))).andDo(print());
+
 
   }
 
 
-//  @Test
-//  @DisplayName("Gruppen können geschlossen werden")
-//  void test_07() throws Exception {
-//
-//    UUID id = UUID.randomUUID();
-//
-//    AusgabeEntity ausgabe = new AusgabeEntity("Pizza", "MaxHub", List.of("MaxHub", "GitLisa"),10000);
-//    GruppeInformationEntity entity = new GruppeInformationEntity(id, "Reisegruppe", List.of("MaxHub", "GitLisa"), false, List.of(ausgabe));
-//
-//    when(service.setRestGruppeGeschlossen(entity.gruppe().toString())).thenReturn("Reisegruppe wurde geschlossen");
-//
-//    mvc.perform(MockMvcRequestBuilders.post("/api/gruppen/{id}/schliessen", id)
-//            .contentType(MediaType.APPLICATION_JSON)
-//            .accept(MediaType.APPLICATION_JSON))
-//            .andExpect(content().string("Reisegruppe wurde geschlossen"));
-//
-//  }
+  @Test
+  @DisplayName("Gruppen können geschlossen werden")
+  void test_10() throws Exception {
+
+    UUID id = UUID.randomUUID();
+
+
+    GruppeInformationEntity entity = new GruppeInformationEntity(id, "Reisegruppe", List.of("MaxHub", "GitLisa"), false, List.of());
+
+    when(service.getGruppeInformationEntity(String.valueOf(id))).thenReturn(entity);
+    when(service.setRestGruppeGeschlossen(String.valueOf(id))).thenReturn(entity.name() + " wurde geschlossen");
+
+
+    mvc.perform(MockMvcRequestBuilders.post("/api/gruppen/{id}/schliessen", id)
+            .contentType(MediaType.APPLICATION_JSON)
+            .accept(MediaType.APPLICATION_JSON))
+        .andExpect(status().isOk()).andExpect(content().string(entity.name() + " wurde geschlossen")).andDo(print());
+
+  }
+
+  @Test
+  @DisplayName("Wenn keine Gruppe gefunden wird, wird NOTFOUND zurück gegeben") // geht nicht
+  void test_11() throws Exception {
+
+    UUID id = UUID.randomUUID();
+
+    when(service.getGruppeInformationEntity(String.valueOf(id))).thenReturn(any());
+    when(service.setRestGruppeGeschlossen(String.valueOf(id))).thenReturn(anyString());
+
+
+    mvc.perform(MockMvcRequestBuilders.post("/api/gruppen/{id}/schliessen", id)
+            .contentType(MediaType.APPLICATION_JSON)
+            .accept(MediaType.APPLICATION_JSON))
+        .andExpect(status().isNotFound()).andDo(print());
+
+    verify(service, never()).setRestGruppeGeschlossen(anyString());
+  }
 
 
 
+  @Test
+  @DisplayName("Auslagen können eingetragen werden")
+  void test_12() throws Exception {
+    UUID id = UUID.randomUUID();
+
+    AusgabeEntity ausgabe = new AusgabeEntity("Pizza", "MaxHub", List.of("MaxHub", "GitLisa"),10000);
+    GruppeInformationEntity entity =new GruppeInformationEntity(id, "Reisegruppe", List.of("MaxHub", "GitLisa"), false, List.of(ausgabe));
+
+    when(service.getGruppeInformationEntity(String.valueOf(id))).thenReturn(entity);
+
+
+    mvc.perform(MockMvcRequestBuilders.post("/api/gruppen/{id}/auslagen", id)
+            .contentType(MediaType.APPLICATION_JSON)
+            .accept(MediaType.APPLICATION_JSON)
+            .content(mapper.writeValueAsString(ausgabe)))
+        .andExpect(status().isCreated()).andDo(print());
+
+  }
+
+  @Test
+  @DisplayName("Gruppe ist nicht vorhanden wenn man eine Auslage eintragen will")
+  void test_13() throws Exception {
+    UUID id = UUID.randomUUID();
+
+    AusgabeEntity ausgabe = new AusgabeEntity("Pizza", "MaxHub", List.of("MaxHub", "GitLisa"),10000);
+
+    when(service.getGruppeInformationEntity(String.valueOf(id))).thenReturn(any());
+
+
+    mvc.perform(MockMvcRequestBuilders.post("/api/gruppen/{id}/auslagen", id)
+            .contentType(MediaType.APPLICATION_JSON)
+            .accept(MediaType.APPLICATION_JSON)
+            .content(mapper.writeValueAsString(ausgabe)))
+        .andExpect(status().isNotFound()).andDo(print());
+
+  }
+
+  @Test
+  @DisplayName("Ausgaben werden nicht eingetragen wenn die Gruppe geschlossen ist")
+  void test_14() throws Exception {
+    UUID id = UUID.randomUUID();
+
+    AusgabeEntity ausgabe = new AusgabeEntity("Pizza", "MaxHub", List.of("MaxHub", "GitLisa"),10000);
+    GruppeInformationEntity entity =new GruppeInformationEntity(id, "Reisegruppe", List.of("MaxHub", "GitLisa"), true, List.of());
+
+    when(service.getGruppeInformationEntity(String.valueOf(id))).thenReturn(entity);
+
+    mvc.perform(MockMvcRequestBuilders.post("/api/gruppen/{id}/auslagen", id)
+            .contentType(MediaType.APPLICATION_JSON)
+            .accept(MediaType.APPLICATION_JSON)
+            .content(mapper.writeValueAsString(ausgabe)))
+        .andExpect(status().is(409)).andDo(print());
+
+  }
+
+
+  @Test
+  @DisplayName("Ausgaben werden nicht eingetragen wenn Json Dokument fehlerhaft ist")
+  void test_15() throws Exception {
+    UUID id = UUID.randomUUID();
+
+    AusgabeEntity ausgabe = new AusgabeEntity(null, null, List.of("MaxHub", "GitLisa"),10000);
+    GruppeInformationEntity entity =new GruppeInformationEntity(id, "Reisegruppe", List.of("MaxHub", "GitLisa"), false, List.of());
+
+    when(service.getGruppeInformationEntity(String.valueOf(id))).thenReturn(entity);
+
+    mvc.perform(MockMvcRequestBuilders.post("/api/gruppen/{id}/auslagen", id)
+            .contentType(MediaType.APPLICATION_JSON)
+            .accept(MediaType.APPLICATION_JSON)
+            .content(mapper.writeValueAsString(ausgabe)))
+        .andExpect(status().is(400)).andDo(print());
+
+  }
 
 
 
+  @Test
+  @DisplayName("Ausgleichzahlungen stehen im ResponseBody")
+  void test_16() throws Exception {
+    UUID id = UUID.randomUUID();
 
+    AusgabeEntity ausgabe = new AusgabeEntity("Pizza", "MaxHub", List.of("MaxHub", "GitLisa"),10000);
+    GruppeInformationEntity entity =new GruppeInformationEntity(id, "Reisegruppe", List.of("MaxHub", "GitLisa"), false, List.of(ausgabe));
+    TransaktionEntity transaktion = new TransaktionEntity("GitLisa", "MaxHub", 5000);
 
+    when(service.getGruppeInformationEntity(String.valueOf(id))).thenReturn(entity);
+    when(service.getRestTransaktionen(String.valueOf(id))).thenReturn(List.of(transaktion));
+
+    mvc.perform(MockMvcRequestBuilders.get("/api/gruppen/{id}/ausgleich", id)
+            .contentType(MediaType.APPLICATION_JSON)
+            .accept(MediaType.APPLICATION_JSON))
+        .andExpect(status().isOk()).andDo(print());
+
+  }
+
+  @Test
+  @DisplayName("Es gibt keine Gruppe mit dieser ID um die Ausgleichzahlung anzuzeigen")
+  void test_17() throws Exception {
+    UUID id = UUID.randomUUID();
+
+    when(service.getGruppeInformationEntity(String.valueOf(id))).thenReturn(any());
+    when(service.getRestTransaktionen(String.valueOf(id))).thenReturn(anyList());
+
+    mvc.perform(MockMvcRequestBuilders.get("/api/gruppen/{id}/ausgleich", id)
+            .contentType(MediaType.APPLICATION_JSON)
+            .accept(MediaType.APPLICATION_JSON))
+        .andExpect(status().isNotFound()).andDo(print());
+
+  }
 }
