@@ -148,7 +148,7 @@ public class GruppenServiceTests {
         service.addAusgabeToGruppe(gruppe.getId(),"pizza","James","James, GitLisa", d);
         service.transaktionBerechnen(gruppe.getId());
 
-        assertThat(service.getSingleGruppe(gruppe.getId()).getTransaktionen()).hasSize(1);
+        assertThat(service.getSingleGruppe(gruppe.getId()).getTransaktionsNachrichten()).hasSize(1);
     }
 
     @Test
@@ -164,7 +164,7 @@ public class GruppenServiceTests {
         service.addAusgabeToGruppe(gruppe.getId(),"club","James","James, GitLisa", d);
         service.transaktionBerechnen(gruppe.getId());
 
-        assertThat(service.getSingleGruppe(gruppe.getId()).getTransaktionen()).hasSize(1);
+        assertThat(service.getSingleGruppe(gruppe.getId()).getTransaktionsNachrichten()).hasSize(1);
     }
 
     @Test
