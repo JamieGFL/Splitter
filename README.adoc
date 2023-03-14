@@ -40,6 +40,58 @@ Außerdem werden Sie von unseren Tutor:innen regelmäßig besucht und haben dort
 
 Bei Fragen, die Sie selber persönlich betreffen (zum Beispiel bei Krankmeldungen), wenden Sie sich bitte per Mail an mailto:propra@cs.hhu.de[propra@cs.hhu.de]. Stellen Sie dort bitte keine Fragen, die auch in den Foren geklärt werden könnten. 
 
+== USER GUIDE
+
+Schritt 1:
+
+Klonen Sie sich die Anwendung.
+
+Schritt 2:
+
+Bevor Sie das Projekt verwenden können müssen Sie auf der GitHub Website Ihren OAuth Client-secret und die Client-ID generieren lassen. 
+
+Hier führ füllen Sie bitte das gegebene Formular so aus:
+
+* Ihren gewünschten Namen für das Projekt als Application name
+
+* http://localhost:9000 als Homepage URL da unsere Anwendung auf dem Port 9000 läuft
+
+* Wenn gewünscht eine Beschreibung
+
+* http://localhost:9000 als callback URL
+
+Nun sollten Sie die Client-ID und das Client-Secret unten erhalten. Diese sollten Sie sich kopieren da Sie im darauffolgenden Schritt verwendet werden.
+
+Schritt 3:
+
+Tragen Sie nun die Client-Secret und die Client-ID in den Umgebungsvariablen der Anwendung ein.
+
+Nun sollte die Anwendung laufen.
+
+Schritt 4: 
+
+Um die Anwendung zu starten müssen sie nach diesem Schema ./gradlew bootRun aufrufen: CLIENT_SECRET=SECRET CLIENT_ID=ID ./gradlew bootRun.
+
+== Anleitung auf der Seite
+
+Auf der Homepage können Sie Gruppen hinzufügen und durch den an jede Gruppe angehängten Hyperlink auf jede Gruppeninformationsseite zugreifen. Hierfür füllen Sie den Input mit dem gewünschten Namen der Gruppe aus und drücken auf den Button „Gruppe hinzufügen“
+
+Wenn wir uns nun in der Gruppeninformation befinden, können Sie durch den obersten Input Personen/Personennamen hinzufügen, die direkt unter dem Input einzeln aufgelistet werden.
+
+Weiter unter der Personen Tabelle finden Sie die Eingaben für eine Ausgabe. Diese sollten Sie, wie durch die Labels gegeben, ausfüllen. 
+
+Achten Sie hier jedoch darauf die Teilnehmer immer mit einem Komma und einer Lücke zu trennen:
+
+Bsp.: Max, Lisa, Tim, Jan
+
+Wenn Sie die Inputs ausgefüllt haben und den Zahler ausgewählt haben, können Sie auf den Button „Ausgabe hinzufügen“ klicken und ihre Ausgabe wird unter den Input Feldern angezeigt. 
+
+Wenn Sie nun alle Ausgaben eingetragen haben, können Sie unten auf den Button „Transaktion berechnen“ drücken, um die erforderliche Transaktion für die Ausgaben zu erhalten. Wenn Sie eine weitere Ausgabe hinzufügen wollen, können Sie dies tun und nochmals auf den „Transaktion ausführen“ Button drücken, um eine angepasste Transaktion zu erhalten.
+
+Wenn Sie nun die Gruppe schließen wollen, können Sie auf den „Gruppe schließen“ Button drücken, wodurch die Gruppe geschlossen wird und nicht mehr veränderlich ist. 
+
+Unter dem zuvor erwähnten Button befindet sich auch ein Hyperlink, um auf die Homepage zurückzukommen, wo nun auch die von Ihnen zuvor geschlossene Gruppe, unter den offenen Gruppen gelistet wird. Auf die Informationen der geschlossenen Liste können Sie durch den angehängten Hyperlink zugreifen, jedoch keine Änderungen vornehmen.
+
 == Verhaltensregeln
 
 Wir erwarten von Ihnen einen respektvollen Umgang miteinander. Es gilt grundsätzlich bei uns der https://berlincodeofconduct.org/de/[Berlin Code of Conduct]. Die Tutor:innen haben die Aufgabe, die Einhaltung der Regeln zu überwachen und können bei Verstößen gegen den Verhaltenskodex Personen aus dem Praktikum ausschließen. Ein Praktikumsausschluss hat zur Folge, dass Sie das Modul in diesem Semester nicht mehr abschließen können. 
