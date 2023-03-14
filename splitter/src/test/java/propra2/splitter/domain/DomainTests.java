@@ -136,7 +136,6 @@ public class DomainTests {
 
         gruppe.addAusgabeToPerson("Pizza","MaxHub",List.of("GitLisa"), Money.of(20, "EUR"));
 
-
         assertThat(gruppe.getGruppenAusgaben().get(0)).isEqualTo(new Ausgabe(new Aktivitaet("Pizza"), personA, List.of(personB), Money.of(20, "EUR")));
     }
 

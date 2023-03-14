@@ -98,15 +98,15 @@
 
     <tr th:each="ausgabe : ${gruppe.gruppenAusgaben}">
       <div th:if="${ausgabe.personPresent(login)}" >
-      <td style="background-color: cornflowerblue"  th:text="${ausgabe.getAktivitaet().name()}"> </td>
-      <td style="background-color: cornflowerblue" th:text="${ausgabe.getAusleger().name}"> </td>
+      <td style="background-color: cornflowerblue"  th:text="${ausgabe.getAktivitaetName()}"> </td>
+      <td style="background-color: cornflowerblue" th:text="${ausgabe.getAuslegerName()}"> </td>
       <td style="background-color: cornflowerblue" th:text="${ausgabe.getPersonenNamen()}"></td>
       <td style="background-color: cornflowerblue" th:text="${ausgabe.getGesamtKosten()}"> </td>
       </div>
 
       <div th:unless="${ausgabe.personPresent(login)}" >
-        <td th:text="${ausgabe.getAktivitaet().name()}"> </td>
-        <td th:text="${ausgabe.getAusleger().name}"> </td>
+        <td th:text="${ausgabe.getAktivitaetName()}"> </td>
+        <td th:text="${ausgabe.getAuslegerName()}"> </td>
         <td th:text="${ausgabe.getPersonenNamen()}"></td>
         <td th:text="${ausgabe.getGesamtKosten()}"> </td>
       </div>

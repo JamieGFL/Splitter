@@ -11,14 +11,14 @@ public class Ausgabe {
     List<Person> personen;
     Money kosten;
 
-    public Ausgabe(Aktivitaet aktivitaet, Person ausleger, List<Person> personen, Money kosten) {
+    Ausgabe(Aktivitaet aktivitaet, Person ausleger, List<Person> personen, Money kosten) {
         this.aktivitaet = aktivitaet;
         this.ausleger = ausleger;
         this.personen = personen;
         this.kosten = kosten;
     }
 
-    public Money getKosten() {
+    Money getKosten() {
         if(personen.contains(ausleger)){
             return kosten.subtract(getDurchschnittsKosten());
         }else {
@@ -51,19 +51,27 @@ public class Ausgabe {
         return Objects.hash(getAktivitaet(), getAusleger(), getPersonen(), getKosten());
     }
 
-    public Money getDurchschnittsKosten(){
+    Money getDurchschnittsKosten(){
         return kosten.divide(personen.size());
     }
 
-    public Aktivitaet getAktivitaet() {
+    Aktivitaet getAktivitaet() {
         return aktivitaet;
     }
 
-    public Person getAusleger() {
+    public String getAktivitaetName(){
+        return aktivitaet.name();
+    }
+
+    Person getAusleger() {
         return ausleger;
     }
 
-    public List<Person> getPersonen() {
+    public String getAuslegerName(){
+        return ausleger.getName();
+    }
+
+    List<Person> getPersonen() {
         return personen;
     }
     public List<String> getPersonenNamen() {
