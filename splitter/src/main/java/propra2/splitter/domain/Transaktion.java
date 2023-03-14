@@ -34,12 +34,20 @@ public class Transaktion {
         return Objects.hash(getPerson1(), getPerson2());
     }
 
-    public Person getPerson1() {
+    Person getPerson1() {
         return person1;
     }
 
-    public Person getPerson2() {
+    Person getPerson2() {
         return person2;
+    }
+
+    public String getPerson1Name(){
+        return person1.getName();
+    }
+
+    public String getPerson2Name(){
+        return person2.getName();
     }
 
     public String getTransaktionsNachricht() {
