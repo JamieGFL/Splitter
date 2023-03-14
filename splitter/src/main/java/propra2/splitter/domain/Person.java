@@ -53,11 +53,11 @@ public class Person{
         return name;
     }
 
-    public List<Ausgabe> getAusgaben() {
+    List<Ausgabe> getAusgaben() {
         return ausgaben;
     }
 
-    public List<Schulden> getSchuldenListe() {
+    List<Schulden> getSchuldenListe() {
         return schuldenListe;
     }
 

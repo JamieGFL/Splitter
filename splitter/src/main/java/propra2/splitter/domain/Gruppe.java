@@ -12,15 +12,13 @@ public class Gruppe {
     private List<Ausgabe> gruppenAusgaben = new ArrayList<>();
     private final List<Transaktion> transaktionen = new ArrayList<>();
     private final ArrayList<Person> nettoBetraege = new ArrayList<>();
-    private Integer groesse = 0;
-
     private String gruppenName;
 
     private boolean ausgleich = false;
     private boolean ausgabeGetaetigt = false;
     private boolean geschlossen = false;
 
-    public Gruppe(List<Person> personen, String gruppenName) {
+    private Gruppe(List<Person> personen, String gruppenName) {
         this.id = UUID.randomUUID();
         this.personen = personen;
         this.gruppenName = gruppenName;
@@ -74,27 +72,7 @@ public class Gruppe {
         }
     }
 
-    private List<Person> getPersonenFromNames(List<String> personen2) {
-        List<Person> newPersonen = new ArrayList<>();
-        for(Person person: personen){
-            for(String personName : personen2) {
-                if (person.getName().equals(personName)) {
-                    newPersonen.add(person);
-                }
-            }
-        }
-        return newPersonen;
-    }
 
-    private Person getPersonFromName(String name) {
-        Person newPerson = new Person("platzhalter", new ArrayList<>(), new ArrayList<>());
-        for(Person person : personen){
-            if(person.getName().equals(name)){
-                newPerson = person;
-            }
-        }
-        return newPerson;
-    }
 
     public void berechneTransaktionen(){
         // Rechnet die Ausgaben jeder Person aus und speichert sie im Ausgabenarray sumAusgaben
@@ -229,7 +207,27 @@ public class Gruppe {
         return Collections.min(nettoBetraege, personComparator);
     }
 
+    private List<Person> getPersonenFromNames(List<String> personen2) {
+        List<Person> newPersonen = new ArrayList<>();
+        for(Person person: personen){
+            for(String personName : personen2) {
+                if (person.getName().equals(personName)) {
+                    newPersonen.add(person);
+                }
+            }
+        }
+        return newPersonen;
+    }
 
+    private Person getPersonFromName(String name) {
+        Person newPerson = new Person("platzhalter", new ArrayList<>(), new ArrayList<>());
+        for(Person person : personen){
+            if(person.getName().equals(name)){
+                newPerson = person;
+            }
+        }
+        return newPerson;
+    }
     public List<Ausgabe> getGruppenAusgaben() {
         return List.copyOf(gruppenAusgaben);
     }
