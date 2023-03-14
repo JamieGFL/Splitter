@@ -10,13 +10,13 @@ public class Schulden {
     Person zahlungsEmpfaenger;
     Money betrag;
 
-    public Schulden(Person zahler, Person zahlungsEmpfaenger) {
+    Schulden(Person zahler, Person zahlungsEmpfaenger) {
         this.zahler = zahler;
         this.zahlungsEmpfaenger = zahlungsEmpfaenger;
         this.betrag = berechneSchulden();
     }
 
-    public Money berechneSchulden(){
+    Money berechneSchulden(){
         Money schulden = Money.of(0, "EUR");
         for(Ausgabe ausgabe : zahlungsEmpfaenger.getAusgaben()){
             if(ausgabe.getPersonen().contains(zahler)){
@@ -39,13 +39,13 @@ public class Schulden {
         return Objects.hash(getZahler(), getZahlungsEmpfaenger(), getBetrag());
     }
 
-    public Person getZahler() {
+    Person getZahler() {
         return zahler;
     }
-    public Person getZahlungsEmpfaenger() {
+    Person getZahlungsEmpfaenger() {
         return zahlungsEmpfaenger;
     }
-    public Money getBetrag() {
+    Money getBetrag() {
         return betrag;
     }
 }

@@ -12,7 +12,7 @@ public class Person{
 
     Money nettoBetrag = Money.of(0,"EUR");
 
-    public Person(String name, List<Ausgabe> ausgaben, List<Schulden> schuldenList) {
+    Person(String name, List<Ausgabe> ausgaben, List<Schulden> schuldenList) {
         this.name = name;
         this.ausgaben = ausgaben;
         this.schuldenListe = schuldenList;
@@ -31,19 +31,19 @@ public class Person{
         return Objects.hash(getName());
     }
 
-    public void addAusgabe(Ausgabe ausgabe){
+    void addAusgabe(Ausgabe ausgabe){
         ausgaben.add(ausgabe);
     }
 
-    public Ausgabe getAusgabe(int index){
+    Ausgabe getAusgabe(int index){
         return ausgaben.get(index);
     }
 
-    public void addSchulden(Schulden schulden){
+    void addSchulden(Schulden schulden){
         schuldenListe.add(schulden);
     }
 
-    public Schulden getSchulden(int index){
+    Schulden getSchulden(int index){
         return  schuldenListe.get(index);
     }
 

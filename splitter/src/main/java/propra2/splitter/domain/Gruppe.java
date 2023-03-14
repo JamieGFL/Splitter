@@ -15,8 +15,8 @@ public class Gruppe {
     private String gruppenName;
 
     private boolean ausgleich = false;
-    boolean ausgabeGetaetigt = false;
-    boolean geschlossen = false;
+    private boolean ausgabeGetaetigt = false;
+    private boolean geschlossen = false;
 
     public Gruppe(List<Person> personen, String gruppenName) {
         this.id = UUID.randomUUID();
@@ -197,7 +197,7 @@ public class Gruppe {
 
 
     public List<Ausgabe> getGruppenAusgaben() {
-        return gruppenAusgaben;
+        return List.copyOf(gruppenAusgaben);
     }
 
     public UUID getId() {
