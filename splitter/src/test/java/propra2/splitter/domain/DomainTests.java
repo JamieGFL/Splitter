@@ -77,6 +77,70 @@ public class DomainTests {
   }
 
   @Test
+  @DisplayName("Ausgaben einer Person werden korrekt ausgerechnet")
+  void test_02_1() {
+    Person personA = new Person("MaxHub", new ArrayList<>(), new ArrayList<>());
+    Person personB = new Person("GitLisa", new ArrayList<>(), new ArrayList<>());
+
+    Gruppe gruppe = Gruppe.erstelleGruppe("MaxHub", "Reisegruppe");
+    gruppe.addPerson("GitLisa");
+
+    gruppe.addAusgabeToPerson("Pizza", "MaxHub", List.of("GitLisa"), Money.of(30, "EUR"));
+    gruppe.addAusgabeToPerson("Club", "MaxHub", List.of("GitLisa"), Money.of(100, "EUR"));
+
+    Money[] ausgaben = gruppe.berechneAusgaben();
+
+    assertThat(ausgaben[0]).isEqualTo(Money.of(130, "EUR"));
+  }
+
+
+
+  @Test
+  @DisplayName("Schulden einer Person werden korrekt ausgerechnet")
+  void test_02_2() {
+    Person personA = new Person("MaxHub", new ArrayList<>(), new ArrayList<>());
+    Person personB = new Person("GitLisa", new ArrayList<>(), new ArrayList<>());
+
+    Gruppe gruppe = Gruppe.erstelleGruppe("MaxHub", "Reisegruppe");
+    gruppe.addPerson("GitLisa");
+
+    gruppe.addAusgabeToPerson("Pizza", "MaxHub", List.of("GitLisa"), Money.of(30, "EUR"));
+    gruppe.addAusgabeToPerson("Club", "MaxHub", List.of("GitLisa"), Money.of(100, "EUR"));
+
+    Money[] schulden = gruppe.berechneSchulden();
+
+    assertThat(schulden[1]).isEqualTo(Money.of(130, "EUR"));
+  }
+
+
+  @Test
+  @DisplayName("Personen werden richtig gefiltert")
+  void test_02_3() {
+    Person personA = new Person("MaxHub", new ArrayList<>(), new ArrayList<>());
+    Person personB = new Person("GitLisa", new ArrayList<>(), new ArrayList<>());
+
+    Gruppe gruppe = Gruppe.erstelleGruppe("MaxHub", "Reisegruppe");
+    gruppe.addPerson("GitLisa");
+
+
+    List<Person> personen = gruppe.getPersonenFromNames(List.of("MaxHub", "GitLisa"));
+
+    assertThat(personen).contains(personA, personB);
+  }
+
+  @Test
+  @DisplayName("Person wird richtig gefiltert")
+  void test_02_4() {
+    Person personA = new Person("MaxHub", new ArrayList<>(), new ArrayList<>());
+    Gruppe gruppe = Gruppe.erstelleGruppe("MaxHub", "Reisegruppe");
+
+    List<Person> personen = gruppe.getPersonenFromNames(List.of("MaxHub"));
+
+    assertThat(personen).contains(personA);
+  }
+
+
+  @Test
   @DisplayName("Durchschnittskosten einer Ausgabe werden korrekt berechnet")
   void test_03() {
     Person personA = new Person("MaxHub", new ArrayList<>(), new ArrayList<>());

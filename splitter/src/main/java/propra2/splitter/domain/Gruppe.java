@@ -160,7 +160,7 @@ public class Gruppe {
     return transaktionen.stream().map(Transaktion::getTransaktionsNachricht).toList();
   }
 
-  private Money[] berechneAusgaben() {
+    Money[] berechneAusgaben() {
     Money[] sumAusgaben = getEmptyArray();
     Money ausgabeSum = Money.of(0, "EUR");
 
@@ -174,7 +174,7 @@ public class Gruppe {
     return sumAusgaben;
   }
 
-  private Money[] berechneSchulden() {
+  Money[] berechneSchulden() {
     Money[] sumSchuldenListe = getEmptyArray();
     Money schuldenSum = Money.of(0, "EUR");
 
@@ -206,7 +206,7 @@ public class Gruppe {
     return Collections.min(nettoBetraege, personComparator);
   }
 
-  private List<Person> getPersonenFromNames(List<String> personen2) {
+  List<Person> getPersonenFromNames(List<String> personen2) {
     List<Person> newPersonen = new ArrayList<>();
     for (Person person : personen) {
       for (String personName : personen2) {
@@ -218,7 +218,7 @@ public class Gruppe {
     return newPersonen;
   }
 
-  private Person getPersonFromName(String name) {
+  Person getPersonFromName(String name) {
     Person newPerson = new Person("platzhalter", new ArrayList<>(), new ArrayList<>());
     for (Person person : personen) {
       if (person.getName().equals(name)) {
