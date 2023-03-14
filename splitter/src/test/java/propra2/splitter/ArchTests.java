@@ -9,10 +9,13 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Service;
+import rules.OneAggregateRootExists;
 
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.classes;
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.noFields;
 import static com.tngtech.archunit.library.Architectures.onionArchitecture;
+import static com.tngtech.archunit.library.dependencies.SlicesRuleDefinition.slices;
+import static rules.OneAggregateRootExists.ONE_AGGREGATE_ROOT_EXISTS;
 
 @AnalyzeClasses(packagesOf = SplitterApplication.class , importOptions = ImportOption.DoNotIncludeTests.class)
 public class ArchTests {
@@ -36,4 +39,9 @@ public class ArchTests {
 
     @ArchTest
     static final ArchRule rule4 = classes().that().areAnnotatedWith(Controller.class).should().resideInAPackage("..web..");
+
+    @ArchTest
+    static final ArchRule rule5 = slices().matching("..domain..").should(ONE_AGGREGATE_ROOT_EXISTS);
+
+
 }

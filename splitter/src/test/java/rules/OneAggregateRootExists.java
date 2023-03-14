@@ -37,4 +37,5 @@ public class OneAggregateRootExists extends ArchCondition<Slice> {
         .collect(toList());
   }
 
+
 }
