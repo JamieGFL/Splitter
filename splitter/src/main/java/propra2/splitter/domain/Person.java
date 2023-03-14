@@ -5,7 +5,9 @@ import java.util.List;
 import java.util.Objects;
 import org.springframework.context.annotation.Configuration;
 import propra2.splitter.stereotypes.AggregateRoot;
+import propra2.splitter.stereotypes.Wertobjekt;
 
+@Wertobjekt
 public class Person{
 
     String name;

@@ -2,8 +2,6 @@ package propra2.splitter.web;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -79,7 +77,7 @@ import java.util.UUID;
         }
 
         @GetMapping("/api/gruppen/{id}/ausgleich")
-        public ResponseEntity<List<TransaktionEntity>> GetAusgleichszahlungen(@PathVariable String id){
+        public ResponseEntity<List<TransaktionEntity>> getAusgleichszahlungen(@PathVariable String id){
             if(service.getGruppeInformationEntity(id) == null){
                 return ResponseEntity.notFound().build();
             }
