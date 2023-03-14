@@ -149,7 +149,6 @@ public class RestControllerTests {
   void test_07() throws Exception {
 
     UUID id = UUID.randomUUID();
-
     AusgabeEntity ausgabe = new AusgabeEntity("Pizza", "MaxHub", List.of("MaxHub", "GitLisa"),
         10000);
     GruppeInformationEntity entity = new GruppeInformationEntity(id, "Reisegruppe",
@@ -170,7 +169,6 @@ public class RestControllerTests {
   void test_08() throws Exception {
 
     UUID id = UUID.randomUUID();
-
     when(service.getGruppeInformationEntity(any())).thenReturn(any());
 
     mvc.perform(MockMvcRequestBuilders.get("/api/gruppen/{id}", id)
@@ -185,7 +183,6 @@ public class RestControllerTests {
   void test_09() throws Exception {
 
     UUID id = UUID.randomUUID();
-
     AusgabeEntity ausgabe = new AusgabeEntity("Pizza", "MaxHub", List.of("MaxHub", "GitLisa"),
         10000);
     GruppeInformationEntity entity = new GruppeInformationEntity(id, "Reisegruppe",
@@ -207,7 +204,6 @@ public class RestControllerTests {
   void test_10() throws Exception {
 
     UUID id = UUID.randomUUID();
-
     GruppeInformationEntity entity = new GruppeInformationEntity(id, "Reisegruppe",
         List.of("MaxHub", "GitLisa"), false, List.of());
 
@@ -225,11 +221,9 @@ public class RestControllerTests {
 
   @Test
   @DisplayName("Wenn keine Gruppe gefunden wird, wird NOTFOUND zurück gegeben")
-    // geht nicht
   void test_11() throws Exception {
 
     UUID id = UUID.randomUUID();
-
     when(service.getGruppeInformationEntity(String.valueOf(id))).thenReturn(any());
     when(service.setRestGruppeGeschlossen(String.valueOf(id))).thenReturn(anyString());
 
@@ -246,7 +240,6 @@ public class RestControllerTests {
   @DisplayName("Auslagen können eingetragen werden")
   void test_12() throws Exception {
     UUID id = UUID.randomUUID();
-
     AusgabeEntity ausgabe = new AusgabeEntity("Pizza", "MaxHub", List.of("MaxHub", "GitLisa"),
         10000);
     GruppeInformationEntity entity = new GruppeInformationEntity(id, "Reisegruppe",
@@ -266,7 +259,6 @@ public class RestControllerTests {
   @DisplayName("Gruppe ist nicht vorhanden wenn man eine Auslage eintragen will")
   void test_13() throws Exception {
     UUID id = UUID.randomUUID();
-
     AusgabeEntity ausgabe = new AusgabeEntity("Pizza", "MaxHub", List.of("MaxHub", "GitLisa"),
         10000);
 
@@ -284,7 +276,6 @@ public class RestControllerTests {
   @DisplayName("Ausgaben werden nicht eingetragen wenn die Gruppe geschlossen ist")
   void test_14() throws Exception {
     UUID id = UUID.randomUUID();
-
     AusgabeEntity ausgabe = new AusgabeEntity("Pizza", "MaxHub", List.of("MaxHub", "GitLisa"),
         10000);
     GruppeInformationEntity entity = new GruppeInformationEntity(id, "Reisegruppe",
@@ -305,7 +296,6 @@ public class RestControllerTests {
   @DisplayName("Ausgaben werden nicht eingetragen wenn Json Dokument fehlerhaft ist")
   void test_15() throws Exception {
     UUID id = UUID.randomUUID();
-
     AusgabeEntity ausgabe = new AusgabeEntity(null, null, List.of("MaxHub", "GitLisa"), 10000);
     GruppeInformationEntity entity = new GruppeInformationEntity(id, "Reisegruppe",
         List.of("MaxHub", "GitLisa"), false, List.of());
@@ -325,7 +315,6 @@ public class RestControllerTests {
   @DisplayName("Ausgleichzahlungen stehen im ResponseBody")
   void test_16() throws Exception {
     UUID id = UUID.randomUUID();
-
     AusgabeEntity ausgabe = new AusgabeEntity("Pizza", "MaxHub", List.of("MaxHub", "GitLisa"),
         10000);
     GruppeInformationEntity entity = new GruppeInformationEntity(id, "Reisegruppe",
@@ -346,7 +335,6 @@ public class RestControllerTests {
   @DisplayName("Es gibt keine Gruppe mit dieser ID um die Ausgleichzahlung anzuzeigen")
   void test_17() throws Exception {
     UUID id = UUID.randomUUID();
-
     when(service.getGruppeInformationEntity(String.valueOf(id))).thenReturn(any());
     when(service.getRestTransaktionen(String.valueOf(id))).thenReturn(anyList());
 

@@ -41,7 +41,6 @@ public class AddTests {
 
     when(service.addGruppe(any(), anyString())).thenReturn(
         Gruppe.erstelleGruppe("MaxHub", "Gruppe"));
-
     String gruppenName = "Gruppe";
 
     mvc.perform(post("/add")

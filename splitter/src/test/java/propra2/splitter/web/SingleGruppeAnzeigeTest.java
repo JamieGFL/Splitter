@@ -80,7 +80,6 @@ public class SingleGruppeAnzeigeTest {
     Gruppe gruppe = Gruppe.erstelleGruppe("MaxHub", "Reisegruppe");
     gruppe.addPerson("GitLisa");
     String error = "invalider GitHub Name";
-
     when(service.getSingleGruppe(gruppe.getId())).thenReturn(gruppe);
 
     mvc.perform(get("/gruppe")
@@ -101,7 +100,6 @@ public class SingleGruppeAnzeigeTest {
     gruppe.addPerson("GitLisa");
     gruppe.addAusgabeToPerson("pizza", "MaxHub", List.of("GitLisa"), Money.of(400, "EUR"));
     String error = "invalider GitHub Name";
-
     when(service.getSingleGruppe(gruppe.getId())).thenReturn(gruppe);
 
     mvc.perform(get("/gruppe")
@@ -125,7 +123,6 @@ public class SingleGruppeAnzeigeTest {
     gruppe.addAusgabeToPerson("pizza", "MaxHub", List.of("GitLisa"), Money.of(400, "EUR"));
     gruppe.berechneTransaktionen();
     String error = "invalider GitHub Name";
-
     when(service.getSingleGruppe(gruppe.getId())).thenReturn(gruppe);
 
     mvc.perform(get("/gruppe")
@@ -143,7 +140,6 @@ public class SingleGruppeAnzeigeTest {
 
     Gruppe gruppe = Gruppe.erstelleGruppe("MaxHub", "Reisegruppe");
     String error = "invalider GitHub Name";
-
     when(service.getSingleGruppe(gruppe.getId())).thenReturn(gruppe);
 
     MvcResult result = mvc.perform(get("/gruppe")
@@ -151,7 +147,6 @@ public class SingleGruppeAnzeigeTest {
             .param("loginForm", "MaxHub")
             .param("error", error))
         .andReturn();
-
     String html = result.getResponse().getContentAsString();
 
     assertThat(html).contains("<form id=\"1\" method=\"post\" action=\"/gruppe/add\">");
@@ -168,7 +163,6 @@ public class SingleGruppeAnzeigeTest {
     Gruppe gruppe = Gruppe.erstelleGruppe("MaxHub", "Reisegruppe");
     String error = "invalider GitHub Name";
     gruppe.addPerson("GitLisa");
-
     when(service.getSingleGruppe(gruppe.getId())).thenReturn(gruppe);
 
     MvcResult result = mvc.perform(get("/gruppe")
@@ -176,7 +170,6 @@ public class SingleGruppeAnzeigeTest {
             .param("loginForm", "MaxHub")
             .param("error", error))
         .andReturn();
-
     String html = result.getResponse().getContentAsString();
 
     assertThat(html).contains("<a href=\"/\"> zurück zur Gruppen-Übersicht </a>");
@@ -191,7 +184,6 @@ public class SingleGruppeAnzeigeTest {
     Gruppe gruppe = Gruppe.erstelleGruppe("MaxHub", "Reisegruppe");
     String error = "invalider GitHub Name";
     gruppe.addPerson("GitLisa");
-
     when(service.getSingleGruppe(gruppe.getId())).thenReturn(gruppe);
 
     MvcResult result = mvc.perform(get("/gruppe")
@@ -199,7 +191,6 @@ public class SingleGruppeAnzeigeTest {
             .param("loginForm", "MaxHub")
             .param("error", error))
         .andReturn();
-
     String html = result.getResponse().getContentAsString();
 
     assertThat(html).contains("<form method=\"post\" action=\"/gruppe/close\">");
@@ -215,7 +206,6 @@ public class SingleGruppeAnzeigeTest {
     Gruppe gruppe = Gruppe.erstelleGruppe("MaxHub", "Reisegruppe");
     String error = "invalider GitHub Name";
     gruppe.addPerson("GitLisa");
-
     when(service.getSingleGruppe(gruppe.getId())).thenReturn(gruppe);
 
     MvcResult result = mvc.perform(get("/gruppe")
@@ -223,7 +213,6 @@ public class SingleGruppeAnzeigeTest {
             .param("loginForm", "MaxHub")
             .param("error", error))
         .andReturn();
-
     String html = result.getResponse().getContentAsString();
 
     assertThat(html).contains("<form method=\"post\" action=\"/gruppe/close\">");
