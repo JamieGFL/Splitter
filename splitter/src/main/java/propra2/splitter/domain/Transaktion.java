@@ -3,7 +3,9 @@ package propra2.splitter.domain;
 import org.javamoney.moneta.Money;
 
 import java.util.Objects;
+import propra2.splitter.stereotypes.Wertobjekt;
 
+@Wertobjekt
 public class Transaktion {
     private Person person1;
     private Person person2;

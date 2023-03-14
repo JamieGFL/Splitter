@@ -4,7 +4,9 @@ import org.javamoney.moneta.Money;
 
 import java.util.List;
 import java.util.Objects;
+import propra2.splitter.stereotypes.Wertobjekt;
 
+@Wertobjekt
 public class Ausgabe {
     Aktivitaet aktivitaet;
     Person ausleger;
