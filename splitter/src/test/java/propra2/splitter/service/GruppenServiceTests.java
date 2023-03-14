@@ -23,7 +23,9 @@ public class GruppenServiceTests {
   @DisplayName("Service kann Gruppen hinzufügen")
   void test_01() {
     GruppenService service = new GruppenService();
+
     Gruppe gruppe = service.addGruppe(mkUser("James"), "Reisegruppe");
+
     assertThat(service.getGruppen().details()).contains(
         new GruppenDetails(gruppe.getId(), gruppe.getGruppenName(), List.of("James"), false));
   }

@@ -95,7 +95,6 @@ public class GruppenAnzeigeTest {
             new GruppenDetails(UUID.randomUUID(), "Reisegruppe", List.of("MaxHub"), false))));
 
     MvcResult result = mvc.perform(get("/")).andReturn();
-
     String html = result.getResponse().getContentAsString();
 
     assertThat(html).contains("<form method=\"post\" action=\"/add\">");
@@ -110,13 +109,11 @@ public class GruppenAnzeigeTest {
   @DisplayName("Die Gruppeninformationsseite ist verlinkt")
   void test_05() throws Exception {
     UUID id = UUID.randomUUID();
-
     when(service.personToGruppeMatch(any()))
         .thenReturn(new GruppenOnPage(
             List.of(new GruppenDetails(id, "Reisegruppe", List.of("MaxHub"), false))));
 
     MvcResult result = mvc.perform(get("/")).andReturn();
-
     String html = result.getResponse().getContentAsString();
     String idToString = id.toString();
 
@@ -130,13 +127,11 @@ public class GruppenAnzeigeTest {
   @DisplayName("Geschlossene Gruppen in denen man Mitglied war werden einem Seperat angezeigt")
   void test_06() throws Exception {
     UUID id = UUID.randomUUID();
-
     when(service.personToGruppeMatch(any()))
         .thenReturn(new GruppenOnPage(
             List.of(new GruppenDetails(id, "Reisegruppe", List.of("MaxHub"), true))));
 
     MvcResult result = mvc.perform(get("/")).andReturn();
-
     String html = result.getResponse().getContentAsString();
     String idToString = id.toString();
 
