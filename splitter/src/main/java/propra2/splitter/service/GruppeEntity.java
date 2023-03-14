@@ -1,6 +1,7 @@
 package propra2.splitter.service;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 public class GruppeEntity {
@@ -41,5 +42,18 @@ public class GruppeEntity {
 
     public void setPersonen(List<String> personen) {
         this.personen = personen;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof GruppeEntity)) return false;
+        GruppeEntity that = (GruppeEntity) o;
+        return Objects.equals(getName(), that.getName()) && Objects.equals(getPersonen(), that.getPersonen());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getName(), getPersonen());
     }
 }

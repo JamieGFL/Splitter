@@ -45,10 +45,8 @@ public class RestGruppenService {
                 throw new IllegalArgumentException();
             }).orElse(null);
             if (gruppe == null){
-                System.out.println("Test1");
                 return null;
             }
-            System.out.println("Test2");
             return toGruppeInformationsEntity(gruppe);
         }
         catch(Exception exception){
