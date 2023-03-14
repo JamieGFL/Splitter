@@ -12,6 +12,7 @@ import static com.tngtech.archunit.lang.SimpleConditionEvent.violated;
 import static java.util.stream.Collectors.toList;
 
 public class OneAggregateRootExists extends ArchCondition<Slice> {
+
   public static final OneAggregateRootExists ONE_AGGREGATE_ROOT_EXISTS =
       new OneAggregateRootExists("exactly one Aggregate Root exists");
 
@@ -24,9 +25,14 @@ public class OneAggregateRootExists extends ArchCondition<Slice> {
     String packageName = slice.iterator().next().getPackageName();
     int numberOfAggregateRoots = rootNames.size();
     switch (numberOfAggregateRoots) {
-      case 0: events.add(violated(slice, packageName+" has no aggregate root")); break;
-      case 1: events.add(satisfied(slice, "ok!")); break;
-      default: events.add(violated(slice, packageName+" has more than one aggregate root"));
+      case 0:
+        events.add(violated(slice, packageName + " has no aggregate root"));
+        break;
+      case 1:
+        events.add(satisfied(slice, "ok!"));
+        break;
+      default:
+        events.add(violated(slice, packageName + " has more than one aggregate root"));
     }
   }
 

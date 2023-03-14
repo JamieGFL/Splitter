@@ -10,6 +10,7 @@ import org.springframework.security.test.context.support.WithSecurityContext;
 @Retention(RetentionPolicy.RUNTIME)
 @WithSecurityContext(factory = WithOAuth2UserSecurityContextFactory.class)
 public @interface WithMockOAuth2User {
+
   int id() default 666666;
 
 

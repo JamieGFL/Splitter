@@ -1,7 +1,6 @@
 package propra2.splitter.web;
 
 
-
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -11,6 +10,7 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.Collections;
 import java.util.List;
@@ -46,7 +46,6 @@ public class RestControllerTests {
   RestGruppenService service;
 
 
-
   @Test
   @DisplayName("Gruppen können erstellt werden")
   void test_01() throws Exception {
@@ -55,11 +54,10 @@ public class RestControllerTests {
     UUID id = UUID.randomUUID();
     when(service.addRestGruppe(entity)).thenReturn(id);
 
-
     mvc.perform(MockMvcRequestBuilders.post("/api/gruppen")
-            .contentType(MediaType.APPLICATION_JSON)
-            .accept(MediaType.APPLICATION_JSON)
-            .content(mapper.writeValueAsString(entity))).andExpect(status().isCreated()).andDo(print());
+        .contentType(MediaType.APPLICATION_JSON)
+        .accept(MediaType.APPLICATION_JSON)
+        .content(mapper.writeValueAsString(entity))).andExpect(status().isCreated()).andDo(print());
 
     verify(service).addRestGruppe(any());
 
@@ -96,15 +94,15 @@ public class RestControllerTests {
   }
 
 
-
   @Test
   @DisplayName("status OK wird zurück gegeben wenn eine Gruppe für eine bestimmte Person angezeigt wird")
   void test_04() throws Exception {
 
-    GruppeEntity entity = new GruppeEntity(UUID.randomUUID(),"Reisen", List.of("MaxHub"));
+    GruppeEntity entity = new GruppeEntity(UUID.randomUUID(), "Reisen", List.of("MaxHub"));
     when(service.personRestMatch(anyString())).thenReturn(Collections.singletonList(entity));
 
-    mvc.perform(MockMvcRequestBuilders.get("/api/user/{githublogin}/gruppen", "MaxHub").accept(MediaType.APPLICATION_JSON))
+    mvc.perform(MockMvcRequestBuilders.get("/api/user/{githublogin}/gruppen", "MaxHub")
+            .accept(MediaType.APPLICATION_JSON))
         .andDo(print()).andExpect(status().isOk());
 
     verify(service).personRestMatch(anyString());
@@ -115,13 +113,14 @@ public class RestControllerTests {
   @DisplayName("Die Gruppe steht im Body der Response")
   void test_05() throws Exception {
 
-    GruppeEntity entity = new GruppeEntity(UUID.randomUUID(),"Reisen", List.of("MaxHub"));
+    GruppeEntity entity = new GruppeEntity(UUID.randomUUID(), "Reisen", List.of("MaxHub"));
     when(service.personRestMatch(anyString())).thenReturn(List.of(entity));
 
     mvc.perform(MockMvcRequestBuilders.get("/api/user/{githublogin}/gruppen", "MaxHub")
             .contentType(MediaType.APPLICATION_JSON)
             .accept(MediaType.APPLICATION_JSON))
-        .andDo(print()).andExpect(status().isOk()).andExpect(content().string("["+mapper.writeValueAsString(entity)+"]"));
+        .andDo(print()).andExpect(status().isOk())
+        .andExpect(content().string("[" + mapper.writeValueAsString(entity) + "]"));
 
     verify(service).personRestMatch(anyString());
 
@@ -132,10 +131,9 @@ public class RestControllerTests {
   @DisplayName("Leeres Array wenn es keine passende Gruppe gibt")
   void test_06() throws Exception {
 
-    GruppeEntity entity = new GruppeEntity(UUID.randomUUID(),"Reisen", List.of("MaxHub"));
+    GruppeEntity entity = new GruppeEntity(UUID.randomUUID(), "Reisen", List.of("MaxHub"));
     String githublogin = "GitLisa";
     when(service.personRestMatch("GitLisa")).thenReturn(anyList());
-
 
     mvc.perform(MockMvcRequestBuilders.get("/api/user/{githublogin}/gruppen", githublogin)
             .contentType(MediaType.APPLICATION_JSON)
@@ -152,16 +150,17 @@ public class RestControllerTests {
 
     UUID id = UUID.randomUUID();
 
-    AusgabeEntity ausgabe = new AusgabeEntity("Pizza", "MaxHub", List.of("MaxHub", "GitLisa"),10000);
-    GruppeInformationEntity entity =new GruppeInformationEntity(id, "Reisegruppe", List.of("MaxHub", "GitLisa"), false, List.of(ausgabe));
+    AusgabeEntity ausgabe = new AusgabeEntity("Pizza", "MaxHub", List.of("MaxHub", "GitLisa"),
+        10000);
+    GruppeInformationEntity entity = new GruppeInformationEntity(id, "Reisegruppe",
+        List.of("MaxHub", "GitLisa"), false, List.of(ausgabe));
 
     when(service.getGruppeInformationEntity(String.valueOf(id))).thenReturn(entity);
 
     mvc.perform(MockMvcRequestBuilders.get("/api/gruppen/{id}", id)
-        .contentType(MediaType.APPLICATION_JSON)
-        .accept(MediaType.APPLICATION_JSON))
+            .contentType(MediaType.APPLICATION_JSON)
+            .accept(MediaType.APPLICATION_JSON))
         .andDo(print()).andExpect(status().isOk());
-
 
 
   }
@@ -177,7 +176,7 @@ public class RestControllerTests {
     mvc.perform(MockMvcRequestBuilders.get("/api/gruppen/{id}", id)
             .contentType(MediaType.APPLICATION_JSON)
             .accept(MediaType.APPLICATION_JSON))
-            .andDo(print()).andExpect(status().isNotFound());
+        .andDo(print()).andExpect(status().isNotFound());
 
   }
 
@@ -187,14 +186,16 @@ public class RestControllerTests {
 
     UUID id = UUID.randomUUID();
 
-    AusgabeEntity ausgabe = new AusgabeEntity("Pizza", "MaxHub", List.of("MaxHub", "GitLisa"),10000);
-    GruppeInformationEntity entity =new GruppeInformationEntity(id, "Reisegruppe", List.of("MaxHub", "GitLisa"), false, List.of(ausgabe));
+    AusgabeEntity ausgabe = new AusgabeEntity("Pizza", "MaxHub", List.of("MaxHub", "GitLisa"),
+        10000);
+    GruppeInformationEntity entity = new GruppeInformationEntity(id, "Reisegruppe",
+        List.of("MaxHub", "GitLisa"), false, List.of(ausgabe));
 
     when(service.getGruppeInformationEntity(String.valueOf(id))).thenReturn(entity);
 
     mvc.perform(MockMvcRequestBuilders.get("/api/gruppen/{id}", id)
-        .contentType(MediaType.APPLICATION_JSON)
-        .accept(MediaType.APPLICATION_JSON))
+            .contentType(MediaType.APPLICATION_JSON)
+            .accept(MediaType.APPLICATION_JSON))
         .andExpect(content().string(mapper.writeValueAsString(entity))).andDo(print());
 
 
@@ -207,29 +208,30 @@ public class RestControllerTests {
 
     UUID id = UUID.randomUUID();
 
-
-    GruppeInformationEntity entity = new GruppeInformationEntity(id, "Reisegruppe", List.of("MaxHub", "GitLisa"), false, List.of());
+    GruppeInformationEntity entity = new GruppeInformationEntity(id, "Reisegruppe",
+        List.of("MaxHub", "GitLisa"), false, List.of());
 
     when(service.getGruppeInformationEntity(String.valueOf(id))).thenReturn(entity);
-    when(service.setRestGruppeGeschlossen(String.valueOf(id))).thenReturn(entity.name() + " wurde geschlossen");
-
+    when(service.setRestGruppeGeschlossen(String.valueOf(id))).thenReturn(
+        entity.name() + " wurde geschlossen");
 
     mvc.perform(MockMvcRequestBuilders.post("/api/gruppen/{id}/schliessen", id)
             .contentType(MediaType.APPLICATION_JSON)
             .accept(MediaType.APPLICATION_JSON))
-        .andExpect(status().isOk()).andExpect(content().string(entity.name() + " wurde geschlossen")).andDo(print());
+        .andExpect(status().isOk())
+        .andExpect(content().string(entity.name() + " wurde geschlossen")).andDo(print());
 
   }
 
   @Test
-  @DisplayName("Wenn keine Gruppe gefunden wird, wird NOTFOUND zurück gegeben") // geht nicht
+  @DisplayName("Wenn keine Gruppe gefunden wird, wird NOTFOUND zurück gegeben")
+    // geht nicht
   void test_11() throws Exception {
 
     UUID id = UUID.randomUUID();
 
     when(service.getGruppeInformationEntity(String.valueOf(id))).thenReturn(any());
     when(service.setRestGruppeGeschlossen(String.valueOf(id))).thenReturn(anyString());
-
 
     mvc.perform(MockMvcRequestBuilders.post("/api/gruppen/{id}/schliessen", id)
             .contentType(MediaType.APPLICATION_JSON)
@@ -240,17 +242,17 @@ public class RestControllerTests {
   }
 
 
-
   @Test
   @DisplayName("Auslagen können eingetragen werden")
   void test_12() throws Exception {
     UUID id = UUID.randomUUID();
 
-    AusgabeEntity ausgabe = new AusgabeEntity("Pizza", "MaxHub", List.of("MaxHub", "GitLisa"),10000);
-    GruppeInformationEntity entity =new GruppeInformationEntity(id, "Reisegruppe", List.of("MaxHub", "GitLisa"), false, List.of(ausgabe));
+    AusgabeEntity ausgabe = new AusgabeEntity("Pizza", "MaxHub", List.of("MaxHub", "GitLisa"),
+        10000);
+    GruppeInformationEntity entity = new GruppeInformationEntity(id, "Reisegruppe",
+        List.of("MaxHub", "GitLisa"), false, List.of(ausgabe));
 
     when(service.getGruppeInformationEntity(String.valueOf(id))).thenReturn(entity);
-
 
     mvc.perform(MockMvcRequestBuilders.post("/api/gruppen/{id}/auslagen", id)
             .contentType(MediaType.APPLICATION_JSON)
@@ -265,10 +267,10 @@ public class RestControllerTests {
   void test_13() throws Exception {
     UUID id = UUID.randomUUID();
 
-    AusgabeEntity ausgabe = new AusgabeEntity("Pizza", "MaxHub", List.of("MaxHub", "GitLisa"),10000);
+    AusgabeEntity ausgabe = new AusgabeEntity("Pizza", "MaxHub", List.of("MaxHub", "GitLisa"),
+        10000);
 
     when(service.getGruppeInformationEntity(String.valueOf(id))).thenReturn(any());
-
 
     mvc.perform(MockMvcRequestBuilders.post("/api/gruppen/{id}/auslagen", id)
             .contentType(MediaType.APPLICATION_JSON)
@@ -283,8 +285,10 @@ public class RestControllerTests {
   void test_14() throws Exception {
     UUID id = UUID.randomUUID();
 
-    AusgabeEntity ausgabe = new AusgabeEntity("Pizza", "MaxHub", List.of("MaxHub", "GitLisa"),10000);
-    GruppeInformationEntity entity =new GruppeInformationEntity(id, "Reisegruppe", List.of("MaxHub", "GitLisa"), true, List.of());
+    AusgabeEntity ausgabe = new AusgabeEntity("Pizza", "MaxHub", List.of("MaxHub", "GitLisa"),
+        10000);
+    GruppeInformationEntity entity = new GruppeInformationEntity(id, "Reisegruppe",
+        List.of("MaxHub", "GitLisa"), true, List.of());
 
     when(service.getGruppeInformationEntity(String.valueOf(id))).thenReturn(entity);
 
@@ -302,8 +306,9 @@ public class RestControllerTests {
   void test_15() throws Exception {
     UUID id = UUID.randomUUID();
 
-    AusgabeEntity ausgabe = new AusgabeEntity(null, null, List.of("MaxHub", "GitLisa"),10000);
-    GruppeInformationEntity entity =new GruppeInformationEntity(id, "Reisegruppe", List.of("MaxHub", "GitLisa"), false, List.of());
+    AusgabeEntity ausgabe = new AusgabeEntity(null, null, List.of("MaxHub", "GitLisa"), 10000);
+    GruppeInformationEntity entity = new GruppeInformationEntity(id, "Reisegruppe",
+        List.of("MaxHub", "GitLisa"), false, List.of());
 
     when(service.getGruppeInformationEntity(String.valueOf(id))).thenReturn(entity);
 
@@ -316,14 +321,15 @@ public class RestControllerTests {
   }
 
 
-
   @Test
   @DisplayName("Ausgleichzahlungen stehen im ResponseBody")
   void test_16() throws Exception {
     UUID id = UUID.randomUUID();
 
-    AusgabeEntity ausgabe = new AusgabeEntity("Pizza", "MaxHub", List.of("MaxHub", "GitLisa"),10000);
-    GruppeInformationEntity entity =new GruppeInformationEntity(id, "Reisegruppe", List.of("MaxHub", "GitLisa"), false, List.of(ausgabe));
+    AusgabeEntity ausgabe = new AusgabeEntity("Pizza", "MaxHub", List.of("MaxHub", "GitLisa"),
+        10000);
+    GruppeInformationEntity entity = new GruppeInformationEntity(id, "Reisegruppe",
+        List.of("MaxHub", "GitLisa"), false, List.of(ausgabe));
     TransaktionEntity transaktion = new TransaktionEntity("GitLisa", "MaxHub", 5000);
 
     when(service.getGruppeInformationEntity(String.valueOf(id))).thenReturn(entity);

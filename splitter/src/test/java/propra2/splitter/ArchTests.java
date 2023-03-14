@@ -21,47 +21,49 @@ import static com.tngtech.archunit.library.Architectures.onionArchitecture;
 import static com.tngtech.archunit.library.dependencies.SlicesRuleDefinition.slices;
 import static rules.OneAggregateRootExists.ONE_AGGREGATE_ROOT_EXISTS;
 
-@AnalyzeClasses(packagesOf = SplitterApplication.class , importOptions = ImportOption.DoNotIncludeTests.class)
+@AnalyzeClasses(packagesOf = SplitterApplication.class, importOptions = ImportOption.DoNotIncludeTests.class)
 public class ArchTests {
 
-    @ArchTest
-    static final ArchRule onion = onionArchitecture()
-            .domainModels("propra2.splitter.domain..")
-            .domainServices("propra2.splitter.domain..")
-            .applicationServices("propra2.splitter.service..")
-            .adapter("web", "propra2.splitter.web..");
+  @ArchTest
+  static final ArchRule onion = onionArchitecture()
+      .domainModels("propra2.splitter.domain..")
+      .domainServices("propra2.splitter.domain..")
+      .applicationServices("propra2.splitter.service..")
+      .adapter("web", "propra2.splitter.web..");
 
 
-    @ArchTest
-    static final ArchRule rule1 = noFields().should().beAnnotatedWith(Autowired.class).orShould().beAnnotatedWith(Value.class);
+  @ArchTest
+  static final ArchRule rule1 = noFields().should().beAnnotatedWith(Autowired.class).orShould()
+      .beAnnotatedWith(Value.class);
 
-    @ArchTest
-    static final ArchRule rule2 = classes().that().areAnnotatedWith(Configuration.class).should().resideInAPackage("..config..");
+  @ArchTest
+  static final ArchRule rule2 = classes().that().areAnnotatedWith(Configuration.class).should()
+      .resideInAPackage("..config..");
 
-    @ArchTest
-    static final ArchRule rule3 = classes().that().areAnnotatedWith(Service.class).should().resideInAPackage("..service..");
+  @ArchTest
+  static final ArchRule rule3 = classes().that().areAnnotatedWith(Service.class).should()
+      .resideInAPackage("..service..");
 
-    @ArchTest
-    static final ArchRule rule4 = classes().that().areAnnotatedWith(Controller.class).should().resideInAPackage("..web..");
+  @ArchTest
+  static final ArchRule rule4 = classes().that().areAnnotatedWith(Controller.class).should()
+      .resideInAPackage("..web..");
 
-    @ArchTest
-    static final ArchRule rule5 = slices().matching("..domain..").should(ONE_AGGREGATE_ROOT_EXISTS);
+  @ArchTest
+  static final ArchRule rule5 = slices().matching("..domain..").should(ONE_AGGREGATE_ROOT_EXISTS);
 
-    @ArchTest
-    static final ArchRule rule6 = noClasses().should().beAnnotatedWith(Deprecated.class);
+  @ArchTest
+  static final ArchRule rule6 = noClasses().should().beAnnotatedWith(Deprecated.class);
 
-    @ArchTest
-    static final ArchRule rule7 = classes()
-        .that()
-        .resideInAPackage("..domain..")
-        .and()
-        .doNotImplement(Comparator.class)
-        .should()
-        .beAnnotatedWith(AggregateRoot.class)
-        .orShould()
-        .beAnnotatedWith(Wertobjekt.class);
-
-
+  @ArchTest
+  static final ArchRule rule7 = classes()
+      .that()
+      .resideInAPackage("..domain..")
+      .and()
+      .doNotImplement(Comparator.class)
+      .should()
+      .beAnnotatedWith(AggregateRoot.class)
+      .orShould()
+      .beAnnotatedWith(Wertobjekt.class);
 
 
 }
