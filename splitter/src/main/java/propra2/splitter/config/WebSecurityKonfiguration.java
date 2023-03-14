@@ -9,20 +9,20 @@ import org.springframework.security.web.SecurityFilterChain;
 @Configuration
 public class WebSecurityKonfiguration {
 
-    @Bean
-    public SecurityFilterChain configure(HttpSecurity chainbuilder) throws Exception{
-        chainbuilder.authorizeHttpRequests(configurer -> configurer.anyRequest().authenticated())
-                .logout()
-                .clearAuthentication(true)
-                .invalidateHttpSession(true)
-                .deleteCookies("JSESSIONID")
-                .and()
-                .oauth2Login();
-        return chainbuilder.build();
-    }
+  @Bean
+  public SecurityFilterChain configure(HttpSecurity chainbuilder) throws Exception {
+    chainbuilder.authorizeHttpRequests(configurer -> configurer.anyRequest().authenticated())
+        .logout()
+        .clearAuthentication(true)
+        .invalidateHttpSession(true)
+        .deleteCookies("JSESSIONID")
+        .and()
+        .oauth2Login();
+    return chainbuilder.build();
+  }
 
-    @Bean
-    public WebSecurityCustomizer customizer(){
-        return web -> web.ignoring().antMatchers("/api/**");
-    }
+  @Bean
+  public WebSecurityCustomizer customizer() {
+    return web -> web.ignoring().antMatchers("/api/**");
+  }
 }

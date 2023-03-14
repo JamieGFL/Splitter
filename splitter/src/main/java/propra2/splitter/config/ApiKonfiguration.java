@@ -8,12 +8,12 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class ApiKonfiguration {
 
-    @Bean
-    public OpenAPI customOpenAPI(){
-        return new OpenAPI()
-                .info(new Info()
-                        .title("Inventory API")
-                        .version("1.0=beta")
-                        .description("RestSchnittstelle"));
-    }
+  @Bean
+  public OpenAPI customOpenAPI() {
+    return new OpenAPI()
+        .info(new Info()
+            .title("Inventory API")
+            .version("1.0=beta")
+            .description("RestSchnittstelle"));
+  }
 }

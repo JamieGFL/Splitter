@@ -30,6 +30,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
+
 @WebMvcTest(controllers = WebController.class)
 @Import(WebSecurityKonfiguration.class)
 public class GruppenAnzeigeTest {
@@ -57,10 +58,11 @@ public class GruppenAnzeigeTest {
   @Test
   @WithMockOAuth2User(login = "MaxHub")
   @DisplayName("Nur die Gruppen in denen man auch Mitglied ist werden einem angezeigt")
-  void test_02() throws Exception{
+  void test_02() throws Exception {
 
     when(service.personToGruppeMatch(any()))
-            .thenReturn(new GruppenOnPage(List.of(new GruppenDetails(UUID.randomUUID(), "Reisegruppe", List.of("MaxHub"), false))));
+        .thenReturn(new GruppenOnPage(List.of(
+            new GruppenDetails(UUID.randomUUID(), "Reisegruppe", List.of("MaxHub"), false))));
 
     MvcResult result = mvc.perform(get("/")).andReturn();
 
@@ -71,10 +73,11 @@ public class GruppenAnzeigeTest {
   @Test
   @WithMockOAuth2User(login = "MaxHub")
   @DisplayName("Jede Gruppe hat einen Link für Gruppeninformationen")
-  void test_03() throws Exception{
+  void test_03() throws Exception {
 
     when(service.personToGruppeMatch(any()))
-            .thenReturn(new GruppenOnPage(List.of(new GruppenDetails(UUID.randomUUID(), "Reisegruppe", List.of("MaxHub"), false))));
+        .thenReturn(new GruppenOnPage(List.of(
+            new GruppenDetails(UUID.randomUUID(), "Reisegruppe", List.of("MaxHub"), false))));
 
     MvcResult result = mvc.perform(get("/")).andReturn();
 
@@ -85,17 +88,19 @@ public class GruppenAnzeigeTest {
   @Test
   @WithMockOAuth2User(login = "MaxHub")
   @DisplayName("Das Eingabeformular für den Gruppennamen wird angezeigt")
-  void test_04() throws Exception{
+  void test_04() throws Exception {
 
     when(service.personToGruppeMatch(any()))
-            .thenReturn(new GruppenOnPage(List.of(new GruppenDetails(UUID.randomUUID(), "Reisegruppe",  List.of("MaxHub"), false))));
+        .thenReturn(new GruppenOnPage(List.of(
+            new GruppenDetails(UUID.randomUUID(), "Reisegruppe", List.of("MaxHub"), false))));
 
     MvcResult result = mvc.perform(get("/")).andReturn();
 
     String html = result.getResponse().getContentAsString();
 
     assertThat(html).contains("<form method=\"post\" action=\"/add\">");
-    assertThat(html).contains("<input id=\"gName\" type=\"text\" name=\"gruppenName\" value=\"\" >");
+    assertThat(html).contains(
+        "<input id=\"gName\" type=\"text\" name=\"gruppenName\" value=\"\" >");
 
 
   }
@@ -103,18 +108,19 @@ public class GruppenAnzeigeTest {
   @Test
   @WithMockOAuth2User(login = "MaxHub")
   @DisplayName("Die Gruppeninformationsseite ist verlinkt")
-  void test_05() throws Exception{
+  void test_05() throws Exception {
     UUID id = UUID.randomUUID();
 
     when(service.personToGruppeMatch(any()))
-            .thenReturn(new GruppenOnPage(List.of(new GruppenDetails(id, "Reisegruppe", List.of("MaxHub"), false))));
+        .thenReturn(new GruppenOnPage(
+            List.of(new GruppenDetails(id, "Reisegruppe", List.of("MaxHub"), false))));
 
     MvcResult result = mvc.perform(get("/")).andReturn();
 
     String html = result.getResponse().getContentAsString();
     String idToString = id.toString();
 
-    assertThat(html).contains("<a href=\"gruppe?id="+ idToString +"\"> Anzeigen </a>");
+    assertThat(html).contains("<a href=\"gruppe?id=" + idToString + "\"> Anzeigen </a>");
 
   }
 
@@ -122,11 +128,12 @@ public class GruppenAnzeigeTest {
   @Test
   @WithMockOAuth2User(login = "MaxHub")
   @DisplayName("Geschlossene Gruppen in denen man Mitglied war werden einem Seperat angezeigt")
-  void test_06() throws Exception{
+  void test_06() throws Exception {
     UUID id = UUID.randomUUID();
 
     when(service.personToGruppeMatch(any()))
-        .thenReturn(new GruppenOnPage(List.of(new GruppenDetails(id, "Reisegruppe", List.of("MaxHub"), true))));
+        .thenReturn(new GruppenOnPage(
+            List.of(new GruppenDetails(id, "Reisegruppe", List.of("MaxHub"), true))));
 
     MvcResult result = mvc.perform(get("/")).andReturn();
 

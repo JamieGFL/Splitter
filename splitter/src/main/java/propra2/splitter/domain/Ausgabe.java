@@ -8,79 +8,87 @@ import propra2.splitter.stereotypes.Wertobjekt;
 
 @Wertobjekt
 public class Ausgabe {
-    final Aktivitaet aktivitaet;
-    final Person ausleger;
-    final List<Person> personen;
-    final Money kosten;
 
-    Ausgabe(Aktivitaet aktivitaet, Person ausleger, List<Person> personen, Money kosten) {
-        this.aktivitaet = aktivitaet;
-        this.ausleger = ausleger;
-        this.personen = personen;
-        this.kosten = kosten;
-    }
+  final Aktivitaet aktivitaet;
+  final Person ausleger;
+  final List<Person> personen;
+  final Money kosten;
 
-    Money getKosten() {
-        if(personen.contains(ausleger)){
-            return kosten.subtract(getDurchschnittsKosten());
-        }else {
-            return kosten;
-        }
-    }
+  Ausgabe(Aktivitaet aktivitaet, Person ausleger, List<Person> personen, Money kosten) {
+    this.aktivitaet = aktivitaet;
+    this.ausleger = ausleger;
+    this.personen = personen;
+    this.kosten = kosten;
+  }
 
-    public boolean personPresent(String name){
-        if(ausleger.getName().equals(name)){
-            return true;
-        }
-        for (Person person: personen){
-            if(person.getName().equals(name)){
-                return true;
-            }
-        }
-        return false;
+  Money getKosten() {
+    if (personen.contains(ausleger)) {
+      return kosten.subtract(getDurchschnittsKosten());
+    } else {
+      return kosten;
     }
+  }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Ausgabe)) return false;
-        Ausgabe ausgabe = (Ausgabe) o;
-        return Objects.equals(getAktivitaet(), ausgabe.getAktivitaet()) && Objects.equals(getAusleger(), ausgabe.getAusleger()) && Objects.equals(getPersonen(), ausgabe.getPersonen()) && Objects.equals(getKosten(), ausgabe.getKosten());
+  public boolean personPresent(String name) {
+    if (ausleger.getName().equals(name)) {
+      return true;
     }
+    for (Person person : personen) {
+      if (person.getName().equals(name)) {
+        return true;
+      }
+    }
+    return false;
+  }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(getAktivitaet(), getAusleger(), getPersonen(), getKosten());
-    }
+  @Override
+  public boolean equals(Object o) {
+      if (this == o) {
+          return true;
+      }
+      if (!(o instanceof Ausgabe)) {
+          return false;
+      }
+    Ausgabe ausgabe = (Ausgabe) o;
+    return Objects.equals(getAktivitaet(), ausgabe.getAktivitaet()) && Objects.equals(getAusleger(),
+        ausgabe.getAusleger()) && Objects.equals(getPersonen(), ausgabe.getPersonen())
+        && Objects.equals(getKosten(), ausgabe.getKosten());
+  }
 
-    Money getDurchschnittsKosten(){
-        return kosten.divide(personen.size());
-    }
+  @Override
+  public int hashCode() {
+    return Objects.hash(getAktivitaet(), getAusleger(), getPersonen(), getKosten());
+  }
 
-    Aktivitaet getAktivitaet() {
-        return aktivitaet;
-    }
+  Money getDurchschnittsKosten() {
+    return kosten.divide(personen.size());
+  }
 
-    public String getAktivitaetName(){
-        return aktivitaet.name();
-    }
+  Aktivitaet getAktivitaet() {
+    return aktivitaet;
+  }
 
-    Person getAusleger() {
-        return ausleger;
-    }
+  public String getAktivitaetName() {
+    return aktivitaet.name();
+  }
 
-    public String getAuslegerName(){
-        return ausleger.getName();
-    }
+  Person getAusleger() {
+    return ausleger;
+  }
 
-    List<Person> getPersonen() {
-        return personen;
-    }
-    public List<String> getPersonenNamen() {
-        return personen.stream().map(Person::getName).toList();
-    }
+  public String getAuslegerName() {
+    return ausleger.getName();
+  }
 
-    public Money getGesamtKosten(){
-        return kosten;
-    }
+  List<Person> getPersonen() {
+    return personen;
+  }
+
+  public List<String> getPersonenNamen() {
+    return personen.stream().map(Person::getName).toList();
+  }
+
+  public Money getGesamtKosten() {
+    return kosten;
+  }
 }

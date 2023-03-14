@@ -5,57 +5,64 @@ import java.util.Objects;
 import java.util.UUID;
 
 public class GruppeEntity {
-    UUID gruppe;
-    String name;
-    List<String> personen;
 
-    public GruppeEntity(){
-    }
+  UUID gruppe;
+  String name;
+  List<String> personen;
 
-    public GruppeEntity(String name, List<String> personen){
-        this.name = name;
-        this.personen = personen;
-    }
-    public GruppeEntity(UUID gruppe, String name, List<String> personen) {
-        this.gruppe = gruppe;
-        this.name = name;
-        this.personen = personen;
-    }
+  public GruppeEntity() {
+  }
 
-    public UUID getGruppe() {
-        return gruppe;
-    }
+  public GruppeEntity(String name, List<String> personen) {
+    this.name = name;
+    this.personen = personen;
+  }
 
-    public void setGruppe(UUID gruppe) {
-        this.gruppe = gruppe;
-    }
+  public GruppeEntity(UUID gruppe, String name, List<String> personen) {
+    this.gruppe = gruppe;
+    this.name = name;
+    this.personen = personen;
+  }
 
-    public String getName() {
-        return name;
-    }
+  public UUID getGruppe() {
+    return gruppe;
+  }
 
-    public void setName(String name) {
-        this.name = name;
-    }
+  public void setGruppe(UUID gruppe) {
+    this.gruppe = gruppe;
+  }
 
-    public List<String> getPersonen() {
-        return personen;
-    }
+  public String getName() {
+    return name;
+  }
 
-    public void setPersonen(List<String> personen) {
-        this.personen = personen;
-    }
+  public void setName(String name) {
+    this.name = name;
+  }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof GruppeEntity)) return false;
-        GruppeEntity that = (GruppeEntity) o;
-        return Objects.equals(getName(), that.getName()) && Objects.equals(getPersonen(), that.getPersonen());
-    }
+  public List<String> getPersonen() {
+    return personen;
+  }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(getName(), getPersonen());
-    }
+  public void setPersonen(List<String> personen) {
+    this.personen = personen;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+      if (this == o) {
+          return true;
+      }
+      if (!(o instanceof GruppeEntity)) {
+          return false;
+      }
+    GruppeEntity that = (GruppeEntity) o;
+    return Objects.equals(getName(), that.getName()) && Objects.equals(getPersonen(),
+        that.getPersonen());
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(getName(), getPersonen());
+  }
 }

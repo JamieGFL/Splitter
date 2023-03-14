@@ -11,68 +11,71 @@ import java.util.*;
 @Service
 public class GruppenService {
 
-    private final List<Gruppe> gruppen = new ArrayList<>();
+  private final List<Gruppe> gruppen = new ArrayList<>();
 
-    private void add(Gruppe gruppe){
-        gruppen.add(gruppe);
+  private void add(Gruppe gruppe) {
+    gruppen.add(gruppe);
+  }
+
+  public Gruppe addGruppe(OAuth2User principle, String gruppenName) {
+    String login = principle.getAttribute("login");
+    Gruppe gruppe = Gruppe.erstelleGruppe(login, gruppenName);
+    add(gruppe);
+    return gruppe;
+  }
+
+  public UUID addRestGruppe(String name, List<String> personen) {
+    Gruppe gruppe = Gruppe.erstelleRestGruppe(name, personen);
+    return gruppe.getId();
+  }
+
+  public void closeGruppe(UUID id) {
+    getSingleGruppe(id).closeGroup();
+  }
+
+  private GruppenDetails toGruppenDetails(Gruppe gruppe) {
+    return new GruppenDetails(gruppe.getId(), gruppe.getGruppenName(),
+        gruppe.getPersonen().stream().map(Person::getName).toList(), gruppe.isGeschlossen());
+  }
+
+  public GruppenOnPage getGruppen() {
+    List<GruppenDetails> gruppenDetails = gruppen.stream().map(this::toGruppenDetails).toList();
+    return new GruppenOnPage(gruppenDetails);
+  }
+
+  public Gruppe getSingleGruppe(UUID id) {
+    return gruppen.stream().filter(e -> e.getId().equals(id)).reduce((a, b) -> {
+      throw new IllegalArgumentException();
+    }).orElseThrow();
+  }
+
+  public void addPersonToGruppe(UUID id, String login) {
+    Gruppe gruppe = getSingleGruppe(id);
+    if (!gruppe.isAusgabeGetaetigt()) {
+      gruppe.addPerson(login);
     }
+  }
 
-    public Gruppe addGruppe(OAuth2User principle, String gruppenName){
-        String login = principle.getAttribute("login");
-        Gruppe gruppe = Gruppe.erstelleGruppe(login, gruppenName);
-        add(gruppe);
-        return gruppe;
-    }
+  public void addAusgabeToGruppe(UUID id, String aktivitaet, String login, String teilnehmer,
+      Double cost) {
+    Gruppe gruppe = getSingleGruppe(id);
 
-    public UUID addRestGruppe(String name, List<String> personen){
-        Gruppe gruppe = Gruppe.erstelleRestGruppe(name, personen);
-        return gruppe.getId();
-    }
+    gruppe.addAusgabeToPerson(aktivitaet, login, Arrays.stream(teilnehmer.split(", ")).toList(),
+        Money.of(cost, "EUR"));
+  }
 
-    public void closeGruppe(UUID id){
-        getSingleGruppe(id).closeGroup();
-    }
+  public void transaktionBerechnen(UUID id) {
+    Gruppe gruppe = getSingleGruppe(id);
+    gruppe.clearTransaktionen();
+    gruppe.berechneTransaktionen();
+  }
 
-    private GruppenDetails toGruppenDetails(Gruppe gruppe){
-        return new GruppenDetails(gruppe.getId(),gruppe.getGruppenName(),gruppe.getPersonen().stream().map(Person::getName).toList(), gruppe.isGeschlossen());
-    }
-
-    public GruppenOnPage getGruppen(){
-        List<GruppenDetails> gruppenDetails = gruppen.stream().map(this::toGruppenDetails).toList();
-        return new GruppenOnPage(gruppenDetails);
-    }
-
-    public Gruppe getSingleGruppe(UUID id){
-        return gruppen.stream().filter(e -> e.getId().equals(id)).reduce((a,b) -> {
-            throw new IllegalArgumentException();
-        }).orElseThrow();
-    }
-
-    public void addPersonToGruppe(UUID id, String login){
-        Gruppe gruppe = getSingleGruppe(id);
-        if(!gruppe.isAusgabeGetaetigt()){
-            gruppe.addPerson(login);
-        }
-    }
-
-    public void addAusgabeToGruppe(UUID id, String aktivitaet, String login,String teilnehmer ,Double cost){
-        Gruppe gruppe = getSingleGruppe(id);
-
-        gruppe.addAusgabeToPerson(aktivitaet,login, Arrays.stream(teilnehmer.split(", ")).toList(),Money.of(cost, "EUR"));
-    }
-
-    public void transaktionBerechnen(UUID id){
-        Gruppe gruppe = getSingleGruppe(id);
-        gruppe.clearTransaktionen();
-        gruppe.berechneTransaktionen();
-    }
-
-    public GruppenOnPage personToGruppeMatch(OAuth2User principle){
-        List<GruppenDetails> currentDetails = getGruppen().details();
-        return new GruppenOnPage(currentDetails.stream()
-                .filter(details -> details.personen().stream()
-                        .anyMatch(p -> Objects.equals(p,principle.getAttribute("login")))).toList());
-    }
+  public GruppenOnPage personToGruppeMatch(OAuth2User principle) {
+    List<GruppenDetails> currentDetails = getGruppen().details();
+    return new GruppenOnPage(currentDetails.stream()
+        .filter(details -> details.personen().stream()
+            .anyMatch(p -> Objects.equals(p, principle.getAttribute("login")))).toList());
+  }
 
 
 }

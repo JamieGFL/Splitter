@@ -11,78 +11,80 @@ import propra2.splitter.service.*;
 import java.util.List;
 import java.util.UUID;
 
-    @org.springframework.web.bind.annotation.RestController
-    public class RestController {
+@org.springframework.web.bind.annotation.RestController
+public class RestController {
 
-        private final RestGruppenService service;
+  private final RestGruppenService service;
 
-        public RestController(RestGruppenService service) {
-            this.service = service;
-        }
+  public RestController(RestGruppenService service) {
+    this.service = service;
+  }
 
-        @GetMapping("/api/user/{githublogin}/gruppen")
-        public ResponseEntity<List<GruppeEntity>> gruppenSeite(@PathVariable String githublogin){
-            return new ResponseEntity<>(service.personRestMatch(githublogin), HttpStatus.OK);
-        }
+  @GetMapping("/api/user/{githublogin}/gruppen")
+  public ResponseEntity<List<GruppeEntity>> gruppenSeite(@PathVariable String githublogin) {
+    return new ResponseEntity<>(service.personRestMatch(githublogin), HttpStatus.OK);
+  }
 
-        @PostMapping("/api/gruppen")
-        public ResponseEntity<UUID> addGruppen(@RequestBody GruppeEntity gruppenEntity){
+  @PostMapping("/api/gruppen")
+  public ResponseEntity<UUID> addGruppen(@RequestBody GruppeEntity gruppenEntity) {
 
-            if (gruppenEntity.getName() == null){
-                return ResponseEntity.badRequest().body(null);
-            } else if (gruppenEntity.getPersonen().size() < 1 ) {
-                return ResponseEntity.badRequest().body(null);
-            }
+    if (gruppenEntity.getName() == null) {
+      return ResponseEntity.badRequest().body(null);
+    } else if (gruppenEntity.getPersonen().size() < 1) {
+      return ResponseEntity.badRequest().body(null);
+    }
 
-            return new ResponseEntity<>(service.addRestGruppe(gruppenEntity), HttpStatus.CREATED);
-        }
+    return new ResponseEntity<>(service.addRestGruppe(gruppenEntity), HttpStatus.CREATED);
+  }
 
-        @GetMapping("/api/gruppen/{id}")
-        public ResponseEntity<GruppeInformationEntity> gruppenInfo(@PathVariable String id){
+  @GetMapping("/api/gruppen/{id}")
+  public ResponseEntity<GruppeInformationEntity> gruppenInfo(@PathVariable String id) {
 
-            if (service.getGruppeInformationEntity(id) == null){
-                return ResponseEntity.notFound().build();
-            }
+    if (service.getGruppeInformationEntity(id) == null) {
+      return ResponseEntity.notFound().build();
+    }
 
-            return new ResponseEntity<>(service.getGruppeInformationEntity(id), HttpStatus.OK);
-        }
+    return new ResponseEntity<>(service.getGruppeInformationEntity(id), HttpStatus.OK);
+  }
 
-        @PostMapping("/api/gruppen/{id}/schliessen")
-        public ResponseEntity<String> schliesseGruppe(@PathVariable String id){
+  @PostMapping("/api/gruppen/{id}/schliessen")
+  public ResponseEntity<String> schliesseGruppe(@PathVariable String id) {
 
-            if (service.getGruppeInformationEntity(id) == null){
-                return ResponseEntity.notFound().build();
-            }
+    if (service.getGruppeInformationEntity(id) == null) {
+      return ResponseEntity.notFound().build();
+    }
 
-            return new ResponseEntity<>(service.setRestGruppeGeschlossen(id), HttpStatus.OK);
-        }
+    return new ResponseEntity<>(service.setRestGruppeGeschlossen(id), HttpStatus.OK);
+  }
 
-        @PostMapping("/api/gruppen/{id}/auslagen")
-        public ResponseEntity<AusgabeEntity> addAusgabe(@PathVariable String id, @RequestBody AusgabeEntity ausgabenEntity){
+  @PostMapping("/api/gruppen/{id}/auslagen")
+  public ResponseEntity<AusgabeEntity> addAusgabe(@PathVariable String id,
+      @RequestBody AusgabeEntity ausgabenEntity) {
 
-            if(service.getGruppeInformationEntity(id) == null){
-                return ResponseEntity.notFound().build();
-            }
-            if(service.getGruppeInformationEntity(id).geschlossen()){
-                return ResponseEntity.status(409).build();
-            }
-            // If check wenn JSON Dokument fehlerhaft ist
-            if(ausgabenEntity.grund() == null || ausgabenEntity.glaeubiger() == null || ausgabenEntity.schuldner() == null || ausgabenEntity.cent() == null
-                    || ausgabenEntity.cent() <= 0 || ausgabenEntity.schuldner().isEmpty()){
-                return ResponseEntity.badRequest().build();
-            }
+    if (service.getGruppeInformationEntity(id) == null) {
+      return ResponseEntity.notFound().build();
+    }
+    if (service.getGruppeInformationEntity(id).geschlossen()) {
+      return ResponseEntity.status(409).build();
+    }
+    // If check wenn JSON Dokument fehlerhaft ist
+    if (ausgabenEntity.grund() == null || ausgabenEntity.glaeubiger() == null
+        || ausgabenEntity.schuldner() == null || ausgabenEntity.cent() == null
+        || ausgabenEntity.cent() <= 0 || ausgabenEntity.schuldner().isEmpty()) {
+      return ResponseEntity.badRequest().build();
+    }
 
-            service.addRestAusgabenToGruppe(id, ausgabenEntity);
-            return new ResponseEntity<>(ausgabenEntity, HttpStatus.CREATED);
-        }
+    service.addRestAusgabenToGruppe(id, ausgabenEntity);
+    return new ResponseEntity<>(ausgabenEntity, HttpStatus.CREATED);
+  }
 
-        @GetMapping("/api/gruppen/{id}/ausgleich")
-        public ResponseEntity<List<TransaktionEntity>> getAusgleichszahlungen(@PathVariable String id){
-            if(service.getGruppeInformationEntity(id) == null){
-                return ResponseEntity.notFound().build();
-            }
-            return new ResponseEntity<>(service.getRestTransaktionen(id), HttpStatus.OK);
-        }
+  @GetMapping("/api/gruppen/{id}/ausgleich")
+  public ResponseEntity<List<TransaktionEntity>> getAusgleichszahlungen(@PathVariable String id) {
+    if (service.getGruppeInformationEntity(id) == null) {
+      return ResponseEntity.notFound().build();
+    }
+    return new ResponseEntity<>(service.getRestTransaktionen(id), HttpStatus.OK);
+  }
 
 
 }

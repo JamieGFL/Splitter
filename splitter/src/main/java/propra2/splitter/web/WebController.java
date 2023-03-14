@@ -20,152 +20,153 @@ import java.util.UUID;
 @Controller
 public class WebController {
 
-    private final GruppenService service;
+  private final GruppenService service;
 
-    public WebController(GruppenService service) {
-        this.service = service;
+  public WebController(GruppenService service) {
+    this.service = service;
+  }
+
+  @GetMapping("/")
+  public String gruppenSeite(Model model, @ModelAttribute("gruppenForm") GruppenForm gruppenForm,
+      OAuth2AuthenticationToken token) {
+    GruppenOnPage liste = service.personToGruppeMatch(token.getPrincipal());
+    model.addAttribute("gruppen", liste);
+    return "index";
+  }
+
+  @PostMapping("/add")
+  public String addGruppen(@Valid GruppenForm gruppenForm,
+      BindingResult bindingResult,
+      OAuth2AuthenticationToken token) {
+
+    if (bindingResult.hasErrors()) {
+      return "index";
     }
 
-    @GetMapping("/")
-    public String gruppenSeite(Model model,@ModelAttribute("gruppenForm") GruppenForm gruppenForm, OAuth2AuthenticationToken token){
-        GruppenOnPage liste = service.personToGruppeMatch(token.getPrincipal());
-        model.addAttribute("gruppen", liste);
-        return "index";
+    Gruppe gruppe = service.addGruppe(token.getPrincipal(), gruppenForm.gruppenName());
+
+    UUID id = gruppe.getId();
+
+    return "redirect:/gruppe?id=" + id;
+  }
+
+  @GetMapping("/gruppe")
+  public String getSingleGruppePage(Model model,
+      @RequestParam(name = "id", value = "id", required = false) UUID id,
+      @ModelAttribute("loginForm") LoginForm loginForm,
+      @ModelAttribute("ausgabenForm") AusgabenForm ausgabenForm,
+      String error,
+      String aktivitaetError,
+      String zahlerError,
+      String teilnehmerError,
+      String betragError,
+      OAuth2AuthenticationToken token) {
+
+    if (error != null) {
+      model.addAttribute("loginMessage", error);
+    }
+    if (aktivitaetError != null) {
+      model.addAttribute("aktivitaetMessage", aktivitaetError);
+    }
+    if (zahlerError != null) {
+      model.addAttribute("zahlerMessage", zahlerError);
+    }
+    if (teilnehmerError != null) {
+      model.addAttribute("teilnehmerMessage", teilnehmerError);
+    }
+    if (betragError != null) {
+      model.addAttribute("betragMessage", betragError);
     }
 
-    @PostMapping("/add")
-    public String addGruppen(@Valid GruppenForm gruppenForm,
-                             BindingResult bindingResult,
-                             OAuth2AuthenticationToken token){
+    Gruppe gruppe = service.getSingleGruppe(id);
+    model.addAttribute("gruppe", gruppe);
+    model.addAttribute("login", token.getPrincipal().getAttribute("login"));
 
-        if (bindingResult.hasErrors()){
-            return "index";
-        }
+    return "gruppe";
+  }
 
+  @PostMapping("/gruppe/add")
+  public String addPersonToSingleGruppe(
+      @RequestParam(name = "id", value = "id", required = false) UUID id,
+      @Valid LoginForm loginForm,
+      BindingResult bindingResult,
+      RedirectAttributes attributes) {
 
-        Gruppe gruppe = service.addGruppe(token.getPrincipal(), gruppenForm.gruppenName());
+    if (bindingResult.hasErrors()) {
+      attributes.addAttribute("error", "Invalider GitHub Name");
 
-        UUID id = gruppe.getId();
-
-        return "redirect:/gruppe?id="+id;
+      return "redirect:/gruppe?id=" + id;
     }
 
-    @GetMapping("/gruppe")
-    public String getSingleGruppePage(Model model,
-                                      @RequestParam(name = "id", value = "id", required = false) UUID id,
-                                      @ModelAttribute("loginForm") LoginForm loginForm,
-                                      @ModelAttribute("ausgabenForm") AusgabenForm ausgabenForm,
-                                      String error,
-                                      String aktivitaetError,
-                                      String zahlerError,
-                                      String teilnehmerError,
-                                      String betragError,
-                                      OAuth2AuthenticationToken token){
+    service.addPersonToGruppe(id, loginForm.login());
 
-        if (error != null){
-            model.addAttribute("loginMessage", error);
-        }
-        if (aktivitaetError != null) {
-            model.addAttribute("aktivitaetMessage", aktivitaetError);
-        }
-        if (zahlerError != null) {
-            model.addAttribute("zahlerMessage", zahlerError);
-        }
-        if (teilnehmerError != null) {
-            model.addAttribute("teilnehmerMessage", teilnehmerError);
-        }
-        if (betragError != null) {
-            model.addAttribute("betragMessage", betragError);
-        }
+    return "redirect:/gruppe?id=" + id;
+  }
 
-        Gruppe gruppe = service.getSingleGruppe(id);
-        model.addAttribute("gruppe", gruppe);
-        model.addAttribute("login", token.getPrincipal().getAttribute("login"));
 
-        return "gruppe";
+  @PostMapping("/gruppe/add/ausgaben")
+  public String addAusgabeToGruppe(
+      @RequestParam(name = "id", value = "id", required = false) UUID id,
+      @Valid AusgabenForm ausgabenForm,
+      BindingResult bindingResult,
+      RedirectAttributes attributes) {
+
+    boolean akt = false;
+    boolean zah = false;
+    boolean teil = false;
+    boolean bet = false;
+
+    if (bindingResult.hasFieldErrors("aktivitaet")) {
+      akt = true;
+      attributes.addAttribute("aktivitaetError", "Invalide Aktivitaet");
+    }
+    if (bindingResult.hasFieldErrors("zahler")) {
+      zah = true;
+      attributes.addAttribute("zahlerError", "Invalider Zahler");
+    }
+    if (bindingResult.hasFieldErrors("teilnehmer")) {
+      teil = true;
+      attributes.addAttribute("teilnehmerError", "Invalide Teilnehmer");
+    }
+    if (bindingResult.hasFieldErrors("betrag")) {
+      bet = true;
+      attributes.addAttribute("betragError", "Invalider Betrag");
     }
 
-    @PostMapping("/gruppe/add")
-    public String addPersonToSingleGruppe(@RequestParam(name = "id", value = "id", required = false) UUID id,
-                                          @Valid LoginForm loginForm,
-                                          BindingResult bindingResult,
-                                          RedirectAttributes attributes){
-
-        if (bindingResult.hasErrors()){
-            attributes.addAttribute("error", "Invalider GitHub Name");
-
-            return "redirect:/gruppe?id="+id;
-        }
-
-        service.addPersonToGruppe(id, loginForm.login());
-
-        return "redirect:/gruppe?id="+id;
+    if (akt) {
+      return "redirect:/gruppe?id=" + id;
+    }
+    if (zah) {
+      return "redirect:/gruppe?id=" + id;
+    }
+    if (teil) {
+      return "redirect:/gruppe?id=" + id;
+    }
+    if (bet) {
+      return "redirect:/gruppe?id=" + id;
     }
 
+    service.addAusgabeToGruppe(id, ausgabenForm.aktivitaet(), ausgabenForm.zahler(),
+        ausgabenForm.teilnehmer(),
+        ausgabenForm.betrag());
 
-    @PostMapping("/gruppe/add/ausgaben")
-    public String addAusgabeToGruppe(@RequestParam(name = "id", value = "id", required = false) UUID id,
-                                     @Valid AusgabenForm ausgabenForm,
-                                     BindingResult bindingResult,
-                                     RedirectAttributes attributes){
+    return "redirect:/gruppe?id=" + id;
+  }
 
-        boolean akt = false;
-        boolean zah = false;
-        boolean teil = false;
-        boolean bet = false;
+  @PostMapping("/gruppe/add/ausgaben/transaktion")
+  public String berechneTransaktion(
+      @RequestParam(name = "id", value = "id", required = false) UUID id) {
 
-        if (bindingResult.hasFieldErrors("aktivitaet")){
-            akt = true;
-            attributes.addAttribute("aktivitaetError","Invalide Aktivitaet");
-        }
-        if (bindingResult.hasFieldErrors("zahler")){
-            zah = true;
-            attributes.addAttribute("zahlerError","Invalider Zahler");
-        }
-        if (bindingResult.hasFieldErrors("teilnehmer")){
-            teil = true;
-            attributes.addAttribute("teilnehmerError","Invalide Teilnehmer");
-        }
-        if (bindingResult.hasFieldErrors("betrag")){
-            bet = true;
-            attributes.addAttribute("betragError","Invalider Betrag");
-        }
+    service.transaktionBerechnen(id);
 
+    return "redirect:/gruppe?id=" + id;
+  }
 
-        if (akt){
-            return "redirect:/gruppe?id=" + id;
-        }
-        if (zah){
-            return "redirect:/gruppe?id=" + id;
-        }
-        if (teil){
-            return "redirect:/gruppe?id=" + id;
-        }
-        if (bet){
-            return "redirect:/gruppe?id=" + id;
-        }
-
-
-
-        service.addAusgabeToGruppe(id,ausgabenForm.aktivitaet(), ausgabenForm.zahler(), ausgabenForm.teilnehmer(),
-            ausgabenForm.betrag());
-
-        return "redirect:/gruppe?id="+id;
-    }
-
-    @PostMapping("/gruppe/add/ausgaben/transaktion")
-    public String berechneTransaktion(@RequestParam(name = "id", value = "id", required = false) UUID id){
-
-        service.transaktionBerechnen(id);
-
-        return "redirect:/gruppe?id="+id;
-    }
-
-    @PostMapping("/gruppe/close")
-    public String schließGruppe(@RequestParam(name = "id", value = "id", required = false) UUID id){
-        service.closeGruppe(id);
-        return "redirect:/gruppe?id="+id;
-    }
+  @PostMapping("/gruppe/close")
+  public String schließGruppe(@RequestParam(name = "id", value = "id", required = false) UUID id) {
+    service.closeGruppe(id);
+    return "redirect:/gruppe?id=" + id;
+  }
 
 
 }
