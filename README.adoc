@@ -50,7 +50,7 @@ Schritt 2:
 
 Bevor Sie das Projekt verwenden können müssen Sie auf der GitHub Website Ihren OAuth Client-secret und die Client-ID generieren lassen. 
 
-Hier führ füllen Sie bitte das gegebene Formular so aus:
+Hierfür füllen Sie bitte das gegebene Formular so aus:
 
 * Ihren gewünschten Namen für das Projekt als Application name
 
