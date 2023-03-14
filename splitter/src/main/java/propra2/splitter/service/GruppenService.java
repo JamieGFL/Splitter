@@ -24,10 +24,6 @@ public class GruppenService {
     return gruppe;
   }
 
-  public UUID addRestGruppe(String name, List<String> personen) {
-    Gruppe gruppe = Gruppe.erstelleRestGruppe(name, personen);
-    return gruppe.getId();
-  }
 
   public void closeGruppe(UUID id) {
     getSingleGruppe(id).closeGroup();
