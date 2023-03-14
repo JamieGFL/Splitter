@@ -27,7 +27,7 @@ public class RestGruppenService {
     }
 
     public UUID addRestGruppe(GruppeEntity gruppe){
-        return add(Gruppe.erstelleRestGruppe(gruppe.name(), gruppe.personen()));
+        return add(Gruppe.erstelleRestGruppe(gruppe.getName(), gruppe.getPersonen()));
     }
 
     public List<GruppeEntity> getRestGruppen(){
@@ -35,7 +35,7 @@ public class RestGruppenService {
     }
 
     private GruppeEntity toGruppeEntity(Gruppe gruppe){
-        return new GruppeEntity(gruppe.getGruppenName(), gruppe.getPersonen().stream().map(Person::getName).toList());
+        return new GruppeEntity(gruppe.getId(), gruppe.getGruppenName(), gruppe.getPersonen().stream().map(Person::getName).toList());
     }
 
     public GruppeInformationEntity getGruppeInformationEntity(String id) {
@@ -91,7 +91,7 @@ public class RestGruppenService {
         List<GruppeEntity> currentDetails = getRestGruppen();
 
         return currentDetails.stream()
-                .filter(groupDetails -> groupDetails.personen().stream()
+                .filter(groupDetails -> groupDetails.getPersonen().stream()
                         .anyMatch(Person -> Objects.equals(Person, login))).toList();
     }
 

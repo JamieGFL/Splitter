@@ -30,9 +30,9 @@ import java.util.UUID;
         @PostMapping("/api/gruppen")
         public ResponseEntity<UUID> addGruppen(@RequestBody GruppeEntity gruppenEntity){
 
-            if (gruppenEntity.name() == null){
+            if (gruppenEntity.getName() == null){
                 return ResponseEntity.badRequest().body(null);
-            } else if (gruppenEntity.personen().size() < 1 ) {
+            } else if (gruppenEntity.getPersonen().size() < 1 ) {
                 return ResponseEntity.badRequest().body(null);
             }
 
