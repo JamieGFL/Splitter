@@ -43,7 +43,7 @@ public class WebController {
         }
 
 
-        Gruppe gruppe = service.addGruppe(token.getPrincipal(), gruppenForm.getGruppenName());
+        Gruppe gruppe = service.addGruppe(token.getPrincipal(), gruppenForm.gruppenName());
 
         UUID id = gruppe.getId();
 
@@ -97,7 +97,7 @@ public class WebController {
             return "redirect:/gruppe?id="+id;
         }
 
-        service.addPersonToGruppe(id, loginForm.getLogin());
+        service.addPersonToGruppe(id, loginForm.login());
 
         return "redirect:/gruppe?id="+id;
     }
@@ -147,8 +147,8 @@ public class WebController {
 
 
 
-        service.addAusgabeToGruppe(id,ausgabenForm.getAktivitaet(), ausgabenForm.getZahler(), ausgabenForm.getTeilnehmer(),
-            ausgabenForm.getBetrag());
+        service.addAusgabeToGruppe(id,ausgabenForm.aktivitaet(), ausgabenForm.zahler(), ausgabenForm.teilnehmer(),
+            ausgabenForm.betrag());
 
         return "redirect:/gruppe?id="+id;
     }

@@ -8,9 +8,9 @@ import propra2.splitter.stereotypes.Wertobjekt;
 @Wertobjekt
 public class Schulden {
 
-    Person zahler;
-    Person zahlungsEmpfaenger;
-    Money betrag;
+    final Person zahler;
+    final Person zahlungsEmpfaenger;
+    final Money betrag;
 
     Schulden(Person zahler, Person zahlungsEmpfaenger) {
         this.zahler = zahler;

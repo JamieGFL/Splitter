@@ -8,10 +8,10 @@ import propra2.splitter.stereotypes.Wertobjekt;
 
 @Wertobjekt
 public class Ausgabe {
-    Aktivitaet aktivitaet;
-    Person ausleger;
-    List<Person> personen;
-    Money kosten;
+    final Aktivitaet aktivitaet;
+    final Person ausleger;
+    final List<Person> personen;
+    final Money kosten;
 
     Ausgabe(Aktivitaet aktivitaet, Person ausleger, List<Person> personen, Money kosten) {
         this.aktivitaet = aktivitaet;

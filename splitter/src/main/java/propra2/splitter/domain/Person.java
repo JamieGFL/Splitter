@@ -3,16 +3,14 @@ package propra2.splitter.domain;
 import org.javamoney.moneta.Money;
 import java.util.List;
 import java.util.Objects;
-import org.springframework.context.annotation.Configuration;
-import propra2.splitter.stereotypes.AggregateRoot;
 import propra2.splitter.stereotypes.Wertobjekt;
 
 @Wertobjekt
 public class Person{
 
-    String name;
-    List<Ausgabe> ausgaben;
-    List<Schulden> schuldenListe;
+    final String name;
+    final List<Ausgabe> ausgaben;
+    final List<Schulden> schuldenListe;
 
     Money nettoBetrag = Money.of(0,"EUR");
 

@@ -7,12 +7,12 @@ import propra2.splitter.stereotypes.AggregateRoot;
 
 @AggregateRoot
 public class Gruppe {
-    private UUID id;
-    private List<Person> personen;
-    private List<Ausgabe> gruppenAusgaben = new ArrayList<>();
+    private final UUID id;
+    private final List<Person> personen;
+    private final List<Ausgabe> gruppenAusgaben = new ArrayList<>();
     private final List<Transaktion> transaktionen = new ArrayList<>();
     private final ArrayList<Person> nettoBetraege = new ArrayList<>();
-    private String gruppenName;
+    private final String gruppenName;
 
     private boolean ausgleich = false;
     private boolean ausgabeGetaetigt = false;
