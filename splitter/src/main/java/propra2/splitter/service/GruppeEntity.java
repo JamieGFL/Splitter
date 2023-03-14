@@ -9,6 +9,8 @@ public class GruppeEntity {
     String name;
     List<String> personen;
 
+    public GruppeEntity(){
+    }
 
     public GruppeEntity(String name, List<String> personen){
         this.name = name;

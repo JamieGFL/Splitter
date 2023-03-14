@@ -57,11 +57,14 @@ public class RestControllerTests {
   void test_01() throws Exception {
 
     GruppeEntity entity = new GruppeEntity("Reisen", List.of("MaxHub"));
+    UUID id = UUID.randomUUID();
+    when(service.addRestGruppe(entity)).thenReturn(id);
+
 
     mvc.perform(MockMvcRequestBuilders.post("/api/gruppen")
             .contentType(MediaType.APPLICATION_JSON)
             .accept(MediaType.APPLICATION_JSON)
-            .content(mapper.writeValueAsString(entity))).andExpect(status().isCreated());
+            .content(mapper.writeValueAsString(entity))).andExpect(status().isCreated()).andDo(print());
 
   }
 
