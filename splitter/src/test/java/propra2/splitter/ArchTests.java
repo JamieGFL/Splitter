@@ -29,7 +29,8 @@ public class ArchTests {
       .domainModels("propra2.splitter.domain..")
       .domainServices("propra2.splitter.domain..")
       .applicationServices("propra2.splitter.service..")
-      .adapter("web", "propra2.splitter.web..");
+      .adapter("web", "propra2.splitter.web..")
+      .adapter("database", "propra2.splitter.database..");
 
 
   @ArchTest
