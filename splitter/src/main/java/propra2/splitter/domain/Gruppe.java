@@ -8,7 +8,7 @@ import propra2.splitter.stereotypes.AggregateRoot;
 @AggregateRoot
 public class Gruppe {
 
-  private final UUID id;
+  private final Integer id;
   private final List<Person> personen;
   private final List<Ausgabe> gruppenAusgaben = new ArrayList<>();
   private final List<Transaktion> transaktionen = new ArrayList<>();
@@ -19,25 +19,25 @@ public class Gruppe {
   private boolean ausgabeGetaetigt = false;
   private boolean geschlossen = false;
 
-  private Gruppe(List<Person> personen, String gruppenName) {
-    this.id = UUID.randomUUID();
+  private Gruppe(Integer id, List<Person> personen, String gruppenName) {
+    this.id = id;
     this.personen = personen;
     this.gruppenName = gruppenName;
   }
 
-  public static Gruppe erstelleGruppe(String gruender, String gruppenName) {
+  public static Gruppe erstelleGruppe(Integer id, String gruender, String gruppenName) {
     Person person = new Person(gruender, new ArrayList<>(), new ArrayList<>());
     List<Person> personen = new ArrayList<>();
     personen.add(person);
-    return new Gruppe(personen, gruppenName);
+    return new Gruppe(id, personen, gruppenName);
   }
 
-  public static Gruppe erstelleRestGruppe(String gruppenName, List<String> personen) {
+  public static Gruppe erstelleRestGruppe(Integer id, String gruppenName, List<String> personen) {
     List<Person> personenListe = new ArrayList<>();
     for (String person : personen) {
       personenListe.add(new Person(person, new ArrayList<>(), new ArrayList<>()));
     }
-    return new Gruppe(personenListe, gruppenName);
+    return new Gruppe(id, personenListe, gruppenName);
   }
 
   public void closeGroup() {
@@ -232,7 +232,7 @@ public class Gruppe {
     return List.copyOf(gruppenAusgaben);
   }
 
-  public UUID getId() {
+  public Integer getId() {
     return id;
   }
 

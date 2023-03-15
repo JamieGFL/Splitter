@@ -17,15 +17,15 @@ public class GruppenService {
     gruppen.add(gruppe);
   }
 
-  public Gruppe addGruppe(OAuth2User principle, String gruppenName) {
+  public Gruppe addGruppe(Integer id, OAuth2User principle, String gruppenName) {
     String login = principle.getAttribute("login");
-    Gruppe gruppe = Gruppe.erstelleGruppe(login, gruppenName);
+    Gruppe gruppe = Gruppe.erstelleGruppe(id, login, gruppenName);
     add(gruppe);
     return gruppe;
   }
 
 
-  public void closeGruppe(UUID id) {
+  public void closeGruppe(Integer id) {
     getSingleGruppe(id).closeGroup();
   }
 
@@ -39,20 +39,20 @@ public class GruppenService {
     return new GruppenOnPage(gruppenDetails);
   }
 
-  public Gruppe getSingleGruppe(UUID id) {
+  public Gruppe getSingleGruppe(Integer id) {
     return gruppen.stream().filter(e -> e.getId().equals(id)).reduce((a, b) -> {
       throw new IllegalArgumentException();
     }).orElseThrow();
   }
 
-  public void addPersonToGruppe(UUID id, String login) {
+  public void addPersonToGruppe(Integer id, String login) {
     Gruppe gruppe = getSingleGruppe(id);
     if (!gruppe.isAusgabeGetaetigt()) {
       gruppe.addPerson(login);
     }
   }
 
-  public void addAusgabeToGruppe(UUID id, String aktivitaet, String login, String teilnehmer,
+  public void addAusgabeToGruppe(Integer id, String aktivitaet, String login, String teilnehmer,
       Double cost) {
     Gruppe gruppe = getSingleGruppe(id);
 
@@ -60,7 +60,7 @@ public class GruppenService {
         Money.of(cost, "EUR"));
   }
 
-  public void transaktionBerechnen(UUID id) {
+  public void transaktionBerechnen(Integer id) {
     Gruppe gruppe = getSingleGruppe(id);
     gruppe.clearTransaktionen();
     gruppe.berechneTransaktionen();

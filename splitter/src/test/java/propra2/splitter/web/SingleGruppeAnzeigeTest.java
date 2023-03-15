@@ -40,12 +40,11 @@ public class SingleGruppeAnzeigeTest {
   @DisplayName("Die interne Gruppenseite ist erreichbar")
   void test_01() throws Exception {
 
-    UUID id = UUID.randomUUID();
-    when(service.getSingleGruppe(id)).thenReturn(Gruppe.erstelleGruppe("MaxHub", "Reisegruppe"));
+    when(service.getSingleGruppe(1)).thenReturn(Gruppe.erstelleGruppe(1, "MaxHub", "Reisegruppe"));
     String error = "invalider GitHub Name";
 
     mvc.perform(get("/gruppe")
-            .param("id", id.toString())
+            .param("id", String.valueOf(1))
             .param("loginForm", "MaxHub")
             .param("error", error))
         .andExpect(status().isOk())
@@ -58,7 +57,7 @@ public class SingleGruppeAnzeigeTest {
   @DisplayName("Das Model für die Seite ist mit den richtigen Eintraegen gefüllt")
   void test_02() throws Exception {
 
-    Gruppe gruppe = Gruppe.erstelleGruppe("MaxHub", "Reisegruppe");
+    Gruppe gruppe = Gruppe.erstelleGruppe(1, "MaxHub", "Reisegruppe");
     gruppe.addPerson("GitLisa");
     String error = "invalider GitHub Name";
 
@@ -77,7 +76,7 @@ public class SingleGruppeAnzeigeTest {
   @DisplayName("Die Seite zeigt die Mitglieder an")
   void test_03() throws Exception {
 
-    Gruppe gruppe = Gruppe.erstelleGruppe("MaxHub", "Reisegruppe");
+    Gruppe gruppe = Gruppe.erstelleGruppe(1,"MaxHub", "Reisegruppe");
     gruppe.addPerson("GitLisa");
     String error = "invalider GitHub Name";
     when(service.getSingleGruppe(gruppe.getId())).thenReturn(gruppe);
@@ -96,7 +95,7 @@ public class SingleGruppeAnzeigeTest {
   @DisplayName("Die Seite zeigt die Ausgaben an")
   void test_04() throws Exception {
 
-    Gruppe gruppe = Gruppe.erstelleGruppe("MaxHub", "Reisegruppe");
+    Gruppe gruppe = Gruppe.erstelleGruppe(1,"MaxHub", "Reisegruppe");
     gruppe.addPerson("GitLisa");
     gruppe.addAusgabeToPerson("pizza", "MaxHub", List.of("GitLisa"), Money.of(400, "EUR"));
     String error = "invalider GitHub Name";
@@ -118,7 +117,7 @@ public class SingleGruppeAnzeigeTest {
   @DisplayName("Die Seite zeigt die Transaktionsnachricht an")
   void test_05() throws Exception {
 
-    Gruppe gruppe = Gruppe.erstelleGruppe("MaxHub", "Reisegruppe");
+    Gruppe gruppe = Gruppe.erstelleGruppe(1,"MaxHub", "Reisegruppe");
     gruppe.addPerson("GitLisa");
     gruppe.addAusgabeToPerson("pizza", "MaxHub", List.of("GitLisa"), Money.of(400, "EUR"));
     gruppe.berechneTransaktionen();
@@ -138,7 +137,7 @@ public class SingleGruppeAnzeigeTest {
   @DisplayName("Das Eingabeformular für Mitglieder wird angezeigt")
   void test_06() throws Exception {
 
-    Gruppe gruppe = Gruppe.erstelleGruppe("MaxHub", "Reisegruppe");
+    Gruppe gruppe = Gruppe.erstelleGruppe(1,"MaxHub", "Reisegruppe");
     String error = "invalider GitHub Name";
     when(service.getSingleGruppe(gruppe.getId())).thenReturn(gruppe);
 
@@ -160,7 +159,7 @@ public class SingleGruppeAnzeigeTest {
   @DisplayName("Die Gruppenstartseite ist verlinkt")
   void test_07() throws Exception {
 
-    Gruppe gruppe = Gruppe.erstelleGruppe("MaxHub", "Reisegruppe");
+    Gruppe gruppe = Gruppe.erstelleGruppe(1,"MaxHub", "Reisegruppe");
     String error = "invalider GitHub Name";
     gruppe.addPerson("GitLisa");
     when(service.getSingleGruppe(gruppe.getId())).thenReturn(gruppe);
@@ -181,7 +180,7 @@ public class SingleGruppeAnzeigeTest {
   @DisplayName("Das Formular um die Gruppe zu schließen wird angezeigt")
   void test_08() throws Exception {
 
-    Gruppe gruppe = Gruppe.erstelleGruppe("MaxHub", "Reisegruppe");
+    Gruppe gruppe = Gruppe.erstelleGruppe(1,"MaxHub", "Reisegruppe");
     String error = "invalider GitHub Name";
     gruppe.addPerson("GitLisa");
     when(service.getSingleGruppe(gruppe.getId())).thenReturn(gruppe);
@@ -203,7 +202,7 @@ public class SingleGruppeAnzeigeTest {
   @DisplayName("")
   void test_09() throws Exception {
 
-    Gruppe gruppe = Gruppe.erstelleGruppe("MaxHub", "Reisegruppe");
+    Gruppe gruppe = Gruppe.erstelleGruppe(1,"MaxHub", "Reisegruppe");
     String error = "invalider GitHub Name";
     gruppe.addPerson("GitLisa");
     when(service.getSingleGruppe(gruppe.getId())).thenReturn(gruppe);
