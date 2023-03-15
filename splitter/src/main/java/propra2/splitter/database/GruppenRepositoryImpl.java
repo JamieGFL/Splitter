@@ -36,7 +36,8 @@ public class GruppenRepositoryImpl implements GruppenRepository {
   private Gruppe toGruppe(GruppeDTO dto){
     Gruppe gruppe = new Gruppe(dto.id(), dto.gruppenName());
     dto.personen().forEach(p -> gruppe.addPersonAlways(p.name()));
-
+    dto.gruppenAusgaben().forEach(a -> gruppe.addAusgabe(a.aktivitaet().name(), a.ausleger().name(), a.personen().stream().map(Record::toString).toList(), a.kosten()));
+    dto.transaktionen().forEach(t -> gruppe.addTransaktion(t.zahler().name(), t.zahlungsempfaenger().name(), t.nettoBetrag()));
     return gruppe;
   }
 

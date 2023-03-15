@@ -65,6 +65,10 @@ public class Gruppe {
     gruppenAusgaben.add(new Ausgabe(new Aktivitaet(aktivitaet) ,getPersonFromName(name), getPersonenFromNames(personen2), kosten));
   }
 
+  public void addTransaktion(String zahler, String zahlungsempfaenger, Money betrag){
+    transaktionen.add(new Transaktion(getPersonFromName(zahler), getPersonFromName(zahlungsempfaenger), betrag));
+  }
+
 
   public void addAusgabeToPerson(String aktivitaet, String name, List<String> personen2,
       Money kosten) {
