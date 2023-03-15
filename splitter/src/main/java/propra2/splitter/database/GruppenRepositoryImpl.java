@@ -24,12 +24,14 @@ public class GruppenRepositoryImpl implements GruppenRepository {
 
   @Override
   public Optional<Gruppe> findById(Integer id) {
-    return Optional.empty();
+    return repository.findById(id).map(this::toGruppe);
   }
 
   @Override
   public Gruppe save(Gruppe gruppe) {
-    return null;
+    GruppeDTO dto = fromGruppe(gruppe);
+    GruppeDTO saved = repository.save(dto);
+    return toGruppe(saved);
   }
 
 
@@ -40,5 +42,26 @@ public class GruppenRepositoryImpl implements GruppenRepository {
     dto.transaktionen().forEach(t -> gruppe.addTransaktion(t.zahler().name(), t.zahlungsempfaenger().name(), t.nettoBetrag()));
     return gruppe;
   }
+
+  private GruppeDTO fromGruppe(Gruppe gruppe){
+    List<PersonDTO> personen = gruppe.getPersonen()
+        .stream()
+        .map(p -> new PersonDTO(p.getName())).toList();
+
+    List<AusgabeDTO> gruppenAusgaben = gruppe.getGruppenAusgaben()
+        .stream()
+        .map(a -> new AusgabeDTO(new AktivitaetDTO(a.getAktivitaetName()), new PersonDTO(a.getAuslegerName()), a.getPersonenNamen().stream().map(
+            PersonDTO::new).toList() , a.getGesamtKosten())).toList();
+
+    List<TransaktionDTO> transaktionen = gruppe.getTransaktionenCopy()
+        .stream()
+        .map(t -> new TransaktionDTO(new PersonDTO(t.getPerson1Name()) , new PersonDTO(t.getPerson2Name()), t.getNettoBetrag())).toList();
+
+    return new GruppeDTO(gruppe.getId(), gruppe.getGruppenName(), personen, gruppenAusgaben, transaktionen);
+
+  }
+
+
+
 
 }
