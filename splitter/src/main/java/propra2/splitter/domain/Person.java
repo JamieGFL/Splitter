@@ -9,15 +9,10 @@ import propra2.splitter.stereotypes.Wertobjekt;
 public class Person {
 
   final String name;
-  final List<Ausgabe> ausgaben;
-  final List<Schulden> schuldenListe;
-
   Money nettoBetrag = Money.of(0, "EUR");
 
-  Person(String name, List<Ausgabe> ausgaben, List<Schulden> schuldenList) {
+  Person(String name) {
     this.name = name;
-    this.ausgaben = ausgaben;
-    this.schuldenListe = schuldenList;
   }
 
   @Override
@@ -37,32 +32,8 @@ public class Person {
     return Objects.hash(getName());
   }
 
-  void addAusgabe(Ausgabe ausgabe) {
-    ausgaben.add(ausgabe);
-  }
-
-  Ausgabe getAusgabe(int index) {
-    return ausgaben.get(index);
-  }
-
-  void addSchulden(Schulden schulden) {
-    schuldenListe.add(schulden);
-  }
-
-  Schulden getSchulden(int index) {
-    return schuldenListe.get(index);
-  }
-
   public String getName() {
     return name;
-  }
-
-  List<Ausgabe> getAusgaben() {
-    return ausgaben;
-  }
-
-  List<Schulden> getSchuldenListe() {
-    return schuldenListe;
   }
 
   public Money getNettoBetrag() {
