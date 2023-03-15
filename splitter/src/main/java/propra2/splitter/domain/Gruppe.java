@@ -9,7 +9,7 @@ import propra2.splitter.stereotypes.AggregateRoot;
 public class Gruppe {
 
   private final Integer id;
-  private final List<Person> personen;
+  private List<Person> personen = new ArrayList<>();
   private final List<Ausgabe> gruppenAusgaben = new ArrayList<>();
   private final List<Transaktion> transaktionen = new ArrayList<>();
   private final ArrayList<Person> nettoBetraege = new ArrayList<>();
@@ -25,8 +25,13 @@ public class Gruppe {
     this.gruppenName = gruppenName;
   }
 
+  public Gruppe(Integer id, String gruppenName){
+    this.id = id;
+    this.gruppenName = gruppenName;
+  }
+
   public static Gruppe erstelleGruppe(Integer id, String gruender, String gruppenName) {
-    Person person = new Person(gruender, new ArrayList<>(), new ArrayList<>());
+    Person person = new Person(gruender);
     List<Person> personen = new ArrayList<>();
     personen.add(person);
     return new Gruppe(id, personen, gruppenName);
@@ -35,7 +40,7 @@ public class Gruppe {
   public static Gruppe erstelleRestGruppe(Integer id, String gruppenName, List<String> personen) {
     List<Person> personenListe = new ArrayList<>();
     for (String person : personen) {
-      personenListe.add(new Person(person, new ArrayList<>(), new ArrayList<>()));
+      personenListe.add(new Person(person));
     }
     return new Gruppe(id, personenListe, gruppenName);
   }
@@ -46,9 +51,14 @@ public class Gruppe {
 
   public void addPerson(String newPerson) {
     if (!geschlossen) {
-      Person person = new Person(newPerson, new ArrayList<>(), new ArrayList<>());
+      Person person = new Person(newPerson);
       personen.add(person);
     }
+  }
+
+  public void addPersonAlways(String newPerson){
+    Person person = new Person(newPerson);
+    personen.add(person);
   }
 
   public void addAusgabeToPerson(String aktivitaet, String name, List<String> personen2,
@@ -62,15 +72,10 @@ public class Gruppe {
 
       // Ausgaben in Person, welche Ausgabe getätigt hat, speichern
       Ausgabe newAusgabe = new Ausgabe(new Aktivitaet(aktivitaet), ausleger, teilnehmer, kosten);
-      ausleger.addAusgabe(newAusgabe);
       gruppenAusgaben.add(newAusgabe);
 
       // speichert Schulden der Teilnehmer mit Ausnahme vom Ausleger, falls dieser für sich selber bezahlt hat
-      for (Person person : teilnehmer) {
-        if (!person.equals(ausleger)) {
-          person.addSchulden(new Schulden(person, ausleger));
-        }
-      }
+
     }
   }
 
@@ -166,9 +171,11 @@ public class Gruppe {
 
     for (int i = 0; i < personen.size(); i++) {
       ausgabeSum = Money.of(0, "EUR");
-      for (int j = 0; j < personen.get(i).getAusgaben().size(); j++) {
-        ausgabeSum = ausgabeSum.add(personen.get(i).getAusgabe(j).getKosten());
-        sumAusgaben[i] = ausgabeSum;
+      for (int j = 0; j < gruppenAusgaben.size(); j++) {
+        if (gruppenAusgaben.get(j).getAusleger().equals(personen.get(i))) {
+          ausgabeSum = ausgabeSum.add(gruppenAusgaben.get(j).getKosten());
+          sumAusgaben[i] = ausgabeSum;
+        }
       }
     }
     return sumAusgaben;
@@ -180,9 +187,13 @@ public class Gruppe {
 
     for (int i = 0; i < personen.size(); i++) {
       schuldenSum = Money.of(0, "EUR");
-      for (int j = 0; j < personen.get(i).getSchuldenListe().size(); j++) {
-        schuldenSum = schuldenSum.add(personen.get(i).getSchulden(j).getBetrag());
-        sumSchuldenListe[i] = schuldenSum;
+      for (int j = 0; j < gruppenAusgaben.size(); j++) {
+        if (gruppenAusgaben.get(j).getPersonen().contains(personen.get(i))) {
+          if (!gruppenAusgaben.get(j).getAusleger().equals(personen.get(i))) {
+            schuldenSum = schuldenSum.add(gruppenAusgaben.get(j).getDurchschnittsKosten());
+            sumSchuldenListe[i] = schuldenSum;
+            }
+        }
       }
     }
     return sumSchuldenListe;
@@ -219,7 +230,7 @@ public class Gruppe {
   }
 
   Person getPersonFromName(String name) {
-    Person newPerson = new Person("platzhalter", new ArrayList<>(), new ArrayList<>());
+    Person newPerson = new Person("platzhalter");
     for (Person person : personen) {
       if (person.getName().equals(name)) {
         newPerson = person;

@@ -63,13 +63,13 @@ public class DomainTests {
     gruppe.addPerson("GitLisa");
 
     assertThat(gruppe.getPersonen().get(1)).isEqualTo(
-        new Person("GitLisa", new ArrayList<>(), new ArrayList<>()));
+        new Person("GitLisa"));
   }
 
   @Test
   @DisplayName("Gruppe wird mit korrektem Gründer erstellt")
   void test_02() {
-    Person personA = new Person("MaxHub", new ArrayList<>(), new ArrayList<>());
+    Person personA = new Person("MaxHub");
 
     Gruppe gruppe = Gruppe.erstelleGruppe(1, "MaxHub", "Reisegruppe");
 
@@ -79,8 +79,8 @@ public class DomainTests {
   @Test
   @DisplayName("Ausgaben einer Person werden korrekt ausgerechnet")
   void test_03() {
-    Person personA = new Person("MaxHub", new ArrayList<>(), new ArrayList<>());
-    Person personB = new Person("GitLisa", new ArrayList<>(), new ArrayList<>());
+    Person personA = new Person("MaxHub");
+    Person personB = new Person("GitLisa");
     Gruppe gruppe = Gruppe.erstelleGruppe(1, "MaxHub", "Reisegruppe");
     gruppe.addPerson("GitLisa");
     gruppe.addAusgabeToPerson("Pizza", "MaxHub", List.of("GitLisa"), Money.of(30, "EUR"));
@@ -95,8 +95,8 @@ public class DomainTests {
   @Test
   @DisplayName("Schulden einer Person werden korrekt ausgerechnet")
   void test_04() {
-    Person personA = new Person("MaxHub", new ArrayList<>(), new ArrayList<>());
-    Person personB = new Person("GitLisa", new ArrayList<>(), new ArrayList<>());
+    Person personA = new Person("MaxHub");
+    Person personB = new Person("GitLisa");
     Gruppe gruppe = Gruppe.erstelleGruppe(1, "MaxHub", "Reisegruppe");
     gruppe.addPerson("GitLisa");
     gruppe.addAusgabeToPerson("Pizza", "MaxHub", List.of("GitLisa"), Money.of(30, "EUR"));
@@ -111,8 +111,8 @@ public class DomainTests {
   @Test
   @DisplayName("Personen werden richtig gefiltert")
   void test_05() {
-    Person personA = new Person("MaxHub", new ArrayList<>(), new ArrayList<>());
-    Person personB = new Person("GitLisa", new ArrayList<>(), new ArrayList<>());
+    Person personA = new Person("MaxHub");
+    Person personB = new Person("GitLisa");
     Gruppe gruppe = Gruppe.erstelleGruppe(1, "MaxHub", "Reisegruppe");
     gruppe.addPerson("GitLisa");
 
@@ -124,7 +124,7 @@ public class DomainTests {
   @Test
   @DisplayName("Person wird richtig gefiltert")
   void test_06() {
-    Person personA = new Person("MaxHub", new ArrayList<>(), new ArrayList<>());
+    Person personA = new Person("MaxHub");
     Gruppe gruppe = Gruppe.erstelleGruppe(1, "MaxHub", "Reisegruppe");
 
     List<Person> personen = gruppe.getPersonenFromNames(List.of("MaxHub"));
@@ -136,9 +136,9 @@ public class DomainTests {
   @Test
   @DisplayName("Durchschnittskosten einer Ausgabe werden korrekt berechnet")
   void test_07() {
-    Person personA = new Person("MaxHub", new ArrayList<>(), new ArrayList<>());
-    Person personB = new Person("GitLisa", new ArrayList<>(), new ArrayList<>());
-    Person personC = new Person("ErixHub", new ArrayList<>(), new ArrayList<>());
+    Person personA = new Person("MaxHub");
+    Person personB = new Person("GitLisa");
+    Person personC = new Person("ErixHub");
     Ausgabe ausgabe = new Ausgabe(new Aktivitaet("Pizza"), personA,
         List.of(personA, personB, personC), Money.of(30, "EUR"));
 
@@ -150,9 +150,9 @@ public class DomainTests {
   @Test
   @DisplayName("Kosten einer Ausgabe werden korrekt berechnet")
   void test_08() {
-    Person personA = new Person("MaxHub", new ArrayList<>(), new ArrayList<>());
-    Person personB = new Person("GitLisa", new ArrayList<>(), new ArrayList<>());
-    Person personC = new Person("ErixHub", new ArrayList<>(), new ArrayList<>());
+    Person personA = new Person("MaxHub");
+    Person personB = new Person("GitLisa");
+    Person personC = new Person("ErixHub");
     Ausgabe ausgabe = new Ausgabe(new Aktivitaet("Pizza"), personA,
         List.of(personA, personB, personC), Money.of(30, "EUR"));
 
@@ -164,22 +164,22 @@ public class DomainTests {
   @Test
   @DisplayName("Ausgaben kann Person hinzugefügt werden")
   void test_09() {
-    Person personA = new Person("MaxHub", new ArrayList<>(), new ArrayList<>());
-    Person personB = new Person("GitLisa", new ArrayList<>(), new ArrayList<>());
+    Person personA = new Person("MaxHub");
+    Person personB = new Person("GitLisa");
     Gruppe gruppe = Gruppe.erstelleGruppe(1, "MaxHub", "Reisegruppe");
     gruppe.addPerson(personB.getName());
 
     gruppe.addAusgabeToPerson("Pizza", "MaxHub", List.of("GitLisa"), Money.of(20, "EUR"));
 
-    assertThat(gruppe.getPersonen().get(0).getAusgabe(0)).isEqualTo
+    assertThat(gruppe.getGruppenAusgaben()).containsExactly
         (new Ausgabe(new Aktivitaet("Pizza"), personA, List.of(personB), Money.of(20, "EUR")));
   }
 
   @Test
   @DisplayName("Ausgaben wird auch Gruppe hinzugefügt")
   void test_10() {
-    Person personA = new Person("MaxHub", new ArrayList<>(), new ArrayList<>());
-    Person personB = new Person("GitLisa", new ArrayList<>(), new ArrayList<>());
+    Person personA = new Person("MaxHub");
+    Person personB = new Person("GitLisa");
     Gruppe gruppe = Gruppe.erstelleGruppe(1, "MaxHub", "Reisegruppe");
     gruppe.addPerson(personB.getName());
 
@@ -188,24 +188,11 @@ public class DomainTests {
     assertThat(gruppe.getGruppenAusgaben().get(0)).isEqualTo(
         new Ausgabe(new Aktivitaet("Pizza"), personA, List.of(personB), Money.of(20, "EUR")));
   }
-
-  @Test
-  @DisplayName("Schulden können Person hinzugefügt werden")
-  void test_11() {
-    Gruppe gruppe = Gruppe.erstelleGruppe(1, "MaxHub", "Reisegruppe");
-    gruppe.addPerson("GitLisa");
-
-    gruppe.addAusgabeToPerson("Pizza", "MaxHub", List.of("GitLisa"), Money.of(20, "EUR"));
-
-    assertThat(gruppe.getPersonen().get(1).getSchulden(0)).isEqualTo(
-        new Schulden(gruppe.getPersonen().get(1), gruppe.getPersonen().get(0)));
-  }
-
   @Test
   @DisplayName("Person mit maximalem Netto-Betrag wird gefunden")
   void test_12() {
-    Person personA = new Person("MaxHub", new ArrayList<>(), new ArrayList<>());
-    Person personB = new Person("GitLisa", new ArrayList<>(), new ArrayList<>());
+    Person personA = new Person("MaxHub");
+    Person personB = new Person("GitLisa");
     personA.setNettoBetrag(Money.of(20, "EUR"));
     personB.setNettoBetrag(Money.of(-20, "EUR"));
     Gruppe gruppe = Gruppe.erstelleGruppe(1, "MaxHub", "Reisegruppe");
@@ -218,8 +205,8 @@ public class DomainTests {
   @Test
   @DisplayName("Person mit minimalem Netto-Betrag wird gefunden")
   void test_13() {
-    Person personA = new Person("MaxHub", new ArrayList<>(), new ArrayList<>());
-    Person personB = new Person("GitLisa", new ArrayList<>(), new ArrayList<>());
+    Person personA = new Person("MaxHub");
+    Person personB = new Person("GitLisa");
     personA.setNettoBetrag(Money.of(20, "EUR"));
     personB.setNettoBetrag(Money.of(-20, "EUR"));
     Gruppe gruppe = Gruppe.erstelleGruppe(1, "MaxHub", "Reisegruppe");
@@ -234,8 +221,8 @@ public class DomainTests {
   @DisplayName("isValid Utility Methode bestimmt richtig, wenn Kriterium 1 nicht erfüllt ist:" +
       "eine Personen darf immer nur selber Überweisungen an andere tätigen oder Geld überwiesen bekommen, niemals beides")
   void test_14() {
-    Person personA = new Person("MaxHub", new ArrayList<>(), new ArrayList<>());
-    Person personB = new Person("GitLisa", new ArrayList<>(), new ArrayList<>());
+    Person personA = new Person("MaxHub");
+    Person personB = new Person("GitLisa");
 
     Transaktion transaktion1 = new Transaktion(personA, personB, Money.of(50, "EUR"));
     Transaktion transaktion2 = new Transaktion(personB, personA, Money.of(60, "EUR"));
@@ -250,8 +237,8 @@ public class DomainTests {
   @DisplayName("isValid Utility Methode bestimmt richtig, wenn Kriterium 2 nicht erfüllt ist:" +
       "es darf höchstens eine Überweisung zwischen zwei Personen geben")
   void test_15() {
-    Person personA = new Person("MaxHub", new ArrayList<>(), new ArrayList<>());
-    Person personB = new Person("GitLisa", new ArrayList<>(), new ArrayList<>());
+    Person personA = new Person("MaxHub");
+    Person personB = new Person("GitLisa");
 
     Transaktion transaktion1 = new Transaktion(personA, personB, Money.of(50, "EUR"));
     Transaktion transaktion2 = new Transaktion(personA, personB, Money.of(60, "EUR"));
@@ -264,8 +251,8 @@ public class DomainTests {
   @DisplayName("isValid Utility Methode bestimmt richtig, wenn Kriterium 2 nicht erfüllt ist:" +
       "Niemand darf sich selber Geld überweisen")
   void test_16() {
-    Person personA = new Person("MaxHub", new ArrayList<>(), new ArrayList<>());
-    Person personB = new Person("GitLisa", new ArrayList<>(), new ArrayList<>());
+    Person personA = new Person("MaxHub");
+    Person personB = new Person("GitLisa");
 
     Transaktion transaktion1 = new Transaktion(personA, personA, Money.of(50, "EUR"));
     Transaktion transaktion2 = new Transaktion(personB, personB, Money.of(60, "EUR"));
@@ -277,8 +264,8 @@ public class DomainTests {
   @Test
   @DisplayName("Szenario 1: Summieren von Auslagen")
   void test_17() {
-    Person personA = new Person("MaxHub", new ArrayList<>(), new ArrayList<>());
-    Person personB = new Person("GitLisa", new ArrayList<>(), new ArrayList<>());
+    Person personA = new Person("MaxHub");
+    Person personB = new Person("GitLisa");
     Gruppe gruppe = Gruppe.erstelleGruppe(1, personA.getName(), "Reisegruppe");
     gruppe.addPerson(personB.getName());
     gruppe.addAusgabeToPerson("Pizza", "MaxHub", List.of("MaxHub", "GitLisa"), Money.of(10, "EUR"));
@@ -294,8 +281,8 @@ public class DomainTests {
   @Test
   @DisplayName("Szenario 2: Ausgleich")
   void test_18() {
-    Person personA = new Person("MaxHub", new ArrayList<>(), new ArrayList<>());
-    Person personB = new Person("GitLisa", new ArrayList<>(), new ArrayList<>());
+    Person personA = new Person("MaxHub");
+    Person personB = new Person("GitLisa");
     Gruppe gruppe = Gruppe.erstelleGruppe(1, personA.getName(), "Reisegruppe");
     gruppe.addPerson(personB.getName());
     gruppe.addAusgabeToPerson("Pizza", "MaxHub", List.of("MaxHub", "GitLisa"), Money.of(10, "EUR"));
@@ -311,8 +298,8 @@ public class DomainTests {
   @Test
   @DisplayName("Szenario 3: Zahlung ohne eigene Beteiligung")
   void test_19() {
-    Person personA = new Person("MaxHub", new ArrayList<>(), new ArrayList<>());
-    Person personB = new Person("GitLisa", new ArrayList<>(), new ArrayList<>());
+    Person personA = new Person("MaxHub");
+    Person personB = new Person("GitLisa");
     Gruppe gruppe = Gruppe.erstelleGruppe(1, personA.getName(), "Reisegruppe");
     gruppe.addPerson(personB.getName());
     gruppe.addAusgabeToPerson("Pizza", "MaxHub", List.of("GitLisa"), Money.of(10, "EUR"));
@@ -328,9 +315,9 @@ public class DomainTests {
   @Test
   @DisplayName("Szenario 4: Ringausgleich")
   void test_20() {
-    Person personA = new Person("MaxHub", new ArrayList<>(), new ArrayList<>());
-    Person personB = new Person("GitLisa", new ArrayList<>(), new ArrayList<>());
-    Person personC = new Person("ErixHub", new ArrayList<>(), new ArrayList<>());
+    Person personA = new Person("MaxHub");
+    Person personB = new Person("GitLisa");
+    Person personC = new Person("ErixHub");
     Gruppe gruppe = Gruppe.erstelleGruppe(1, personA.getName(), "Reisegruppe");
     gruppe.addPerson(personB.getName());
     gruppe.addPerson(personC.getName());
@@ -349,9 +336,9 @@ public class DomainTests {
   @Test
   @DisplayName("Szenario 4: Ringausgleich mit ungleichen Ausgaben")
   void test_21() {
-    Person personA = new Person("MaxHub", new ArrayList<>(), new ArrayList<>());
-    Person personB = new Person("GitLisa", new ArrayList<>(), new ArrayList<>());
-    Person personC = new Person("ErixHub", new ArrayList<>(), new ArrayList<>());
+    Person personA = new Person("MaxHub");
+    Person personB = new Person("GitLisa");
+    Person personC = new Person("ErixHub");
     Gruppe gruppe = Gruppe.erstelleGruppe(1, personA.getName(), "Reisegruppe");
     gruppe.addPerson(personB.getName());
     gruppe.addPerson(personC.getName());
@@ -370,9 +357,9 @@ public class DomainTests {
   @Test
   @DisplayName("Szenario 5: ABC Beispiel aus der Einführung")
   void test_22() {
-    Person personA = new Person("Anton", new ArrayList<>(), new ArrayList<>());
-    Person personB = new Person("Berta", new ArrayList<>(), new ArrayList<>());
-    Person personC = new Person("Christian", new ArrayList<>(), new ArrayList<>());
+    Person personA = new Person("Anton");
+    Person personB = new Person("Berta");
+    Person personC = new Person("Christian");
     Gruppe gruppe = Gruppe.erstelleGruppe(1, personA.getName(), "Reisegruppe");
     gruppe.addPerson(personB.getName());
     gruppe.addPerson(personC.getName());
@@ -401,12 +388,12 @@ public class DomainTests {
   @Test
   @DisplayName("Szenario 6: Beispiel aus der Aufgabenstellung")
   void test_23() {
-    Person personA = new Person("A", new ArrayList<>(), new ArrayList<>());
-    Person personB = new Person("B", new ArrayList<>(), new ArrayList<>());
-    Person personC = new Person("C", new ArrayList<>(), new ArrayList<>());
-    Person personD = new Person("D", new ArrayList<>(), new ArrayList<>());
-    Person personE = new Person("E", new ArrayList<>(), new ArrayList<>());
-    Person personF = new Person("F", new ArrayList<>(), new ArrayList<>());
+    Person personA = new Person("A");
+    Person personB = new Person("B");
+    Person personC = new Person("C");
+    Person personD = new Person("D");
+    Person personE = new Person("E");
+    Person personF = new Person("F");
     Gruppe gruppe = Gruppe.erstelleGruppe(1, personA.getName(), "Reisegruppe");
     gruppe.addPerson(personB.getName());
     gruppe.addPerson(personC.getName());
@@ -443,13 +430,13 @@ public class DomainTests {
   @DisplayName("Szenario 7: Minimierung")
     //Hier wird ein möglicher Ausgleich ausgerechnet (nicht der, der gegeben wurde), ist jedoch nicht minimal
   void test_24() {
-    Person personA = new Person("A", new ArrayList<>(), new ArrayList<>());
-    Person personB = new Person("B", new ArrayList<>(), new ArrayList<>());
-    Person personC = new Person("C", new ArrayList<>(), new ArrayList<>());
-    Person personD = new Person("D", new ArrayList<>(), new ArrayList<>());
-    Person personE = new Person("E", new ArrayList<>(), new ArrayList<>());
-    Person personF = new Person("F", new ArrayList<>(), new ArrayList<>());
-    Person personG = new Person("G", new ArrayList<>(), new ArrayList<>());
+    Person personA = new Person("A");
+    Person personB = new Person("B");
+    Person personC = new Person("C");
+    Person personD = new Person("D");
+    Person personE = new Person("E");
+    Person personF = new Person("F");
+    Person personG = new Person("G");
     Gruppe gruppe = Gruppe.erstelleGruppe(1, personA.getName(), "Reisegruppe");
     gruppe.addPerson(personB.getName());
     gruppe.addPerson(personC.getName());
@@ -483,9 +470,9 @@ public class DomainTests {
   @Test
   @DisplayName("Transaktion wird mit Fehlerabstand von 1 Cent korrekt berechnet")
   void test_25() {
-    Person personA = new Person("A", new ArrayList<>(), new ArrayList<>());
-    Person personB = new Person("B", new ArrayList<>(), new ArrayList<>());
-    Person personC = new Person("C", new ArrayList<>(), new ArrayList<>());
+    Person personA = new Person("A");
+    Person personB = new Person("B");
+    Person personC = new Person("C");
 
     Gruppe gruppe = Gruppe.erstelleGruppe(1, personA.getName(), "Reisegruppe");
     gruppe.addPerson(personB.getName());
