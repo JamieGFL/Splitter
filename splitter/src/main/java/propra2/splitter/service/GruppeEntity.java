@@ -6,7 +6,7 @@ import java.util.UUID;
 
 public class GruppeEntity {
 
-  UUID gruppe;
+  Integer gruppe;
   String name;
   List<String> personen;
 
@@ -18,17 +18,17 @@ public class GruppeEntity {
     this.personen = personen;
   }
 
-  public GruppeEntity(UUID gruppe, String name, List<String> personen) {
+  public GruppeEntity(Integer gruppe, String name, List<String> personen) {
     this.gruppe = gruppe;
     this.name = name;
     this.personen = personen;
   }
 
-  public UUID getGruppe() {
+  public Integer getGruppe() {
     return gruppe;
   }
 
-  public void setGruppe(UUID gruppe) {
+  public void setGruppe(Integer gruppe) {
     this.gruppe = gruppe;
   }
 

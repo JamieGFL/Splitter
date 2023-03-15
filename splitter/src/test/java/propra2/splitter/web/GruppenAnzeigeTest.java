@@ -62,7 +62,7 @@ public class GruppenAnzeigeTest {
 
     when(service.personToGruppeMatch(any()))
         .thenReturn(new GruppenOnPage(List.of(
-            new GruppenDetails(UUID.randomUUID(), "Reisegruppe", List.of("MaxHub"), false))));
+            new GruppenDetails(1, "Reisegruppe", List.of("MaxHub"), false))));
 
     MvcResult result = mvc.perform(get("/")).andReturn();
 
@@ -77,7 +77,7 @@ public class GruppenAnzeigeTest {
 
     when(service.personToGruppeMatch(any()))
         .thenReturn(new GruppenOnPage(List.of(
-            new GruppenDetails(UUID.randomUUID(), "Reisegruppe", List.of("MaxHub"), false))));
+            new GruppenDetails(1, "Reisegruppe", List.of("MaxHub"), false))));
 
     MvcResult result = mvc.perform(get("/")).andReturn();
 
@@ -92,7 +92,7 @@ public class GruppenAnzeigeTest {
 
     when(service.personToGruppeMatch(any()))
         .thenReturn(new GruppenOnPage(List.of(
-            new GruppenDetails(UUID.randomUUID(), "Reisegruppe", List.of("MaxHub"), false))));
+            new GruppenDetails(1, "Reisegruppe", List.of("MaxHub"), false))));
 
     MvcResult result = mvc.perform(get("/")).andReturn();
     String html = result.getResponse().getContentAsString();
@@ -108,16 +108,15 @@ public class GruppenAnzeigeTest {
   @WithMockOAuth2User(login = "MaxHub")
   @DisplayName("Die Gruppeninformationsseite ist verlinkt")
   void test_05() throws Exception {
-    UUID id = UUID.randomUUID();
+    Integer id = 1;
     when(service.personToGruppeMatch(any()))
         .thenReturn(new GruppenOnPage(
             List.of(new GruppenDetails(id, "Reisegruppe", List.of("MaxHub"), false))));
 
     MvcResult result = mvc.perform(get("/")).andReturn();
     String html = result.getResponse().getContentAsString();
-    String idToString = id.toString();
 
-    assertThat(html).contains("<a href=\"gruppe?id=" + idToString + "\"> Anzeigen </a>");
+    assertThat(html).contains("<a href=\"gruppe?id=" + id + "\"> Anzeigen </a>");
 
   }
 
@@ -126,14 +125,13 @@ public class GruppenAnzeigeTest {
   @WithMockOAuth2User(login = "MaxHub")
   @DisplayName("Geschlossene Gruppen in denen man Mitglied war werden einem Seperat angezeigt")
   void test_06() throws Exception {
-    UUID id = UUID.randomUUID();
+
     when(service.personToGruppeMatch(any()))
         .thenReturn(new GruppenOnPage(
-            List.of(new GruppenDetails(id, "Reisegruppe", List.of("MaxHub"), true))));
+            List.of(new GruppenDetails(1, "Reisegruppe", List.of("MaxHub"), true))));
 
     MvcResult result = mvc.perform(get("/")).andReturn();
     String html = result.getResponse().getContentAsString();
-    String idToString = id.toString();
 
     assertThat(html).contains("Geschlossene Gruppen");
     assertThat(html).contains("Reisegruppe");

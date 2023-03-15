@@ -15,19 +15,19 @@ public class RestGruppenService {
 
   private final List<Gruppe> gruppen = new ArrayList<>();
 
-  private UUID add(Gruppe gruppe) {
+  private Integer add(Gruppe gruppe) {
     gruppen.add(gruppe);
     return gruppe.getId();
   }
 
-  public Gruppe getSingleGruppe(UUID id) {
+  public Gruppe getSingleGruppe(Integer id) {
     return gruppen.stream().filter(g -> g.getId().equals(id)).reduce((a, b) -> {
       throw new IllegalArgumentException();
     }).orElseThrow();
   }
 
-  public UUID addRestGruppe(GruppeEntity gruppe) {
-    return add(Gruppe.erstelleRestGruppe(gruppe.getName(), gruppe.getPersonen()));
+  public Integer addRestGruppe(GruppeEntity gruppe) {
+    return add(Gruppe.erstelleRestGruppe(gruppe.getGruppe(), gruppe.getName(), gruppe.getPersonen()));
   }
 
   public List<GruppeEntity> getRestGruppen() {
@@ -39,10 +39,9 @@ public class RestGruppenService {
         gruppe.getPersonen().stream().map(Person::getName).toList());
   }
 
-  public GruppeInformationEntity getGruppeInformationEntity(String id) {
+  public GruppeInformationEntity getGruppeInformationEntity(Integer id) {
     try {
-      UUID uuid = UUID.fromString(id);
-      Gruppe gruppe = gruppen.stream().filter(g -> g.getId().equals(uuid)).reduce((a, b) -> {
+      Gruppe gruppe = gruppen.stream().filter(g -> g.getId().equals(id)).reduce((a, b) -> {
         throw new IllegalArgumentException();
       }).orElse(null);
       if (gruppe == null) {
@@ -63,23 +62,20 @@ public class RestGruppenService {
         .toList());
   }
 
-  public String setRestGruppeGeschlossen(String id) {
-    UUID uuid = UUID.fromString(id);
-    Gruppe gruppe = getSingleGruppe(uuid);
+  public String setRestGruppeGeschlossen(Integer id) {
+    Gruppe gruppe = getSingleGruppe(id);
     gruppe.closeGroup();
     return gruppe.getGruppenName() + " wurde geschlossen";
   }
 
-  public void addRestAusgabenToGruppe(String id, AusgabeEntity ausgabenEntity) {
-    UUID uuid = UUID.fromString(id);
-    Gruppe gruppe = getSingleGruppe(uuid);
+  public void addRestAusgabenToGruppe(Integer id, AusgabeEntity ausgabenEntity) {
+    Gruppe gruppe = getSingleGruppe(id);
     gruppe.addAusgabeToPerson(ausgabenEntity.grund(), ausgabenEntity.glaeubiger(),
         ausgabenEntity.schuldner(), Money.of(ausgabenEntity.cent() / 100, "EUR"));
   }
 
-  public List<TransaktionEntity> getRestTransaktionen(String id) {
-    UUID uuid = UUID.fromString(id);
-    Gruppe gruppe = getSingleGruppe(uuid);
+  public List<TransaktionEntity> getRestTransaktionen(Integer id) {
+    Gruppe gruppe = getSingleGruppe(id);
     gruppe.berechneTransaktionen();
     return gruppe.getTransaktionenCopy().stream()
         .map(transaktion -> new TransaktionEntity

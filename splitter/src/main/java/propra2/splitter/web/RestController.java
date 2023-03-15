@@ -26,7 +26,7 @@ public class RestController {
   }
 
   @PostMapping("/api/gruppen")
-  public ResponseEntity<UUID> addGruppen(@RequestBody GruppeEntity gruppenEntity) {
+  public ResponseEntity<Integer> addGruppen(@RequestBody GruppeEntity gruppenEntity) {
 
     if (gruppenEntity.getName() == null) {
       return ResponseEntity.badRequest().body(null);
@@ -38,7 +38,7 @@ public class RestController {
   }
 
   @GetMapping("/api/gruppen/{id}")
-  public ResponseEntity<GruppeInformationEntity> gruppenInfo(@PathVariable String id) {
+  public ResponseEntity<GruppeInformationEntity> gruppenInfo(@PathVariable Integer id) {
 
     if (service.getGruppeInformationEntity(id) == null) {
       return ResponseEntity.notFound().build();
@@ -48,7 +48,7 @@ public class RestController {
   }
 
   @PostMapping("/api/gruppen/{id}/schliessen")
-  public ResponseEntity<String> schliesseGruppe(@PathVariable String id) {
+  public ResponseEntity<String> schliesseGruppe(@PathVariable Integer id) {
 
     if (service.getGruppeInformationEntity(id) == null) {
       return ResponseEntity.notFound().build();
@@ -58,7 +58,7 @@ public class RestController {
   }
 
   @PostMapping("/api/gruppen/{id}/auslagen")
-  public ResponseEntity<AusgabeEntity> addAusgabe(@PathVariable String id,
+  public ResponseEntity<AusgabeEntity> addAusgabe(@PathVariable Integer id,
       @RequestBody AusgabeEntity ausgabenEntity) {
 
     if (service.getGruppeInformationEntity(id) == null) {
@@ -79,7 +79,7 @@ public class RestController {
   }
 
   @GetMapping("/api/gruppen/{id}/ausgleich")
-  public ResponseEntity<List<TransaktionEntity>> getAusgleichszahlungen(@PathVariable String id) {
+  public ResponseEntity<List<TransaktionEntity>> getAusgleichszahlungen(@PathVariable Integer id) {
     if (service.getGruppeInformationEntity(id) == null) {
       return ResponseEntity.notFound().build();
     }

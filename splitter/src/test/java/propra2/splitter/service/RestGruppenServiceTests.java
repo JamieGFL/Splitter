@@ -44,7 +44,7 @@ public class RestGruppenServiceTests {
   void test_03() {
     RestGruppenService service = new RestGruppenService();
 
-    UUID id = service.addRestGruppe(new GruppeEntity("Reisegruppe1", List.of("MaxHub", "GitLisa")));
+    Integer id = service.addRestGruppe(new GruppeEntity(1,"Reisegruppe1", List.of("MaxHub", "GitLisa")));
 
     assertThat(service.getSingleGruppe(id).getGruppenName()).isEqualTo("Reisegruppe1");
     assertThat(
@@ -57,13 +57,13 @@ public class RestGruppenServiceTests {
   void test_04() {
     RestGruppenService service = new RestGruppenService();
 
-    UUID id = service.addRestGruppe(new GruppeEntity("Reisegruppe1", List.of("MaxHub", "GitLisa")));
+    Integer id = service.addRestGruppe(new GruppeEntity(1,"Reisegruppe1", List.of("MaxHub", "GitLisa")));
 
-    assertThat(service.getGruppeInformationEntity(id.toString()).name()).isEqualTo("Reisegruppe1");
-    assertThat(service.getGruppeInformationEntity(id.toString()).personen()).isEqualTo(
+    assertThat(service.getGruppeInformationEntity(id).name()).isEqualTo("Reisegruppe1");
+    assertThat(service.getGruppeInformationEntity(id).personen()).isEqualTo(
         List.of("MaxHub", "GitLisa"));
-    assertThat(service.getGruppeInformationEntity(id.toString()).geschlossen()).isFalse();
-    assertThat(service.getGruppeInformationEntity(id.toString()).ausgaben()).isEqualTo(
+    assertThat(service.getGruppeInformationEntity(id).geschlossen()).isFalse();
+    assertThat(service.getGruppeInformationEntity(id).ausgaben()).isEqualTo(
         new ArrayList<>());
   }
 
@@ -72,12 +72,12 @@ public class RestGruppenServiceTests {
   void test_05() {
     RestGruppenService service = new RestGruppenService();
 
-    UUID id = service.addRestGruppe(new GruppeEntity("Reisegruppe1", List.of("MaxHub", "GitLisa")));
+    Integer id = service.addRestGruppe(new GruppeEntity(1,"Reisegruppe1", List.of("MaxHub", "GitLisa")));
     AusgabeEntity ausgabe = new AusgabeEntity("Pizza", "MaxHub", List.of("MaxHub", "GitLisa"),
         1000);
-    service.addRestAusgabenToGruppe(id.toString(), ausgabe);
+    service.addRestAusgabenToGruppe(id, ausgabe);
 
-    assertThat(service.getGruppeInformationEntity(id.toString()).ausgaben()).containsExactly(
+    assertThat(service.getGruppeInformationEntity(id).ausgaben()).containsExactly(
         ausgabe);
   }
 
@@ -86,10 +86,10 @@ public class RestGruppenServiceTests {
   void test_06() {
     RestGruppenService service = new RestGruppenService();
 
-    UUID id = service.addRestGruppe(new GruppeEntity("Reisegruppe1", List.of("MaxHub", "GitLisa")));
-    service.setRestGruppeGeschlossen(id.toString());
+    Integer id = service.addRestGruppe(new GruppeEntity(1,"Reisegruppe1", List.of("MaxHub", "GitLisa")));
+    service.setRestGruppeGeschlossen(id);
 
-    assertThat(service.getGruppeInformationEntity(id.toString()).geschlossen()).isTrue();
+    assertThat(service.getGruppeInformationEntity(id).geschlossen()).isTrue();
   }
 
   @Test
@@ -97,13 +97,13 @@ public class RestGruppenServiceTests {
   void test_07() {
     RestGruppenService service = new RestGruppenService();
 
-    service.addRestGruppe(new GruppeEntity("Reisegruppe1", List.of("MaxHub", "GitLisa")));
-    service.addRestGruppe(new GruppeEntity("Reisegruppe2", List.of("MaxHub", "GitAndreas")));
-    service.addRestGruppe(new GruppeEntity("Reisegruppe3", List.of("GitLisa", "GitAndreas")));
+    service.addRestGruppe(new GruppeEntity(1,"Reisegruppe1", List.of("MaxHub", "GitLisa")));
+    service.addRestGruppe(new GruppeEntity(2,"Reisegruppe2", List.of("MaxHub", "GitAndreas")));
+    service.addRestGruppe(new GruppeEntity(3,"Reisegruppe3", List.of("GitLisa", "GitAndreas")));
 
     assertThat(service.personRestMatch("MaxHub")).containsExactlyInAnyOrder(
-        new GruppeEntity("Reisegruppe1", List.of("MaxHub", "GitLisa")),
-        new GruppeEntity("Reisegruppe2", List.of("MaxHub", "GitAndreas")));
+        new GruppeEntity(1,"Reisegruppe1", List.of("MaxHub", "GitLisa")),
+        new GruppeEntity(2,"Reisegruppe2", List.of("MaxHub", "GitAndreas")));
   }
 
   @Test
@@ -111,11 +111,11 @@ public class RestGruppenServiceTests {
   void test_08() {
     RestGruppenService service = new RestGruppenService();
 
-    UUID id = service.addRestGruppe(new GruppeEntity("Reisegruppe1", List.of("MaxHub", "GitLisa")));
-    service.addRestAusgabenToGruppe(id.toString(),
+    Integer id = service.addRestGruppe(new GruppeEntity(1,"Reisegruppe1", List.of("MaxHub", "GitLisa")));
+    service.addRestAusgabenToGruppe(id,
         new AusgabeEntity("Pizza", "MaxHub", List.of("MaxHub", "GitLisa"), 1000));
 
-    assertThat(service.getRestTransaktionen(id.toString())).containsExactly(
+    assertThat(service.getRestTransaktionen(id)).containsExactly(
         new TransaktionEntity("GitLisa", "MaxHub", 500));
   }
 
