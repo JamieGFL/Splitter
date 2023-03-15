@@ -9,7 +9,7 @@ import propra2.splitter.stereotypes.AggregateRoot;
 public class Gruppe {
 
   private final Integer id;
-  private final List<Person> personen;
+  private List<Person> personen = new ArrayList<>();
   private final List<Ausgabe> gruppenAusgaben = new ArrayList<>();
   private final List<Transaktion> transaktionen = new ArrayList<>();
   private final ArrayList<Person> nettoBetraege = new ArrayList<>();
@@ -22,6 +22,11 @@ public class Gruppe {
   private Gruppe(Integer id, List<Person> personen, String gruppenName) {
     this.id = id;
     this.personen = personen;
+    this.gruppenName = gruppenName;
+  }
+
+  public Gruppe(Integer id, String gruppenName){
+    this.id = id;
     this.gruppenName = gruppenName;
   }
 
@@ -49,6 +54,11 @@ public class Gruppe {
       Person person = new Person(newPerson);
       personen.add(person);
     }
+  }
+
+  public void addPersonAlways(String newPerson){
+    Person person = new Person(newPerson);
+    personen.add(person);
   }
 
   public void addAusgabeToPerson(String aktivitaet, String name, List<String> personen2,
