@@ -11,6 +11,7 @@ public class Gruppe {
   private final Integer id;
   private final List<Person> personen;
   private final List<Ausgabe> gruppenAusgaben = new ArrayList<>();
+  private final List<Schulden> gruppenSchulden = new ArrayList<>();
   private final List<Transaktion> transaktionen = new ArrayList<>();
   private final ArrayList<Person> nettoBetraege = new ArrayList<>();
   private final String gruppenName;
@@ -69,6 +70,7 @@ public class Gruppe {
       for (Person person : teilnehmer) {
         if (!person.equals(ausleger)) {
           person.addSchulden(new Schulden(person, ausleger));
+
         }
       }
     }
@@ -166,9 +168,11 @@ public class Gruppe {
 
     for (int i = 0; i < personen.size(); i++) {
       ausgabeSum = Money.of(0, "EUR");
-      for (int j = 0; j < personen.get(i).getAusgaben().size(); j++) {
-        ausgabeSum = ausgabeSum.add(personen.get(i).getAusgabe(j).getKosten());
-        sumAusgaben[i] = ausgabeSum;
+      for (int j = 0; j < gruppenAusgaben.size(); j++) {
+        if (gruppenAusgaben.get(j).getAusleger().equals(personen.get(i))) {
+          ausgabeSum = ausgabeSum.add(gruppenAusgaben.get(j).getKosten());
+          sumAusgaben[i] = ausgabeSum;
+        }
       }
     }
     return sumAusgaben;
