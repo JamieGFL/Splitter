@@ -25,9 +25,10 @@ public class Gruppe {
     this.gruppenName = gruppenName;
   }
 
-  public Gruppe(Integer id, String gruppenName){
+  public Gruppe(Integer id, String gruppenName, boolean geschlossen){
     this.id = id;
     this.gruppenName = gruppenName;
+    this.geschlossen = geschlossen;
   }
 
   public static Gruppe erstelleGruppe(Integer id, String gruender, String gruppenName) {

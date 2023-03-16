@@ -2,6 +2,8 @@ package propra2.splitter.database;
 
 import java.util.List;
 import java.util.Optional;
+
+import org.javamoney.moneta.Money;
 import org.springframework.stereotype.Repository;
 import propra2.splitter.domain.Gruppe;
 import propra2.splitter.service.GruppenRepository;
@@ -36,10 +38,11 @@ public class GruppenRepositoryImpl implements GruppenRepository {
 
 
   private Gruppe toGruppe(GruppeDTO dto){
-    Gruppe gruppe = new Gruppe(dto.id(), dto.gruppenName());
+    Gruppe gruppe = new Gruppe(dto.id(), dto.gruppenName(), dto.geschlossen());
     dto.personen().forEach(p -> gruppe.addPersonAlways(p.name()));
-    dto.gruppenAusgaben().forEach(a -> gruppe.addAusgabe(a.aktivitaet().name(), a.ausleger().name(), a.personen().stream().map(Record::toString).toList(), a.kosten()));
-    dto.transaktionen().forEach(t -> gruppe.addTransaktion(t.zahler().name(), t.zahlungsempfaenger().name(), t.nettoBetrag()));
+    dto.gruppenAusgaben().forEach(a -> gruppe.addAusgabe(a.aktivitaet().name(), a.ausleger().name(), a.personen().stream().map(Record::toString).toList(),
+            Money.of(a.kosten(), "EUR")));
+    dto.transaktionen().forEach(t -> gruppe.addTransaktion(t.zahler().name(), t.zahlungsempfaenger().name(), Money.of(t.nettoBetrag(), "EUR")));
     return gruppe;
   }
 
@@ -50,14 +53,14 @@ public class GruppenRepositoryImpl implements GruppenRepository {
 
     List<AusgabeDTO> gruppenAusgaben = gruppe.getGruppenAusgaben()
         .stream()
-        .map(a -> new AusgabeDTO(new AktivitaetDTO(a.getAktivitaetName()), new PersonDTO(a.getAuslegerName()), a.getPersonenNamen().stream().map(
-            PersonDTO::new).toList() , a.getGesamtKosten())).toList();
+        .map(a -> new AusgabeDTO(new AktivitaetDTO(a.getAktivitaetName()), new AuslegerDTO(a.getAuslegerName()), a.getPersonenNamen().stream().map(
+            TeilnehmerDTO::new).toList() , a.getGesamtKosten().getNumberStripped().doubleValue())).toList();
 
     List<TransaktionDTO> transaktionen = gruppe.getTransaktionenCopy()
         .stream()
-        .map(t -> new TransaktionDTO(new PersonDTO(t.getPerson1Name()) , new PersonDTO(t.getPerson2Name()), t.getNettoBetrag())).toList();
+        .map(t -> new TransaktionDTO(new ZahlerDTO(t.getPerson1Name()) , new ZahlungsempfaengerDTO(t.getPerson2Name()), t.getNettoBetrag().getNumberStripped().doubleValue())).toList();
 
-    return new GruppeDTO(gruppe.getId(), gruppe.getGruppenName(), personen, gruppenAusgaben, transaktionen);
+    return new GruppeDTO(gruppe.getId(), gruppe.getGruppenName(), personen, gruppenAusgaben, transaktionen, gruppe.isGeschlossen());
 
   }
 
