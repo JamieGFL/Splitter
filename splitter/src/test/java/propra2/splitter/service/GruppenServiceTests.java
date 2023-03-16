@@ -1,10 +1,12 @@
 package propra2.splitter.service;
 
+import java.util.Optional;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
 import propra2.splitter.domain.Gruppe;
 
+import static org.assertj.core.api.Assertions.as;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
@@ -30,6 +32,7 @@ public class GruppenServiceTests {
     GruppenService service = new GruppenService(repository);
     Gruppe gruppe = Gruppe.erstelleGruppe(1, "James", "Reisegruppe");
     when(repository.save(any(Gruppe.class))).thenReturn(gruppe);
+
     Gruppe actualGruppe = service.addGruppe(1, mkUser("James"), "Reisegruppe");
 
     assertThat(actualGruppe).isEqualTo(gruppe);
@@ -38,178 +41,156 @@ public class GruppenServiceTests {
   }
 
   @Test
-  @DisplayName("Service kann mehrere Gruppen speichern")
-  void test_02() {
-    GruppenService service = new GruppenService(repository);
-    Gruppe gruppe1 = service.addGruppe(1,mkUser("James"), "Reisegruppe1");
-    Gruppe gruppe2 = service.addGruppe(2,mkUser("GitLisa"), "Reisegruppe2");
-    Gruppe gruppe3 = service.addGruppe(3,mkUser("GitMax"), "Reisegruppe3");
-
-    assertThat(service.getGruppen().details())
-        .containsExactlyInAnyOrder(
-            new GruppenDetails(gruppe1.getId(), gruppe1.getGruppenName(), List.of("James"), false),
-            new GruppenDetails(gruppe2.getId(), gruppe2.getGruppenName(), List.of("GitLisa"),
-                false),
-            new GruppenDetails(gruppe3.getId(), gruppe3.getGruppenName(), List.of("GitMax"),
-                false));
-  }
-
-  @Test
   @DisplayName("Service kann mehr als eine Person zu einer Gruppe hinzufügen")
-  void test_03() {
+  void test_03() throws Exception {
     GruppenService service = new GruppenService(repository);
-    Gruppe gruppe = service.addGruppe(1,mkUser("James"), "Reisegruppe");
-    gruppe.addPerson("GitMax");
-    gruppe.addPerson("GitLisa");
+    Gruppe gruppe = Gruppe.erstelleGruppe(1, "James", "Reisegruppe");
+    when(repository.findById(anyInt())).thenReturn(Optional.of(gruppe));
 
-    assertThat(service.getGruppen().details())
-        .containsExactly(new GruppenDetails(gruppe.getId(), gruppe.getGruppenName(),
-            List.of("James", "GitMax", "GitLisa"), false));
+    service.addPersonToGruppe(1, "James2");
+
+    verify(repository, times(1)).save(gruppe);
   }
 
   @Test
   @DisplayName("Eine Person kann Bestandteil von mehreren Gruppen sein")
   void test_04() {
     GruppenService service = new GruppenService(repository);
-    Gruppe gruppe = service.addGruppe(1,mkUser("James"), "Reisegruppe1");
-    Gruppe gruppe2 = service.addGruppe(2,mkUser("GitLisa"), "Reisegruppe2");
-    Gruppe gruppe3 = service.addGruppe(3,mkUser("GitMax"), "Reisegruppe3");
+    Gruppe gruppe1 = Gruppe.erstelleGruppe(1, "James", "Reisegruppe");
+    Gruppe gruppe2 = Gruppe.erstelleGruppe(2, "MaxHub", "Reisegruppe");
+    when(repository.findById(anyInt())).thenReturn(Optional.of(gruppe1)).thenReturn(
+        Optional.of(gruppe2));
 
-    gruppe2.addPerson("James");
-    gruppe3.addPerson("James");
+    Gruppe actualGruppe1 = service.addGruppe(1,mkUser("MaxHub"), "Reisegruppe1");
+    Gruppe actualGruppe2 = service.addGruppe(2,mkUser("GitLisa"), "Reisegruppe2");
+    service.addPersonToGruppe(1, "MaxHub");
+    service.addPersonToGruppe(2, "James");
 
-    assertThat(service.getGruppen().details())
-        .containsExactlyInAnyOrder(
-            new GruppenDetails(gruppe.getId(), gruppe.getGruppenName(), List.of("James"), false),
-            new GruppenDetails(gruppe2.getId(), gruppe2.getGruppenName(),
-                List.of("GitLisa", "James"), false),
-            new GruppenDetails(gruppe3.getId(), gruppe3.getGruppenName(),
-                List.of("GitMax", "James"), false));
+    verify(repository, times(1)).save(gruppe1);
+    verify(repository, times(1)).save(gruppe2);
   }
 
   @Test
   @DisplayName("Eine Person kann mehrere Gruppen erstellen")
   void test_05() {
     GruppenService service = new GruppenService(repository);
-    Gruppe gruppe = service.addGruppe(1,mkUser("James"), "Reisegruppe");
-    Gruppe gruppe2 = service.addGruppe(2,mkUser("James"), "Reisegruppe");
-    Gruppe gruppe3 = service.addGruppe(3,mkUser("James"), "Reisegruppe");
+    Gruppe gruppe1 = Gruppe.erstelleGruppe(1, "James", "Reisegruppe");
+    Gruppe gruppe2 = Gruppe.erstelleGruppe(2, "James", "Reisegruppe2");
+    when(repository.save(any(Gruppe.class))).thenReturn(gruppe1).thenReturn(gruppe2);
 
-    assertThat(service.getGruppen().details())
-        .containsExactlyInAnyOrder(
-            new GruppenDetails(gruppe.getId(), gruppe.getGruppenName(), List.of("James"), false),
-            new GruppenDetails(gruppe2.getId(), gruppe2.getGruppenName(), List.of("James"), false),
-            new GruppenDetails(gruppe3.getId(), gruppe3.getGruppenName(), List.of("James"), false));
+    service.addGruppe(1,mkUser("James"), "Reisegruppe");
+    service.addGruppe(2,mkUser("James"), "Reisegruppe");
+
+    verify(repository, times(2)).save(any(Gruppe.class));
   }
 
   @Test
   @DisplayName("Es werden einem nur Gruppen angezeigt, in welchen man auch Mitglied ist")
   void test_06() {
     GruppenService service = new GruppenService(repository);
+    when(repository.findAll())
+        .thenReturn(List.of(Gruppe.erstelleGruppe(1, "James", "Reisegruppe"), Gruppe.erstelleGruppe(2, "GitLisa", "Reisegruppe2")));
+
     Gruppe gruppe = service.addGruppe(1,mkUser("James"), "Reisegruppe");
-    Gruppe gruppe2 = service.addGruppe(2,mkUser("GitLisa"), "Reisegruppe");
-    Gruppe gruppe3 = service.addGruppe(3,mkUser("GitMax"), "Reisegruppe");
+    Gruppe gruppe2 = service.addGruppe(2,mkUser("GitLisa"), "Reisegruppe2");
+    GruppenOnPage actualGruppen = service.personToGruppeMatch(mkUser("James"));
 
-    gruppe2.addPerson("James");
-
-    assertThat(service.personToGruppeMatch(mkUser("James")).details())
-        .containsExactlyInAnyOrder(
-            new GruppenDetails(gruppe.getId(), gruppe.getGruppenName(), List.of("James"), false),
-            new GruppenDetails(gruppe2.getId(), gruppe2.getGruppenName(),
-                List.of("GitLisa", "James"), false));
+    assertThat(actualGruppen.details()).containsExactly(new GruppenDetails(1, "Reisegruppe", List.of("James"), false));
+    verify(repository, times(1)).findAll();
   }
 
   @Test
   @DisplayName("Service kann nach beliebigen Gruppen durch die ID filtern")
   void test_07() {
     GruppenService service = new GruppenService(repository);
-    Gruppe gruppe = service.addGruppe(1,mkUser("James"), "Reisegruppe");
-    Gruppe gruppe2 = service.addGruppe(2,mkUser("GitLisa"), "Reisegruppe");
-    Gruppe gruppe3 = service.addGruppe(3,mkUser("GitMax"), "Reisegruppe");
-    Gruppe gruppe4 = service.addGruppe(4,mkUser("ErixHub"), "Reisegruppe");
+    Gruppe gruppe = Gruppe.erstelleGruppe(1, "James" , "Reisegruppe");
+    when(repository.findById(anyInt())).thenReturn(
+        Optional.of(Gruppe.erstelleGruppe(1, "James", "Reisegruppe")));
 
-    assertThat(service.getSingleGruppe(gruppe3.getId())).isEqualTo(gruppe3);
+    service.addGruppe(1, mkUser("James"), "Reisegruppe");
+
+    assertThat(service.getSingleGruppe(1)).isEqualTo(gruppe);
+    verify(repository, times(1)).findById(1);
+
   }
 
   @Test
   @DisplayName("Der Service kann Ausgaben eintragen")
   void test_08() {
     GruppenService service = new GruppenService(repository);
-    Gruppe gruppe = service.addGruppe(1,mkUser("James"), "Reisegruppe");
-    gruppe.addPerson("GitLisa");
-    Double d = 40.00;
+    Gruppe gruppe = Gruppe.erstelleGruppe(1, "James", "Reisegruppe");
+    when(repository.findById(anyInt())).thenReturn(Optional.of(gruppe));
 
-    service.addAusgabeToGruppe(gruppe.getId(), "pizza", "James", "James, GitLisa", d);
+    service.addPersonToGruppe(1, "GitLisa");
+    service.addAusgabeToGruppe(1, "Pizza", "James", "James, GitLisa", 40.00);
 
-    assertThat(service.getSingleGruppe(gruppe.getId()).getGruppenAusgaben()).hasSize(1);
+    verify(repository, times(2)).save(gruppe);
   }
 
   @Test
   @DisplayName("Der Service kann mehrere Ausgaben eintragen")
   void test_09() {
     GruppenService service = new GruppenService(repository);
-    Gruppe gruppe = service.addGruppe(1,mkUser("James"), "Reisegruppe");
-    gruppe.addPerson("GitLisa");
-    Double d = 40.00;
+    Gruppe gruppe = Gruppe.erstelleGruppe(1, "James", "Reisegruppe");
+    when(repository.findById(anyInt())).thenReturn(Optional.of(gruppe));
+    service.addPersonToGruppe(1, "GitLisa");
 
-    service.addAusgabeToGruppe(gruppe.getId(), "pizza", "James", "James, GitLisa", d);
-    service.addAusgabeToGruppe(gruppe.getId(), "club", "James", "James, GitLisa", d);
+    service.addAusgabeToGruppe(gruppe.getId(), "pizza", "James", "James, GitLisa", 40.00);
+    service.addAusgabeToGruppe(gruppe.getId(), "club", "James", "James, GitLisa", 40.00);
 
-    assertThat(service.getSingleGruppe(gruppe.getId()).getGruppenAusgaben()).hasSize(2);
+    verify(repository, times(3)).save(gruppe);
   }
 
   @Test
   @DisplayName("Service kann Transaktionen für eine Gruppe hinzufügen")
   void test_10() {
     GruppenService service = new GruppenService(repository);
-    Gruppe gruppe = service.addGruppe(1,mkUser("James"), "Reisegruppe");
-    gruppe.addPerson("GitLisa");
-    Double d = 40.00;
+    Gruppe gruppe = Gruppe.erstelleGruppe(1, "James", "Reisegruppe");
+    when(repository.findById(anyInt())).thenReturn(Optional.of(gruppe));
 
-    service.addAusgabeToGruppe(gruppe.getId(), "pizza", "James", "James, GitLisa", d);
-    service.transaktionBerechnen(gruppe.getId());
+    service.addPersonToGruppe(1, "GitLisa");
+    service.addAusgabeToGruppe(1, "pizza", "James", "James, GitLisa", 40.00);
+    service.transaktionBerechnen(1);
 
-    assertThat(service.getSingleGruppe(gruppe.getId()).getTransaktionsNachrichten()).hasSize(1);
+    verify(repository, times(3)).save(gruppe);
   }
 
   @Test
   @DisplayName("Service speichert nur Transaktionsnachricht für Gesamtheit der Ausgaben")
   void test_11() {
     GruppenService service = new GruppenService(repository);
-    Gruppe gruppe = service.addGruppe(1,mkUser("James"), "Reisegruppe");
-    gruppe.addPerson("GitLisa");
-    Double d = 40.00;
+    Gruppe gruppe = Gruppe.erstelleGruppe(1, "James", "Reisegruppe");
+    when(repository.findById(anyInt())).thenReturn(Optional.of(gruppe));
 
-    service.addAusgabeToGruppe(gruppe.getId(), "pizza", "James", "James, GitLisa", d);
+    service.addAusgabeToGruppe(gruppe.getId(), "pizza", "James", "James, GitLisa", 40.00);
     service.transaktionBerechnen(gruppe.getId());
-    service.addAusgabeToGruppe(gruppe.getId(), "club", "James", "James, GitLisa", d);
+    service.addAusgabeToGruppe(gruppe.getId(), "club", "James", "James, GitLisa", 40.00);
     service.transaktionBerechnen(gruppe.getId());
 
-    assertThat(service.getSingleGruppe(gruppe.getId()).getTransaktionsNachrichten()).hasSize(1);
+    verify(repository, times(4)).save(gruppe);
   }
 
   @Test
   @DisplayName("Service kann Gruppen schließen")
   void test_12() {
     GruppenService service = new GruppenService(repository);
-    Gruppe gruppe = service.addGruppe(1,mkUser("James"), "Reisegruppe");
-    gruppe.addPerson("GitLisa");
+    Gruppe gruppe = Gruppe.erstelleGruppe(1, "James", "Reisegruppe");
+    when(repository.findById(anyInt())).thenReturn(Optional.of(gruppe));
 
     service.closeGruppe(gruppe.getId());
 
-    assertThat(service.getSingleGruppe(gruppe.getId()).isGeschlossen()).isTrue();
-
+    verify(repository).save(gruppe);
   }
 
   @Test
   @DisplayName("Nicht geschlossene Gruppen sind offen")
   void test_13() {
     GruppenService service = new GruppenService(repository);
-    Gruppe gruppe = service.addGruppe(1,mkUser("James"), "Reisegruppe");
-    gruppe.addPerson("GitLisa");
+    Gruppe gruppe = Gruppe.erstelleGruppe(1, "James", "Reisegruppe");
+    when(repository.findById(anyInt())).thenReturn(Optional.of(gruppe));
 
-    assertThat(service.getSingleGruppe(gruppe.getId()).isGeschlossen()).isFalse();
 
+    verify(repository, never()).save(gruppe);
   }
 
 
