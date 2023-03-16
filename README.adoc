@@ -70,11 +70,11 @@ Schritt 4:
 
 Tragen Sie nun den POSTGRES_USER und das POSTGRES_PASSWORD, die Sie in der docker-compose.yml vorfinden können, in die Umgebungsvariablen ein.
 
-Nun sollte die Anwendung laufen.
-
 Schritt 5: 
 
 Um die Anwendung zu starten müssen Sie nach diesem Schema ./gradlew bootRun aufrufen: CLIENT_SECRET=SECRET CLIENT_ID=ID ./gradlew bootRun.
+
+Nun sollte die Anwendung laufen.
 
 == Anleitung auf der Seite
 
