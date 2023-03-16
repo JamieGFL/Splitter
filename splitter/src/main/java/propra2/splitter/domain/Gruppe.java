@@ -249,6 +249,26 @@ public class Gruppe {
     return newPerson;
   }
 
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+    Gruppe gruppe = (Gruppe) o;
+    return geschlossen == gruppe.geschlossen && Objects.equals(id, gruppe.id)
+        && Objects.equals(personen, gruppe.personen) && Objects.equals(
+        gruppenAusgaben, gruppe.gruppenAusgaben) && Objects.equals(transaktionen,
+        gruppe.transaktionen) && Objects.equals(gruppenName, gruppe.gruppenName);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(id, personen, gruppenAusgaben, transaktionen, gruppenName, geschlossen);
+  }
+
   public List<Ausgabe> getGruppenAusgaben() {
     return List.copyOf(gruppenAusgaben);
   }
