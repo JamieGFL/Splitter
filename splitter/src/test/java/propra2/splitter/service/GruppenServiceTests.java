@@ -6,11 +6,16 @@ import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
 import propra2.splitter.domain.Gruppe;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 public class GruppenServiceTests {
+
+  GruppenRepository repository = mock(GruppenRepository.class);
 
   private DefaultOAuth2User mkUser(String login) {
     return new DefaultOAuth2User(
@@ -22,18 +27,20 @@ public class GruppenServiceTests {
   @Test
   @DisplayName("Service kann Gruppen hinzufügen")
   void test_01() {
-    GruppenService service = new GruppenService();
+    GruppenService service = new GruppenService(repository);
+    Gruppe gruppe = Gruppe.erstelleGruppe(1, "James", "Reisegruppe");
+    when(repository.save(any(Gruppe.class))).thenReturn(gruppe);
+    Gruppe actualGruppe = service.addGruppe(1, mkUser("James"), "Reisegruppe");
 
-    Gruppe gruppe = service.addGruppe(1, mkUser("James"), "Reisegruppe");
-
-    assertThat(service.getGruppen().details()).contains(
-        new GruppenDetails(gruppe.getId(), gruppe.getGruppenName(), List.of("James"), false));
+    assertThat(actualGruppe).isEqualTo(gruppe);
+    verify(repository, times(1)).save(any(Gruppe.class));
+    verifyNoMoreInteractions(repository);
   }
 
   @Test
   @DisplayName("Service kann mehrere Gruppen speichern")
   void test_02() {
-    GruppenService service = new GruppenService();
+    GruppenService service = new GruppenService(repository);
     Gruppe gruppe1 = service.addGruppe(1,mkUser("James"), "Reisegruppe1");
     Gruppe gruppe2 = service.addGruppe(2,mkUser("GitLisa"), "Reisegruppe2");
     Gruppe gruppe3 = service.addGruppe(3,mkUser("GitMax"), "Reisegruppe3");
@@ -50,7 +57,7 @@ public class GruppenServiceTests {
   @Test
   @DisplayName("Service kann mehr als eine Person zu einer Gruppe hinzufügen")
   void test_03() {
-    GruppenService service = new GruppenService();
+    GruppenService service = new GruppenService(repository);
     Gruppe gruppe = service.addGruppe(1,mkUser("James"), "Reisegruppe");
     gruppe.addPerson("GitMax");
     gruppe.addPerson("GitLisa");
@@ -63,7 +70,7 @@ public class GruppenServiceTests {
   @Test
   @DisplayName("Eine Person kann Bestandteil von mehreren Gruppen sein")
   void test_04() {
-    GruppenService service = new GruppenService();
+    GruppenService service = new GruppenService(repository);
     Gruppe gruppe = service.addGruppe(1,mkUser("James"), "Reisegruppe1");
     Gruppe gruppe2 = service.addGruppe(2,mkUser("GitLisa"), "Reisegruppe2");
     Gruppe gruppe3 = service.addGruppe(3,mkUser("GitMax"), "Reisegruppe3");
@@ -83,7 +90,7 @@ public class GruppenServiceTests {
   @Test
   @DisplayName("Eine Person kann mehrere Gruppen erstellen")
   void test_05() {
-    GruppenService service = new GruppenService();
+    GruppenService service = new GruppenService(repository);
     Gruppe gruppe = service.addGruppe(1,mkUser("James"), "Reisegruppe");
     Gruppe gruppe2 = service.addGruppe(2,mkUser("James"), "Reisegruppe");
     Gruppe gruppe3 = service.addGruppe(3,mkUser("James"), "Reisegruppe");
@@ -98,7 +105,7 @@ public class GruppenServiceTests {
   @Test
   @DisplayName("Es werden einem nur Gruppen angezeigt, in welchen man auch Mitglied ist")
   void test_06() {
-    GruppenService service = new GruppenService();
+    GruppenService service = new GruppenService(repository);
     Gruppe gruppe = service.addGruppe(1,mkUser("James"), "Reisegruppe");
     Gruppe gruppe2 = service.addGruppe(2,mkUser("GitLisa"), "Reisegruppe");
     Gruppe gruppe3 = service.addGruppe(3,mkUser("GitMax"), "Reisegruppe");
@@ -115,7 +122,7 @@ public class GruppenServiceTests {
   @Test
   @DisplayName("Service kann nach beliebigen Gruppen durch die ID filtern")
   void test_07() {
-    GruppenService service = new GruppenService();
+    GruppenService service = new GruppenService(repository);
     Gruppe gruppe = service.addGruppe(1,mkUser("James"), "Reisegruppe");
     Gruppe gruppe2 = service.addGruppe(2,mkUser("GitLisa"), "Reisegruppe");
     Gruppe gruppe3 = service.addGruppe(3,mkUser("GitMax"), "Reisegruppe");
@@ -127,7 +134,7 @@ public class GruppenServiceTests {
   @Test
   @DisplayName("Der Service kann Ausgaben eintragen")
   void test_08() {
-    GruppenService service = new GruppenService();
+    GruppenService service = new GruppenService(repository);
     Gruppe gruppe = service.addGruppe(1,mkUser("James"), "Reisegruppe");
     gruppe.addPerson("GitLisa");
     Double d = 40.00;
@@ -140,7 +147,7 @@ public class GruppenServiceTests {
   @Test
   @DisplayName("Der Service kann mehrere Ausgaben eintragen")
   void test_09() {
-    GruppenService service = new GruppenService();
+    GruppenService service = new GruppenService(repository);
     Gruppe gruppe = service.addGruppe(1,mkUser("James"), "Reisegruppe");
     gruppe.addPerson("GitLisa");
     Double d = 40.00;
@@ -154,7 +161,7 @@ public class GruppenServiceTests {
   @Test
   @DisplayName("Service kann Transaktionen für eine Gruppe hinzufügen")
   void test_10() {
-    GruppenService service = new GruppenService();
+    GruppenService service = new GruppenService(repository);
     Gruppe gruppe = service.addGruppe(1,mkUser("James"), "Reisegruppe");
     gruppe.addPerson("GitLisa");
     Double d = 40.00;
@@ -168,7 +175,7 @@ public class GruppenServiceTests {
   @Test
   @DisplayName("Service speichert nur Transaktionsnachricht für Gesamtheit der Ausgaben")
   void test_11() {
-    GruppenService service = new GruppenService();
+    GruppenService service = new GruppenService(repository);
     Gruppe gruppe = service.addGruppe(1,mkUser("James"), "Reisegruppe");
     gruppe.addPerson("GitLisa");
     Double d = 40.00;
@@ -184,7 +191,7 @@ public class GruppenServiceTests {
   @Test
   @DisplayName("Service kann Gruppen schließen")
   void test_12() {
-    GruppenService service = new GruppenService();
+    GruppenService service = new GruppenService(repository);
     Gruppe gruppe = service.addGruppe(1,mkUser("James"), "Reisegruppe");
     gruppe.addPerson("GitLisa");
 
@@ -197,7 +204,7 @@ public class GruppenServiceTests {
   @Test
   @DisplayName("Nicht geschlossene Gruppen sind offen")
   void test_13() {
-    GruppenService service = new GruppenService();
+    GruppenService service = new GruppenService(repository);
     Gruppe gruppe = service.addGruppe(1,mkUser("James"), "Reisegruppe");
     gruppe.addPerson("GitLisa");
 

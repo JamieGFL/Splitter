@@ -14,4 +14,4 @@ spring:
   datasource:
     password: ${POSTGRES_PASSWORD}
     username: ${POSTGRES_USER}
-    url: ${POSTGRES_URL}
+    url: jdbc:postgresql://localhost:5432/splitter

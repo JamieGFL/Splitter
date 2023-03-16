@@ -11,22 +11,24 @@ import java.util.*;
 @Service
 public class GruppenService {
 
-  private final List<Gruppe> gruppen = new ArrayList<>();
 
-  private void add(Gruppe gruppe) {
-    gruppen.add(gruppe);
+  private final GruppenRepository repository;
+
+  public GruppenService(GruppenRepository repository) {
+    this.repository = repository;
   }
 
   public Gruppe addGruppe(Integer id, OAuth2User principle, String gruppenName) {
     String login = principle.getAttribute("login");
-    Gruppe gruppe = Gruppe.erstelleGruppe(id, login, gruppenName);
-    add(gruppe);
-    return gruppe;
+    Gruppe gruppe = Gruppe.erstelleGruppe(null, login, gruppenName);
+    return repository.save(gruppe);
   }
 
 
   public void closeGruppe(Integer id) {
-    getSingleGruppe(id).closeGroup();
+    Gruppe gruppe = getSingleGruppe(id);
+    gruppe.closeGroup();
+    repository.save(gruppe);
   }
 
   private GruppenDetails toGruppenDetails(Gruppe gruppe) {
@@ -35,35 +37,35 @@ public class GruppenService {
   }
 
   public GruppenOnPage getGruppen() {
+    List<Gruppe> gruppen = repository.findAll();
     List<GruppenDetails> gruppenDetails = gruppen.stream().map(this::toGruppenDetails).toList();
     return new GruppenOnPage(gruppenDetails);
   }
 
   public Gruppe getSingleGruppe(Integer id) {
-    return gruppen.stream().filter(e -> e.getId().equals(id)).reduce((a, b) -> {
-      throw new IllegalArgumentException();
-    }).orElseThrow();
+    return repository.findById(id).orElseThrow();
   }
 
   public void addPersonToGruppe(Integer id, String login) {
     Gruppe gruppe = getSingleGruppe(id);
     if (!gruppe.isAusgabeGetaetigt()) {
       gruppe.addPerson(login);
+      repository.save(gruppe);
     }
   }
 
-  public void addAusgabeToGruppe(Integer id, String aktivitaet, String login, String teilnehmer,
-      Double cost) {
+  public void addAusgabeToGruppe(Integer id, String aktivitaet, String login, String teilnehmer, Double cost) {
     Gruppe gruppe = getSingleGruppe(id);
-
     gruppe.addAusgabeToPerson(aktivitaet, login, Arrays.stream(teilnehmer.split(", ")).toList(),
         Money.of(cost, "EUR"));
+    repository.save(gruppe);
   }
 
   public void transaktionBerechnen(Integer id) {
     Gruppe gruppe = getSingleGruppe(id);
     gruppe.clearTransaktionen();
     gruppe.berechneTransaktionen();
+    repository.save(gruppe);
   }
 
   public GruppenOnPage personToGruppeMatch(OAuth2User principle) {
