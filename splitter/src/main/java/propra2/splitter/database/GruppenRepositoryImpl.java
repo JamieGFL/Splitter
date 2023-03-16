@@ -53,12 +53,12 @@ public class GruppenRepositoryImpl implements GruppenRepository {
 
     List<AusgabeDTO> gruppenAusgaben = gruppe.getGruppenAusgaben()
         .stream()
-        .map(a -> new AusgabeDTO(new AktivitaetDTO(a.getAktivitaetName()), new AuslegerDTO(a.getAuslegerName()), a.getPersonenNamen().stream().map(
+        .map(a -> new AusgabeDTO(null, new AktivitaetDTO(a.getAktivitaetName()), new AuslegerDTO(a.getAuslegerName()), a.getPersonenNamen().stream().map(
             TeilnehmerDTO::new).toList() , a.getGesamtKosten().getNumberStripped().doubleValue())).toList();
 
     List<TransaktionDTO> transaktionen = gruppe.getTransaktionenCopy()
         .stream()
-        .map(t -> new TransaktionDTO(new ZahlerDTO(t.getPerson1Name()) , new ZahlungsempfaengerDTO(t.getPerson2Name()), t.getNettoBetrag().getNumberStripped().doubleValue())).toList();
+        .map(t -> new TransaktionDTO(null, new ZahlerDTO(t.getPerson1Name()) , new ZahlungsempfaengerDTO(t.getPerson2Name()), t.getNettoBetrag().getNumberStripped().doubleValue())).toList();
 
     return new GruppeDTO(gruppe.getId(), gruppe.getGruppenName(), personen, gruppenAusgaben, transaktionen, gruppe.isGeschlossen());
 

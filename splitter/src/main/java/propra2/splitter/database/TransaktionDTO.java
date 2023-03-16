@@ -1,7 +1,7 @@
 package propra2.splitter.database;
 
-import org.javamoney.moneta.Money;
+import org.springframework.data.annotation.Id;
 
-public record TransaktionDTO(ZahlerDTO zahler, ZahlungsempfaengerDTO zahlungsempfaenger, double nettoBetrag) {
+public record TransaktionDTO(@Id Integer id, ZahlerDTO zahler, ZahlungsempfaengerDTO zahlungsempfaenger, double nettoBetrag) {
 
 }

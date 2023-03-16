@@ -2,7 +2,8 @@ package propra2.splitter.database;
 
 import java.util.List;
 import org.javamoney.moneta.Money;
+import org.springframework.data.annotation.Id;
 
-public record AusgabeDTO(AktivitaetDTO aktivitaet, AuslegerDTO ausleger, List<TeilnehmerDTO> personen, double kosten) {
+public record AusgabeDTO(@Id Integer id, AktivitaetDTO aktivitaet, AuslegerDTO ausleger, List<TeilnehmerDTO> personen, double kosten) {
 
 }
