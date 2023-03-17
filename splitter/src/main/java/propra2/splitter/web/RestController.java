@@ -92,11 +92,16 @@ public class RestController {
   }
 
   @GetMapping("/api/gruppen/{id}/ausgleich")
-  public ResponseEntity<List<TransaktionEntity>> getAusgleichszahlungen(@PathVariable Integer id) {
-    if (service.getGruppeInformationEntity(id) == null) {
+  public ResponseEntity<List<TransaktionEntity>> getAusgleichszahlungen(@PathVariable String id) {
+    try{
+      if (service.getGruppeInformationEntity(Integer.parseInt(id)) == null) {
+        return ResponseEntity.notFound().build();
+      }
+      return new ResponseEntity<>(service.getRestTransaktionen(Integer.parseInt(id)), HttpStatus.OK);
+    }
+    catch(NumberFormatException exception){
       return ResponseEntity.notFound().build();
     }
-    return new ResponseEntity<>(service.getRestTransaktionen(id), HttpStatus.OK);
   }
 
 
