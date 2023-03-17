@@ -12,7 +12,7 @@ import propra2.splitter.config.WebSecurityKonfiguration;
 import propra2.splitter.helper.WithMockOAuth2User;
 import propra2.splitter.service.GruppenDetails;
 import propra2.splitter.service.GruppenOnPage;
-import propra2.splitter.service.GruppenService
+import propra2.splitter.service.GruppenService;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
