@@ -28,6 +28,7 @@ public class RestGruppenService {
   }
 
   public List<GruppeEntity> getRestGruppen() {
+    List<Gruppe> gruppen = repository.findAll();
     return gruppen.stream().map(this::toGruppeEntity).toList();
   }
 
