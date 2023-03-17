@@ -67,24 +67,28 @@ public class RestController {
   }
 
   @PostMapping("/api/gruppen/{id}/auslagen")
-  public ResponseEntity<AusgabeEntity> addAusgabe(@PathVariable Integer id,
-      @RequestBody AusgabeEntity ausgabenEntity) {
+  public ResponseEntity<AusgabeEntity> addAusgabe(@PathVariable String id,
+                                                  @RequestBody AusgabeEntity ausgabenEntity) {
+    try{
+      if (service.getGruppeInformationEntity(Integer.parseInt(id)) == null) {
+        return ResponseEntity.notFound().build();
+      }
+      if (service.getGruppeInformationEntity(Integer.parseInt(id)).geschlossen()) {
+        return ResponseEntity.status(409).build();
+      }
+      // If check wenn JSON Dokument fehlerhaft ist
+      if (ausgabenEntity.grund() == null || ausgabenEntity.glaeubiger() == null
+              || ausgabenEntity.schuldner() == null || ausgabenEntity.cent() == null
+              || ausgabenEntity.cent() <= 0 || ausgabenEntity.schuldner().isEmpty()) {
+        return ResponseEntity.badRequest().build();
+      }
 
-    if (service.getGruppeInformationEntity(id) == null) {
+      service.addRestAusgabenToGruppe(Integer.parseInt(id), ausgabenEntity);
+      return new ResponseEntity<>(ausgabenEntity, HttpStatus.CREATED);
+    }
+    catch(NumberFormatException exception){
       return ResponseEntity.notFound().build();
     }
-    if (service.getGruppeInformationEntity(id).geschlossen()) {
-      return ResponseEntity.status(409).build();
-    }
-    // If check wenn JSON Dokument fehlerhaft ist
-    if (ausgabenEntity.grund() == null || ausgabenEntity.glaeubiger() == null
-        || ausgabenEntity.schuldner() == null || ausgabenEntity.cent() == null
-        || ausgabenEntity.cent() <= 0 || ausgabenEntity.schuldner().isEmpty()) {
-      return ResponseEntity.badRequest().build();
-    }
-
-    service.addRestAusgabenToGruppe(id, ausgabenEntity);
-    return new ResponseEntity<>(ausgabenEntity, HttpStatus.CREATED);
   }
 
   @GetMapping("/api/gruppen/{id}/ausgleich")
