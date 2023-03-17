@@ -25,9 +25,7 @@ public class RestGruppenService {
   }
 
   public Gruppe getSingleGruppe(Integer id) {
-    return gruppen.stream().filter(g -> g.getId().equals(id)).reduce((a, b) -> {
-      throw new IllegalArgumentException();
-    }).orElseThrow();
+    return repository.findById(id).orElse(null);
   }
 
   public Integer addRestGruppe(GruppeEntity gruppe) {
