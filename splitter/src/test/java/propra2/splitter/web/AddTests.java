@@ -13,10 +13,6 @@ import propra2.splitter.config.WebSecurityKonfiguration;
 import propra2.splitter.domain.Gruppe;
 import propra2.splitter.helper.WithMockOAuth2User;
 import propra2.splitter.service.GruppenService;
-import propra2.splitter.service.RestGruppenService;
-
-import java.util.UUID;
-
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;

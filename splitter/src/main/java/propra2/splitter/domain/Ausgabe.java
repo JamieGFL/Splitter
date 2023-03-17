@@ -5,7 +5,6 @@ import org.javamoney.moneta.Money;
 import java.util.List;
 import java.util.Objects;
 import propra2.splitter.stereotypes.Entity;
-import propra2.splitter.stereotypes.Wertobjekt;
 
 @Entity
 class Ausgabe {

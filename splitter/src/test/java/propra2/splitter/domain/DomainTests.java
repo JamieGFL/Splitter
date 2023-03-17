@@ -79,8 +79,6 @@ public class DomainTests {
   @Test
   @DisplayName("Ausgaben einer Person werden korrekt ausgerechnet")
   void test_03() {
-    Person personA = new Person("MaxHub");
-    Person personB = new Person("GitLisa");
     Gruppe gruppe = Gruppe.erstelleGruppe(1, "MaxHub", "Reisegruppe");
     gruppe.addPerson("GitLisa");
     gruppe.addAusgabeToPerson("Pizza", "MaxHub", List.of("GitLisa"), Money.of(30, "EUR"));
@@ -95,8 +93,6 @@ public class DomainTests {
   @Test
   @DisplayName("Schulden einer Person werden korrekt ausgerechnet")
   void test_04() {
-    Person personA = new Person("MaxHub");
-    Person personB = new Person("GitLisa");
     Gruppe gruppe = Gruppe.erstelleGruppe(1, "MaxHub", "Reisegruppe");
     gruppe.addPerson("GitLisa");
     gruppe.addAusgabeToPerson("Pizza", "MaxHub", List.of("GitLisa"), Money.of(30, "EUR"));

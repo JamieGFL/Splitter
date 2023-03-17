@@ -6,18 +6,16 @@ import org.junit.jupiter.api.Test;
 import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
 import propra2.splitter.domain.Gruppe;
 
-import static org.assertj.core.api.Assertions.as;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 public class GruppenServiceTests {
 
-  GruppenRepository repository = mock(GruppenRepository.class);
+  final GruppenRepository repository = mock(GruppenRepository.class);
 
   private DefaultOAuth2User mkUser(String login) {
     return new DefaultOAuth2User(
@@ -42,7 +40,7 @@ public class GruppenServiceTests {
 
   @Test
   @DisplayName("Service kann mehr als eine Person zu einer Gruppe hinzufügen")
-  void test_03() throws Exception {
+  void test_03() {
     GruppenService service = new GruppenService(repository);
     Gruppe gruppe = Gruppe.erstelleGruppe(1, "James", "Reisegruppe");
     when(repository.findById(anyInt())).thenReturn(Optional.of(gruppe));

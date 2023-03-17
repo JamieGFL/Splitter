@@ -159,10 +159,6 @@ public class Gruppe {
     transaktionen(nettoBetraege);
   }
 
-  public List<Transaktion> getTransaktionenCopy() {
-    return List.copyOf(transaktionen);
-  }
-
   List<Transaktion> getTransaktionen() {
     return transaktionen;
   }

@@ -1,7 +1,6 @@
 package propra2.splitter.database;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 import org.javamoney.moneta.Money;
 import org.springframework.stereotype.Repository;
