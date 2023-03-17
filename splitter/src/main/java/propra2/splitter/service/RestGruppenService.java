@@ -34,7 +34,7 @@ public class RestGruppenService {
 
   private GruppeEntity toGruppeEntity(Gruppe gruppe) {
     return new GruppeEntity(gruppe.getId(), gruppe.getGruppenName(),
-        gruppe.getPersonen().stream().map(Person::getName).toList());
+            gruppe.getPersonen().stream().map(Person::getName).toList());
   }
 
   public GruppeInformationEntity getGruppeInformationEntity(Integer id) {
