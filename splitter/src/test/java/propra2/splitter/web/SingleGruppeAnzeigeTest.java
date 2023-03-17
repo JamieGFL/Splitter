@@ -16,11 +16,9 @@ import propra2.splitter.helper.WithMockOAuth2User;
 import propra2.splitter.service.GruppenService;
 
 import java.util.List;
-import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.containsString;
-import static org.mockito.ArgumentMatchers.contains;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;

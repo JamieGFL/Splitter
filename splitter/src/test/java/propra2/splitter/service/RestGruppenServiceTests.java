@@ -14,7 +14,7 @@ import static org.mockito.Mockito.*;
 
 public class RestGruppenServiceTests {
 
-  GruppenRepository repository = mock(GruppenRepository.class);
+  final GruppenRepository repository = mock(GruppenRepository.class);
 
   @Test
   @DisplayName("Service kann Gruppen hinzufügen")

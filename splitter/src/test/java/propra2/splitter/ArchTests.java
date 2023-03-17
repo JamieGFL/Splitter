@@ -13,11 +13,9 @@ import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 import propra2.splitter.domain.AusgabenDetails;
 import propra2.splitter.domain.TransaktionDetails;
-import propra2.splitter.service.GruppenDetails;
 import propra2.splitter.stereotypes.AggregateRoot;
 import propra2.splitter.stereotypes.Entity;
 import propra2.splitter.stereotypes.Wertobjekt;
-import rules.OneAggregateRootExists;
 
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.classes;
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.noClasses;

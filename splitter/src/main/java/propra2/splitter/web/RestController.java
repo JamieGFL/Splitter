@@ -10,7 +10,6 @@ import propra2.splitter.service.*;
 
 import javax.validation.Valid;
 import java.util.List;
-import java.util.UUID;
 
 @org.springframework.web.bind.annotation.RestController
 public class RestController {
@@ -76,7 +75,7 @@ public class RestController {
       if (service.getGruppeInformationEntity(Integer.parseInt(id)).geschlossen()) {
         return ResponseEntity.status(409).build();
       }
-      // If check wenn JSON Dokument fehlerhaft ist
+      // If check, wenn JSON Dokument fehlerhaft ist
       if (ausgabenEntity.grund() == null || ausgabenEntity.glaeubiger() == null
               || ausgabenEntity.schuldner() == null || ausgabenEntity.cent() == null
               || ausgabenEntity.cent() <= 0 || ausgabenEntity.schuldner().isEmpty()) {

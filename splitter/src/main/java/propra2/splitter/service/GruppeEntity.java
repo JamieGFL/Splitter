@@ -2,7 +2,6 @@ package propra2.splitter.service;
 
 import java.util.List;
 import java.util.Objects;
-import java.util.UUID;
 
 public class GruppeEntity {
 

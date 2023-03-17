@@ -18,8 +18,8 @@ import propra2.splitter.domain.Gruppe;
 @DataJdbcTest
 public class GruppeRepositoryImplTest {
 
-  SpringDataGruppeRepository repository = mock(SpringDataGruppeRepository.class);
-  GruppenRepositoryImpl gruppenImpl = new GruppenRepositoryImpl(repository);
+  final SpringDataGruppeRepository repository = mock(SpringDataGruppeRepository.class);
+  final GruppenRepositoryImpl gruppenImpl = new GruppenRepositoryImpl(repository);
 
   @Test
   @DisplayName("Eine Gruppe kann gespeichert werden (invoked save methode von SpringDataRepo)")
