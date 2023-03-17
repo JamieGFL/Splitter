@@ -38,17 +38,11 @@ public class RestGruppenService {
   }
 
   public GruppeInformationEntity getGruppeInformationEntity(Integer id) {
-    try {
-      Gruppe gruppe = gruppen.stream().filter(g -> g.getId().equals(id)).reduce((a, b) -> {
-        throw new IllegalArgumentException();
-      }).orElse(null);
-      if (gruppe == null) {
-        return null;
-      }
-      return toGruppeInformationsEntity(gruppe);
-    } catch (Exception exception) {
+    if (getSingleGruppe(id) == null) {
       return null;
     }
+    Gruppe gruppe = getSingleGruppe(id);
+    return toGruppeInformationsEntity(gruppe);
   }
 
   public GruppeInformationEntity toGruppeInformationsEntity(Gruppe gruppe) {
