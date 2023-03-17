@@ -70,7 +70,11 @@ Schritt 4:
 
 Tragen Sie nun den POSTGRES_USER und das POSTGRES_PASSWORD, die Sie in der docker-compose.yml vorfinden können, in die Umgebungsvariablen ein.
 
-Schritt 5: 
+Schritt 5:
+
+Um den Docker container zu starten müssen Sie zuerst in Ihrer GitBash "docker compose up" ausführen.
+
+Schritt 6: 
 
 Um die Anwendung zu starten müssen Sie nach diesem Schema ./gradlew bootRun aufrufen: CLIENT_SECRET=SECRET CLIENT_ID=ID ./gradlew bootRun.
 
