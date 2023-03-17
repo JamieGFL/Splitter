@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import propra2.splitter.service.*;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.UUID;
 
@@ -38,13 +39,17 @@ public class RestController {
   }
 
   @GetMapping("/api/gruppen/{id}")
-  public ResponseEntity<GruppeInformationEntity> gruppenInfo(@PathVariable Integer id) {
+  public ResponseEntity<GruppeInformationEntity> gruppenInfo(@PathVariable @Valid String id) {
+    try{
+      if (service.getGruppeInformationEntity(Integer.parseInt(id)) == null) {
+        return ResponseEntity.notFound().build();
+      }
 
-    if (service.getGruppeInformationEntity(id) == null) {
+      return new ResponseEntity<>(service.getGruppeInformationEntity(Integer.parseInt(id)), HttpStatus.OK);
+    }
+    catch(NumberFormatException exception){
       return ResponseEntity.notFound().build();
     }
-
-    return new ResponseEntity<>(service.getGruppeInformationEntity(id), HttpStatus.OK);
   }
 
   @PostMapping("/api/gruppen/{id}/schliessen")
