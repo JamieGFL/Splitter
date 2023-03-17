@@ -37,7 +37,7 @@ public class GruppenRepositoryImpl implements GruppenRepository {
   }
 
 
-  private Gruppe toGruppe(GruppeDTO dto){
+   Gruppe toGruppe(GruppeDTO dto){
     Gruppe gruppe = new Gruppe(dto.id(), dto.gruppenName(), dto.geschlossen());
     dto.personen().forEach(p -> gruppe.addPersonAlways(p.name()));
     dto.gruppenAusgaben().forEach(a -> gruppe.addAusgabe(a.aktivitaet().name(), a.ausleger().name(), a.personen().stream().map(TeilnehmerDTO::name).toList(), Money.of(a.kosten(),"EUR")));
@@ -45,7 +45,7 @@ public class GruppenRepositoryImpl implements GruppenRepository {
     return gruppe;
   }
 
-  private GruppeDTO fromGruppe(Gruppe gruppe){
+  GruppeDTO fromGruppe(Gruppe gruppe){
     List<PersonDTO> personen = gruppe.getPersonen()
         .stream()
         .map(p -> new PersonDTO(p.getName())).toList();
