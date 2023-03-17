@@ -3,12 +3,10 @@ package propra2.splitter.service;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import propra2.splitter.domain.Gruppe;
-import propra2.splitter.domain.Person;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
@@ -70,7 +68,7 @@ public class RestGruppenServiceTests {
 
     assertThat(service.getSingleGruppe(id).getGruppenName()).isEqualTo("Reisegruppe");
     assertThat(
-            service.getSingleGruppe(id).getPersonen().stream().map(Person::getName).toList()).isEqualTo(
+            service.getSingleGruppe(id).getPersonenNamen()).isEqualTo(
             List.of("MaxHub", "GitLisa"));
     verify(repository, times(1)).save(any(Gruppe.class));
     verify(repository, times(2)).findById(anyInt());

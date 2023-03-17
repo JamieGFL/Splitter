@@ -11,6 +11,9 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
+import propra2.splitter.domain.AusgabenDetails;
+import propra2.splitter.domain.TransaktionDetails;
+import propra2.splitter.service.GruppenDetails;
 import propra2.splitter.stereotypes.AggregateRoot;
 import propra2.splitter.stereotypes.Entity;
 import propra2.splitter.stereotypes.Wertobjekt;
@@ -71,10 +74,24 @@ public class ArchTests {
       .resideInAPackage("..domain..")
       .and()
       .doNotImplement(Comparator.class)
+      .and()
+      .doNotBelongToAnyOf(AusgabenDetails.class, TransaktionDetails.class)
       .should()
       .beAnnotatedWith(AggregateRoot.class)
       .orShould()
       .beAnnotatedWith(Entity.class)
       .orShould()
       .beAnnotatedWith(Wertobjekt.class);
+
+  @ArchTest
+  static final ArchRule onlyAggregateRootsArePublic = classes()
+          .that()
+          .areNotAnnotatedWith(AggregateRoot.class)
+          .and()
+          .doNotBelongToAnyOf(AusgabenDetails.class, TransaktionDetails.class)
+          .and()
+          .resideInAPackage("..domain..")
+          .should()
+          .notBePublic()
+          .because("the implementation of an aggregate shoduld be hidden");
 }

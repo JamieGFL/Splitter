@@ -8,7 +8,7 @@ import propra2.splitter.stereotypes.Entity;
 import propra2.splitter.stereotypes.Wertobjekt;
 
 @Entity
-public class Ausgabe {
+class Ausgabe {
 
   final Aktivitaet aktivitaet;
   final Person ausleger;

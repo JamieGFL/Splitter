@@ -7,7 +7,7 @@ import propra2.splitter.stereotypes.Entity;
 import propra2.splitter.stereotypes.Wertobjekt;
 
 @Entity
-public class Transaktion {
+class Transaktion {
 
   private Person person1;
   private Person person2;

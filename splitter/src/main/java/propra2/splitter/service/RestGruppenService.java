@@ -3,12 +3,8 @@ package propra2.splitter.service;
 import org.javamoney.moneta.Money;
 import org.springframework.stereotype.Service;
 import propra2.splitter.domain.Gruppe;
-import propra2.splitter.domain.Person;
-
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.UUID;
 
 @Service
 public class RestGruppenService {
@@ -34,7 +30,7 @@ public class RestGruppenService {
 
   private GruppeEntity toGruppeEntity(Gruppe gruppe) {
     return new GruppeEntity(gruppe.getId(), gruppe.getGruppenName(),
-            gruppe.getPersonen().stream().map(Person::getName).toList());
+            gruppe.getPersonenNamen());
   }
 
   public GruppeInformationEntity getGruppeInformationEntity(Integer id) {
@@ -47,10 +43,10 @@ public class RestGruppenService {
 
   public GruppeInformationEntity toGruppeInformationsEntity(Gruppe gruppe) {
     return new GruppeInformationEntity(gruppe.getId(), gruppe.getGruppenName(),
-            gruppe.getPersonen().stream().map(Person::getName).toList(),
-            gruppe.isGeschlossen(), gruppe.getGruppenAusgaben().stream().
-            map(ausgabe -> new AusgabeEntity(ausgabe.getAktivitaetName(), ausgabe.getAuslegerName(),
-                    ausgabe.getPersonenNamen(), ausgabe.getGesamtKosten().getNumber().intValue() * 100))
+            gruppe.getPersonenNamen(),
+            gruppe.isGeschlossen(), gruppe.getAusgabenDetails().stream().
+            map(ausgabe -> new AusgabeEntity(ausgabe.aktivitaet(), ausgabe.ausleger(),
+                    ausgabe.personen(), ausgabe.kosten().getNumber().intValue() * 100))
             .toList());
   }
 
@@ -71,10 +67,10 @@ public class RestGruppenService {
   public List<TransaktionEntity> getRestTransaktionen(Integer id) {
     Gruppe gruppe = getSingleGruppe(id);
     gruppe.berechneTransaktionen();
-    return gruppe.getTransaktionenCopy().stream()
+    return gruppe.getTransaktionDetails().stream()
             .map(transaktion -> new TransaktionEntity
-                    (transaktion.getPerson1Name(), transaktion.getPerson2Name(),
-                            transaktion.getNettoBetrag().getNumberStripped().intValue() * 100)).toList();
+                    (transaktion.person1(), transaktion.person2(),
+                            transaktion.betrag().getNumberStripped().intValue() * 100)).toList();
   }
 
   public List<GruppeEntity> personRestMatch(String login) {

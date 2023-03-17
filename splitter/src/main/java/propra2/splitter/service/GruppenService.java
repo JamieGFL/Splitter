@@ -4,7 +4,6 @@ import org.javamoney.moneta.Money;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 import propra2.splitter.domain.Gruppe;
-import propra2.splitter.domain.Person;
 
 import java.util.*;
 
@@ -33,7 +32,7 @@ public class GruppenService {
 
   private GruppenDetails toGruppenDetails(Gruppe gruppe) {
     return new GruppenDetails(gruppe.getId(), gruppe.getGruppenName(),
-        gruppe.getPersonen().stream().map(Person::getName).toList(), gruppe.isGeschlossen());
+        gruppe.getPersonenNamen(), gruppe.isGeschlossen());
   }
 
   public GruppenOnPage getGruppen() {

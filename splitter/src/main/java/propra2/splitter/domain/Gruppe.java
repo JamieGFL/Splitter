@@ -167,6 +167,10 @@ public class Gruppe {
     return transaktionen;
   }
 
+  public List<TransaktionDetails> getTransaktionDetails(){
+    return transaktionen.stream().map(t -> new TransaktionDetails(t.getPerson1Name(), t.getPerson2Name(), t.getNettoBetrag(), t.getTransaktionsNachricht())).toList();
+  }
+
 
   public void clearTransaktionen() {
     transaktionen.clear();
@@ -274,12 +278,20 @@ public class Gruppe {
     return List.copyOf(gruppenAusgaben);
   }
 
+  public List<AusgabenDetails> getAusgabenDetails(){
+    return gruppenAusgaben.stream().map(
+            a -> new AusgabenDetails(a.getAktivitaetName(), a.getAuslegerName(), a.getPersonenNamen(), a.getGesamtKosten())).toList();
+  }
   public Integer getId() {
     return id;
   }
 
   public List<Person> getPersonen() {
     return List.copyOf(personen);
+  }
+
+  public List<String> getPersonenNamen(){
+    return personen.stream().map(Person::getName).toList();
   }
 
   public boolean isAusgabeGetaetigt() {

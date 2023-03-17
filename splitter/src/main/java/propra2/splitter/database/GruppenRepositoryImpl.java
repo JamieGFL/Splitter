@@ -46,18 +46,18 @@ public class GruppenRepositoryImpl implements GruppenRepository {
   }
 
   GruppeDTO fromGruppe(Gruppe gruppe){
-    List<PersonDTO> personen = gruppe.getPersonen()
+    List<PersonDTO> personen = gruppe.getPersonenNamen()
         .stream()
-        .map(p -> new PersonDTO(p.getName())).toList();
+        .map(PersonDTO::new).toList();
 
-    List<AusgabeDTO> gruppenAusgaben = gruppe.getGruppenAusgaben()
+    List<AusgabeDTO> gruppenAusgaben = gruppe.getAusgabenDetails()
         .stream()
-        .map(a -> new AusgabeDTO(null,new AktivitaetDTO(a.getAktivitaetName()), new AuslegerDTO(a.getAuslegerName()), a.getPersonenNamen().stream().map(
-            TeilnehmerDTO::new).toList() , a.getGesamtKosten().getNumberStripped().doubleValue())).toList();
+        .map(a -> new AusgabeDTO(null,new AktivitaetDTO(a.aktivitaet()), new AuslegerDTO(a.ausleger()), a.personen().stream().map(
+            TeilnehmerDTO::new).toList() , a.kosten().getNumberStripped().doubleValue())).toList();
 
-    List<TransaktionDTO> transaktionen = gruppe.getTransaktionenCopy()
+    List<TransaktionDTO> transaktionen = gruppe.getTransaktionDetails()
         .stream()
-        .map(t -> new TransaktionDTO(null,new ZahlerDTO(t.getPerson1Name()) , new ZahlungsempfaengerDTO(t.getPerson2Name()), t.getNettoBetrag().getNumberStripped().doubleValue())).toList();
+        .map(t -> new TransaktionDTO(null, new ZahlerDTO(t.person1()) , new ZahlungsempfaengerDTO(t.person2()), t.betrag().getNumberStripped().doubleValue())).toList();
 
     return new GruppeDTO(gruppe.getId(), gruppe.getGruppenName(), personen, gruppenAusgaben, transaktionen, gruppe.isGeschlossen(), gruppe.isAusgabeGetaetigt());
 

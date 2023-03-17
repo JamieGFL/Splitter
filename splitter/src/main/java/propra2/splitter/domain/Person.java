@@ -6,7 +6,7 @@ import java.util.Objects;
 import propra2.splitter.stereotypes.Wertobjekt;
 
 @Wertobjekt
-public class Person {
+class Person {
 
   final String name;
   Money nettoBetrag = Money.of(0, "EUR");
