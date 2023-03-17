@@ -87,7 +87,9 @@ Nun sollte die Anwendung laufen.
 
 Auf der Homepage können Sie Gruppen hinzufügen und durch den an jede Gruppe angehängten Hyperlink auf die entsprechende Gruppeninformationsseite zugreifen. Hierfür füllen Sie den Input mit dem gewünschten Namen der Gruppe aus und drücken auf den Button „Gruppe hinzufügen“
 
-Wenn wir uns nun in der Gruppeninformation befinden, können Sie durch den obersten Input Personen/Personennamen hinzufügen, die direkt unter dem Input einzeln aufgelistet werden.
+Oben an der Seite gibt es außerdem die Funktion nach Gruppen zu suchen, einmal für offene und einmal für geschlossene Gruppen
+
+Wenn wir uns in der Gruppeninformation befinden, können Sie durch den obersten Input Personen/Personennamen hinzufügen, die direkt unter dem Input einzeln aufgelistet werden.
 
 Weiter unter der Personentabelle finden Sie die Eingaben für eine Ausgabe. Diese sollten Sie, wie durch die Labels gegeben, ausfüllen. 
 
@@ -102,6 +104,8 @@ Wenn Sie nun alle Ausgaben eingetragen haben, können Sie unten auf den Button �
 Wenn Sie nun die Gruppe schließen wollen, können Sie auf den „Gruppe schließen“ Button drücken, wodurch die Gruppe geschlossen wird und nicht mehr veränderlich ist. 
 
 Unter dem zuvor erwähnten Button befindet sich auch ein Hyperlink, um auf die Homepage zurückzukommen, wo nun auch die von Ihnen zuvor geschlossene Gruppe unter den offenen Gruppen gelistet wird. Auf die Informationen der geschlossenen Liste können Sie durch den angehängten Hyperlink zugreifen, jedoch keine Änderungen vornehmen.
+
+
 
 == Verhaltensregeln
 
