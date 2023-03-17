@@ -64,7 +64,8 @@ public class RestGruppenService {
   public void addRestAusgabenToGruppe(Integer id, AusgabeEntity ausgabenEntity) {
     Gruppe gruppe = getSingleGruppe(id);
     gruppe.addAusgabeToPerson(ausgabenEntity.grund(), ausgabenEntity.glaeubiger(),
-        ausgabenEntity.schuldner(), Money.of(ausgabenEntity.cent() / 100, "EUR"));
+            ausgabenEntity.schuldner(), Money.of(ausgabenEntity.cent() / 100, "EUR"));
+    repository.save(gruppe);
   }
 
   public List<TransaktionEntity> getRestTransaktionen(Integer id) {
