@@ -81,10 +81,11 @@ public class Gruppe {
       // Personen, die ausgelegt bekommen haben und später Geld zurückzahlen müssen, wenn sie nicht Ausleger sind
       List<Person> teilnehmer = getPersonenFromNames(personen2);
 
-      // Ausgaben in Person, welche Ausgabe getätigt hat, speichern
-      Ausgabe newAusgabe = new Ausgabe(new Aktivitaet(aktivitaet), ausleger, teilnehmer, kosten);
-      gruppenAusgaben.add(newAusgabe);
-
+      if (!teilnehmer.isEmpty()) {
+        // Ausgaben in Person, welche Ausgabe getätigt hat, speichern
+        Ausgabe newAusgabe = new Ausgabe(new Aktivitaet(aktivitaet), ausleger, teilnehmer, kosten);
+        gruppenAusgaben.add(newAusgabe);
+      }
       // speichert Schulden der Teilnehmer mit Ausnahme vom Ausleger, falls dieser für sich selber bezahlt hat
 
     }
