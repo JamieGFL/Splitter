@@ -99,7 +99,7 @@ public class GruppenAnzeigeTest {
 
     assertThat(html).contains("<form method=\"post\" action=\"/add\">");
     assertThat(html).contains(
-        "<input id=\"gName\" type=\"text\" name=\"gruppenName\" value=\"\" >");
+        "<input class=\"form-control w-25\" id=\"gName\" type=\"text\" name=\"gruppenName\" value=\"\" >");
 
 
   }
