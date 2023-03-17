@@ -57,6 +57,7 @@ public class RestGruppenService {
   public String setRestGruppeGeschlossen(Integer id) {
     Gruppe gruppe = getSingleGruppe(id);
     gruppe.closeGroup();
+    repository.save(gruppe);
     return gruppe.getGruppenName() + " wurde geschlossen";
   }
 
