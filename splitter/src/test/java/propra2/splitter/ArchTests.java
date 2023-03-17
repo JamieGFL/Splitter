@@ -83,13 +83,13 @@ public class ArchTests {
 
   @ArchTest
   static final ArchRule onlyAggregateRootsArePublic = classes()
-          .that()
-          .areNotAnnotatedWith(AggregateRoot.class)
-          .and()
-          .doNotBelongToAnyOf(AusgabenDetails.class, TransaktionDetails.class)
-          .and()
-          .resideInAPackage("..domain..")
-          .should()
-          .notBePublic()
-          .because("the implementation of an aggregate shoduld be hidden");
+      .that()
+      .areNotAnnotatedWith(AggregateRoot.class)
+      .and()
+      .doNotBelongToAnyOf(AusgabenDetails.class, TransaktionDetails.class)
+      .and()
+      .resideInAPackage("..domain..")
+      .should()
+      .notBePublic()
+      .because("the implementation of an aggregate shoduld be hidden");
 }

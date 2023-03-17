@@ -18,11 +18,11 @@ class Transaktion {
     this.person1 = person1;
     this.person2 = person2;
     this.nettoBetrag = nettoBetrag.abs();
-    if(nettoBetrag.isZero()){
+    if (nettoBetrag.isZero()) {
       transaktionsNachricht1 = "Es sind keine Ausgleichszahlungen notwendig.";
-    }
-    else {
-      transaktionsNachricht1 = person1.getName() + " muss " + nettoBetrag + " an " + person2.getName() + " zahlen";
+    } else {
+      transaktionsNachricht1 =
+          person1.getName() + " muss " + nettoBetrag + " an " + person2.getName() + " zahlen";
     }
     this.transaktionsNachricht = transaktionsNachricht1;
   }
@@ -33,12 +33,12 @@ class Transaktion {
 
   @Override
   public boolean equals(Object o) {
-      if (this == o) {
-          return true;
-      }
-      if (!(o instanceof Transaktion)) {
-          return false;
-      }
+    if (this == o) {
+      return true;
+    }
+    if (!(o instanceof Transaktion)) {
+      return false;
+    }
     Transaktion that = (Transaktion) o;
     return Objects.equals(getPerson1(), that.getPerson1()) && Objects.equals(getPerson2(),
         that.getPerson2());
