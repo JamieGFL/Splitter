@@ -53,7 +53,8 @@ public class GruppenService {
     }
   }
 
-  public void addAusgabeToGruppe(Integer id, String aktivitaet, String login, String teilnehmer, Double cost) {
+  public void addAusgabeToGruppe(Integer id, String aktivitaet, String login, String teilnehmer,
+      Double cost) {
     Gruppe gruppe = getSingleGruppe(id);
     gruppe.addAusgabeToPerson(aktivitaet, login, Arrays.stream(teilnehmer.split(", ")).toList(),
         Money.of(cost, "EUR"));

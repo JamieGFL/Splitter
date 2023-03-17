@@ -49,12 +49,12 @@ public class GruppeEntity {
 
   @Override
   public boolean equals(Object o) {
-      if (this == o) {
-          return true;
-      }
-      if (!(o instanceof GruppeEntity)) {
-          return false;
-      }
+    if (this == o) {
+      return true;
+    }
+    if (!(o instanceof GruppeEntity)) {
+      return false;
+    }
     GruppeEntity that = (GruppeEntity) o;
     return Objects.equals(getName(), that.getName()) && Objects.equals(getPersonen(),
         that.getPersonen());

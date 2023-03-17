@@ -43,12 +43,12 @@ class Ausgabe {
 
   @Override
   public boolean equals(Object o) {
-      if (this == o) {
-          return true;
-      }
-      if (!(o instanceof Ausgabe)) {
-          return false;
-      }
+    if (this == o) {
+      return true;
+    }
+    if (!(o instanceof Ausgabe)) {
+      return false;
+    }
     Ausgabe ausgabe = (Ausgabe) o;
     return Objects.equals(getAktivitaet(), ausgabe.getAktivitaet()) && Objects.equals(getAusleger(),
         ausgabe.getAusleger()) && Objects.equals(getPersonen(), ausgabe.getPersonen())

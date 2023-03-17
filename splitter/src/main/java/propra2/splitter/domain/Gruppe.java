@@ -25,7 +25,7 @@ public class Gruppe {
     this.gruppenName = gruppenName;
   }
 
-  public Gruppe(Integer id, String gruppenName, boolean geschlossen, boolean ausgabeGetaetigt){
+  public Gruppe(Integer id, String gruppenName, boolean geschlossen, boolean ausgabeGetaetigt) {
     this.id = id;
     this.gruppenName = gruppenName;
     this.geschlossen = geschlossen;
@@ -58,17 +58,19 @@ public class Gruppe {
     }
   }
 
-  public void addPersonAlways(String newPerson){
+  public void addPersonAlways(String newPerson) {
     Person person = new Person(newPerson);
     personen.add(person);
   }
 
-  public void addAusgabe(String aktivitaet, String name, List<String> personen2, Money kosten){
-    gruppenAusgaben.add(new Ausgabe(new Aktivitaet(aktivitaet) ,getPersonFromName(name), getPersonenFromNames(personen2), kosten));
+  public void addAusgabe(String aktivitaet, String name, List<String> personen2, Money kosten) {
+    gruppenAusgaben.add(new Ausgabe(new Aktivitaet(aktivitaet), getPersonFromName(name),
+        getPersonenFromNames(personen2), kosten));
   }
 
-  public void addTransaktion(String zahler, String zahlungsempfaenger, Money betrag){
-    transaktionen.add(new Transaktion(getPersonFromName(zahler), getPersonFromName(zahlungsempfaenger), betrag));
+  public void addTransaktion(String zahler, String zahlungsempfaenger, Money betrag) {
+    transaktionen.add(
+        new Transaktion(getPersonFromName(zahler), getPersonFromName(zahlungsempfaenger), betrag));
   }
 
 
@@ -124,7 +126,8 @@ public class Gruppe {
       }
     }
     if (ausgleich && transaktionen.isEmpty()) {
-      transaktionen.add(new Transaktion(personMaxSchulden, personMaxGutschrift, Money.of(0, "EUR")));
+      transaktionen.add(
+          new Transaktion(personMaxSchulden, personMaxGutschrift, Money.of(0, "EUR")));
     }
 
     // Rekursionsabbruch bei fertigem Ausgleich
@@ -163,8 +166,10 @@ public class Gruppe {
     return transaktionen;
   }
 
-  public List<TransaktionDetails> getTransaktionDetails(){
-    return transaktionen.stream().map(t -> new TransaktionDetails(t.getPerson1Name(), t.getPerson2Name(), t.getNettoBetrag(), t.getTransaktionsNachricht())).toList();
+  public List<TransaktionDetails> getTransaktionDetails() {
+    return transaktionen.stream().map(
+        t -> new TransaktionDetails(t.getPerson1Name(), t.getPerson2Name(), t.getNettoBetrag(),
+            t.getTransaktionsNachricht())).toList();
   }
 
 
@@ -176,7 +181,7 @@ public class Gruppe {
     return transaktionen.stream().map(Transaktion::getTransaktionsNachricht).toList();
   }
 
-    Money[] berechneAusgaben() {
+  Money[] berechneAusgaben() {
     Money[] sumAusgaben = getEmptyArray();
     Money ausgabeSum = Money.of(0, "EUR");
 
@@ -203,7 +208,7 @@ public class Gruppe {
           if (!gruppenAusgaben.get(j).getAusleger().equals(personen.get(i))) {
             schuldenSum = schuldenSum.add(gruppenAusgaben.get(j).getDurchschnittsKosten());
             sumSchuldenListe[i] = schuldenSum;
-            }
+          }
         }
       }
     }
@@ -274,10 +279,12 @@ public class Gruppe {
     return List.copyOf(gruppenAusgaben);
   }
 
-  public List<AusgabenDetails> getAusgabenDetails(){
+  public List<AusgabenDetails> getAusgabenDetails() {
     return gruppenAusgaben.stream().map(
-            a -> new AusgabenDetails(a.getAktivitaetName(), a.getAuslegerName(), a.getPersonenNamen(), a.getGesamtKosten())).toList();
+        a -> new AusgabenDetails(a.getAktivitaetName(), a.getAuslegerName(), a.getPersonenNamen(),
+            a.getGesamtKosten())).toList();
   }
+
   public Integer getId() {
     return id;
   }
@@ -286,7 +293,7 @@ public class Gruppe {
     return List.copyOf(personen);
   }
 
-  public List<String> getPersonenNamen(){
+  public List<String> getPersonenNamen() {
     return personen.stream().map(Person::getName).toList();
   }
 

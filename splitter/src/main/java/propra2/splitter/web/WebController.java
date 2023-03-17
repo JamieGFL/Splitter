@@ -42,7 +42,7 @@ public class WebController {
       return "index";
     }
 
-    Gruppe gruppe = service.addGruppe(1,token.getPrincipal(), gruppenForm.gruppenName());
+    Gruppe gruppe = service.addGruppe(1, token.getPrincipal(), gruppenForm.gruppenName());
 
     Integer id = gruppe.getId();
 
@@ -162,7 +162,8 @@ public class WebController {
   }
 
   @PostMapping("/gruppe/close")
-  public String schließGruppe(@RequestParam(name = "id", value = "id", required = false) Integer id) {
+  public String schließGruppe(
+      @RequestParam(name = "id", value = "id", required = false) Integer id) {
     service.closeGruppe(id);
     return "redirect:/gruppe?id=" + id;
   }

@@ -59,8 +59,8 @@ public class GruppenServiceTests {
     when(repository.findById(anyInt())).thenReturn(Optional.of(gruppe1)).thenReturn(
         Optional.of(gruppe2));
 
-    Gruppe actualGruppe1 = service.addGruppe(1,mkUser("MaxHub"), "Reisegruppe1");
-    Gruppe actualGruppe2 = service.addGruppe(2,mkUser("GitLisa"), "Reisegruppe2");
+    Gruppe actualGruppe1 = service.addGruppe(1, mkUser("MaxHub"), "Reisegruppe1");
+    Gruppe actualGruppe2 = service.addGruppe(2, mkUser("GitLisa"), "Reisegruppe2");
     service.addPersonToGruppe(1, "MaxHub");
     service.addPersonToGruppe(2, "James");
 
@@ -76,8 +76,8 @@ public class GruppenServiceTests {
     Gruppe gruppe2 = Gruppe.erstelleGruppe(2, "James", "Reisegruppe2");
     when(repository.save(any(Gruppe.class))).thenReturn(gruppe1).thenReturn(gruppe2);
 
-    service.addGruppe(1,mkUser("James"), "Reisegruppe");
-    service.addGruppe(2,mkUser("James"), "Reisegruppe");
+    service.addGruppe(1, mkUser("James"), "Reisegruppe");
+    service.addGruppe(2, mkUser("James"), "Reisegruppe");
 
     verify(repository, times(2)).save(any(Gruppe.class));
   }
@@ -87,13 +87,15 @@ public class GruppenServiceTests {
   void test_06() {
     GruppenService service = new GruppenService(repository);
     when(repository.findAll())
-        .thenReturn(List.of(Gruppe.erstelleGruppe(1, "James", "Reisegruppe"), Gruppe.erstelleGruppe(2, "GitLisa", "Reisegruppe2")));
+        .thenReturn(List.of(Gruppe.erstelleGruppe(1, "James", "Reisegruppe"),
+            Gruppe.erstelleGruppe(2, "GitLisa", "Reisegruppe2")));
 
-    Gruppe gruppe = service.addGruppe(1,mkUser("James"), "Reisegruppe");
-    Gruppe gruppe2 = service.addGruppe(2,mkUser("GitLisa"), "Reisegruppe2");
+    Gruppe gruppe = service.addGruppe(1, mkUser("James"), "Reisegruppe");
+    Gruppe gruppe2 = service.addGruppe(2, mkUser("GitLisa"), "Reisegruppe2");
     GruppenOnPage actualGruppen = service.personToGruppeMatch(mkUser("James"));
 
-    assertThat(actualGruppen.details()).containsExactly(new GruppenDetails(1, "Reisegruppe", List.of("James"), false));
+    assertThat(actualGruppen.details()).containsExactly(
+        new GruppenDetails(1, "Reisegruppe", List.of("James"), false));
     verify(repository, times(1)).findAll();
   }
 
@@ -101,7 +103,7 @@ public class GruppenServiceTests {
   @DisplayName("Service kann nach beliebigen Gruppen durch die ID filtern")
   void test_07() {
     GruppenService service = new GruppenService(repository);
-    Gruppe gruppe = Gruppe.erstelleGruppe(1, "James" , "Reisegruppe");
+    Gruppe gruppe = Gruppe.erstelleGruppe(1, "James", "Reisegruppe");
     when(repository.findById(anyInt())).thenReturn(
         Optional.of(Gruppe.erstelleGruppe(1, "James", "Reisegruppe")));
 
@@ -186,7 +188,6 @@ public class GruppenServiceTests {
     GruppenService service = new GruppenService(repository);
     Gruppe gruppe = Gruppe.erstelleGruppe(1, "James", "Reisegruppe");
     when(repository.findById(anyInt())).thenReturn(Optional.of(gruppe));
-
 
     verify(repository, never()).save(gruppe);
   }

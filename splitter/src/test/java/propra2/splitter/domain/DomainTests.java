@@ -58,7 +58,7 @@ public class DomainTests {
   @Test
   @DisplayName("Person kann Gruppe hinzugefügt werden")
   void test_01() {
-    Gruppe gruppe = Gruppe.erstelleGruppe(1,"MaxHub", "Reisegruppe");
+    Gruppe gruppe = Gruppe.erstelleGruppe(1, "MaxHub", "Reisegruppe");
 
     gruppe.addPerson("GitLisa");
 
@@ -184,6 +184,7 @@ public class DomainTests {
     assertThat(gruppe.getGruppenAusgaben().get(0)).isEqualTo(
         new Ausgabe(new Aktivitaet("Pizza"), personA, List.of(personB), Money.of(20, "EUR")));
   }
+
   @Test
   @DisplayName("Person mit maximalem Netto-Betrag wird gefunden")
   void test_12() {
