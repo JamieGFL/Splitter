@@ -123,7 +123,7 @@ public class Gruppe {
       }
     }
     if (ausgleich && transaktionen.isEmpty()) {
-      transaktionen.add(new Transaktion());
+      transaktionen.add(new Transaktion(personMaxSchulden, personMaxGutschrift, Money.of(0, "EUR")));
     }
 
     // Rekursionsabbruch bei fertigem Ausgleich
