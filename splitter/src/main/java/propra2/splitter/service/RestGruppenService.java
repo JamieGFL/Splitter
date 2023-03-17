@@ -72,9 +72,9 @@ public class RestGruppenService {
     Gruppe gruppe = getSingleGruppe(id);
     gruppe.berechneTransaktionen();
     return gruppe.getTransaktionenCopy().stream()
-        .map(transaktion -> new TransaktionEntity
-            (transaktion.getPerson1Name(), transaktion.getPerson2Name(),
-                transaktion.getNettoBetrag().getNumberStripped().intValue() * 100)).toList();
+            .map(transaktion -> new TransaktionEntity
+                    (transaktion.getPerson1Name(), transaktion.getPerson2Name(),
+                            transaktion.getNettoBetrag().getNumberStripped().intValue() * 100)).toList();
   }
 
   public List<GruppeEntity> personRestMatch(String login) {
