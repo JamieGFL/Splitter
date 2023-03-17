@@ -38,7 +38,7 @@ public class GruppenRepositoryImpl implements GruppenRepository {
 
 
    Gruppe toGruppe(GruppeDTO dto){
-    Gruppe gruppe = new Gruppe(dto.id(), dto.gruppenName(), dto.geschlossen());
+    Gruppe gruppe = new Gruppe(dto.id(), dto.gruppenName(), dto.geschlossen(), dto.ausgabeGetaetigt());
     dto.personen().forEach(p -> gruppe.addPersonAlways(p.name()));
     dto.gruppenAusgaben().forEach(a -> gruppe.addAusgabe(a.aktivitaet().name(), a.ausleger().name(), a.personen().stream().map(TeilnehmerDTO::name).toList(), Money.of(a.kosten(),"EUR")));
     dto.transaktionen().forEach(t -> gruppe.addTransaktion(t.zahler().name(), t.zahlungsempfaenger().name(), Money.of( t.nettoBetrag(), "EUR")));
@@ -59,7 +59,7 @@ public class GruppenRepositoryImpl implements GruppenRepository {
         .stream()
         .map(t -> new TransaktionDTO(null,new ZahlerDTO(t.getPerson1Name()) , new ZahlungsempfaengerDTO(t.getPerson2Name()), t.getNettoBetrag().getNumberStripped().doubleValue())).toList();
 
-    return new GruppeDTO(gruppe.getId(), gruppe.getGruppenName(), personen, gruppenAusgaben, transaktionen, gruppe.isGeschlossen());
+    return new GruppeDTO(gruppe.getId(), gruppe.getGruppenName(), personen, gruppenAusgaben, transaktionen, gruppe.isGeschlossen(), gruppe.isAusgabeGetaetigt());
 
   }
 
