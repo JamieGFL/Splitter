@@ -48,19 +48,19 @@ Klonen Sie sich die Anwendung.
 
 Schritt 2:
 
-Bevor Sie das Projekt verwenden können müssen Sie auf der GitHub Website Ihren OAuth Client-secret und die Client-ID generieren lassen. 
+Bevor Sie das Projekt verwenden können, müssen Sie auf der GitHub Website Ihren OAuth Client-Secret und die Client-ID generieren lassen. 
 
 Hierfür füllen Sie bitte das gegebene Formular so aus:
 
 * Ihren gewünschten Namen für das Projekt als Application name
 
-* http://localhost:9000 als Homepage URL da unsere Anwendung auf dem Port 9000 läuft
+* http://localhost:9000 als Homepage URL, da unsere Anwendung auf dem Port 9000 läuft
 
 * Wenn gewünscht eine Beschreibung
 
-* http://localhost:9000 als callback URL
+* http://localhost:9000 als Callback URL
 
-Nun sollten Sie die Client-ID und das Client-Secret unten erhalten. Diese sollten Sie sich kopieren da Sie im darauffolgenden Schritt verwendet werden.
+Nun sollten Sie die Client-ID und das Client-Secret unten erhalten. Diese sollten Sie sich kopieren, da Sie im darauffolgenden Schritt verwendet werden.
 
 Schritt 3:
 
@@ -68,11 +68,11 @@ Tragen Sie nun die Client-Secret und die Client-ID in den Umgebungsvariablen der
 
 Schritt 4:
 
-Tragen Sie nun den POSTGRES_USER und das POSTGRES_PASSWORD, die Sie in der docker-compose.yml vorfinden können, in die Umgebungsvariablen ein.
+Tragen Sie nun den POSTGRES_USER und das POSTGRES_PASSWORD, welche Sie in der docker-compose.yml vorfinden können, in die Umgebungsvariablen ein.
 
 Schritt 5:
 
-Um den Docker container zu starten müssen Sie zuerst in Ihrer GitBash "docker compose up" ausführen.
+Um den Docker container zu starten, müssen Sie zuerst in Ihrer GitBash "docker compose up" ausführen.
 
 Schritt 6: 
 
@@ -83,13 +83,13 @@ Bei SECRET, ID, user und password müssen die selber in den Environment Variable
 
 Nun sollte die Anwendung laufen.
 
-== Anleitung auf der Seite
+== Anleitung zur Seite
 
-Auf der Homepage können Sie Gruppen hinzufügen und durch den an jede Gruppe angehängten Hyperlink auf jede Gruppeninformationsseite zugreifen. Hierfür füllen Sie den Input mit dem gewünschten Namen der Gruppe aus und drücken auf den Button „Gruppe hinzufügen“
+Auf der Homepage können Sie Gruppen hinzufügen und durch den an jede Gruppe angehängten Hyperlink auf die entsprechende Gruppeninformationsseite zugreifen. Hierfür füllen Sie den Input mit dem gewünschten Namen der Gruppe aus und drücken auf den Button „Gruppe hinzufügen“
 
 Wenn wir uns nun in der Gruppeninformation befinden, können Sie durch den obersten Input Personen/Personennamen hinzufügen, die direkt unter dem Input einzeln aufgelistet werden.
 
-Weiter unter der Personen Tabelle finden Sie die Eingaben für eine Ausgabe. Diese sollten Sie, wie durch die Labels gegeben, ausfüllen. 
+Weiter unter der Personentabelle finden Sie die Eingaben für eine Ausgabe. Diese sollten Sie, wie durch die Labels gegeben, ausfüllen. 
 
 Achten Sie hier jedoch darauf die Teilnehmer immer mit einem Komma und einer Lücke zu trennen:
 
@@ -101,7 +101,7 @@ Wenn Sie nun alle Ausgaben eingetragen haben, können Sie unten auf den Button �
 
 Wenn Sie nun die Gruppe schließen wollen, können Sie auf den „Gruppe schließen“ Button drücken, wodurch die Gruppe geschlossen wird und nicht mehr veränderlich ist. 
 
-Unter dem zuvor erwähnten Button befindet sich auch ein Hyperlink, um auf die Homepage zurückzukommen, wo nun auch die von Ihnen zuvor geschlossene Gruppe, unter den offenen Gruppen gelistet wird. Auf die Informationen der geschlossenen Liste können Sie durch den angehängten Hyperlink zugreifen, jedoch keine Änderungen vornehmen.
+Unter dem zuvor erwähnten Button befindet sich auch ein Hyperlink, um auf die Homepage zurückzukommen, wo nun auch die von Ihnen zuvor geschlossene Gruppe unter den offenen Gruppen gelistet wird. Auf die Informationen der geschlossenen Liste können Sie durch den angehängten Hyperlink zugreifen, jedoch keine Änderungen vornehmen.
 
 == Verhaltensregeln
 
