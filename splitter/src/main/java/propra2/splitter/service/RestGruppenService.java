@@ -13,7 +13,11 @@ import java.util.UUID;
 @Service
 public class RestGruppenService {
 
-  private final List<Gruppe> gruppen = new ArrayList<>();
+  private final GruppenRepository repository;
+
+  public RestGruppenService(GruppenRepository repository) {
+    this.repository = repository;
+  }
 
   private Integer add(Gruppe gruppe) {
     gruppen.add(gruppe);
