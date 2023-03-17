@@ -1,3 +1,15 @@
+drop table if exists aktivitaet_dto;
+drop table if exists person_dto;
+drop table if exists zahlungsempfaenger_dto;
+drop table if exists zahler_dto;
+drop table if exists ausleger_dto;
+drop table if exists teilnehmer_dto;
+drop table if exists ausgabe_dto;
+drop table if exists transaktion_dto;
+drop table if exists gruppe_dto;
+
+
+
 create table gruppe_dto
 (
     id serial primary key,

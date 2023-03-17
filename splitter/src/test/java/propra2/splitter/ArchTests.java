@@ -9,8 +9,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Controller;
+import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 import propra2.splitter.stereotypes.AggregateRoot;
+import propra2.splitter.stereotypes.Entity;
 import propra2.splitter.stereotypes.Wertobjekt;
 import rules.OneAggregateRootExists;
 
@@ -50,13 +52,21 @@ public class ArchTests {
       .resideInAPackage("..web..");
 
   @ArchTest
-  static final ArchRule rule5 = slices().matching("..domain..").should(ONE_AGGREGATE_ROOT_EXISTS);
+  static final ArchRule rule5 = classes().that().areAnnotatedWith(Repository.class).should()
+      .resideInAPackage("..database..");
 
   @ArchTest
-  static final ArchRule rule6 = noClasses().should().beAnnotatedWith(Deprecated.class);
+  static final ArchRule rule6 = noClasses().that().areAnnotatedWith(Controller.class)
+      .should().dependOnClassesThat().resideInAPackage("..database..");
 
   @ArchTest
-  static final ArchRule rule7 = classes()
+  static final ArchRule rule7 = slices().matching("..domain..").should(ONE_AGGREGATE_ROOT_EXISTS);
+
+  @ArchTest
+  static final ArchRule rule8 = noClasses().should().beAnnotatedWith(Deprecated.class);
+
+  @ArchTest
+  static final ArchRule rule9 = classes()
       .that()
       .resideInAPackage("..domain..")
       .and()
@@ -64,7 +74,7 @@ public class ArchTests {
       .should()
       .beAnnotatedWith(AggregateRoot.class)
       .orShould()
+      .beAnnotatedWith(Entity.class)
+      .orShould()
       .beAnnotatedWith(Wertobjekt.class);
-
-
 }

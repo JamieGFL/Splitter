@@ -3,9 +3,10 @@ package propra2.splitter.domain;
 import org.javamoney.moneta.Money;
 
 import java.util.Objects;
+import propra2.splitter.stereotypes.Entity;
 import propra2.splitter.stereotypes.Wertobjekt;
 
-@Wertobjekt
+@Entity
 public class Transaktion {
 
   private Person person1;
@@ -14,11 +15,17 @@ public class Transaktion {
   private final String transaktionsNachricht;
 
   Transaktion(Person person1, Person person2, Money nettoBetrag) {
+    String transaktionsNachricht1;
     this.person1 = person1;
     this.person2 = person2;
     this.nettoBetrag = nettoBetrag.abs();
-    this.transaktionsNachricht =
-        person1.getName() + " muss " + nettoBetrag + " an " + person2.getName() + " zahlen";
+    if(nettoBetrag.isZero()){
+      transaktionsNachricht1 = "Es sind keine Ausgleichszahlungen notwendig.";
+    }
+    else {
+      transaktionsNachricht1 = person1.getName() + " muss " + nettoBetrag + " an " + person2.getName() + " zahlen";
+    }
+    this.transaktionsNachricht = transaktionsNachricht1;
   }
 
   Transaktion() {
