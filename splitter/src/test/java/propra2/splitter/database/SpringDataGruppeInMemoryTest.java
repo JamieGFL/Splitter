@@ -27,7 +27,8 @@ public class SpringDataGruppeInMemoryTest {
         List.of(new PersonDTO("MaxHub"), new PersonDTO("GitLisa")),
         List.of(new AusgabeDTO(null, new AktivitaetDTO("Pizza"), new AuslegerDTO("MaxHub"), List.of(new TeilnehmerDTO("GitLisa")), 20)),
         List.of(new TransaktionDTO(null, new ZahlerDTO("GitLisa"), new ZahlungsempfaengerDTO("MaxHub"), 20)),
-        false);
+        false,
+        true);
 
     repository.save(dto);
     Optional<GruppeDTO> found = repository.findById(1);
@@ -40,6 +41,7 @@ public class SpringDataGruppeInMemoryTest {
     assertThat(found.get().gruppenAusgaben()).containsExactly(new AusgabeDTO(1, new AktivitaetDTO("Pizza"), new AuslegerDTO("MaxHub"), List.of(new TeilnehmerDTO("GitLisa")), 20));
     assertThat(found.get().transaktionen()).containsExactly(new TransaktionDTO(1, new ZahlerDTO("GitLisa"), new ZahlungsempfaengerDTO("MaxHub"), 20));
     assertThat(found.get().geschlossen()).isFalse();
+    assertThat(found.get().ausgabeGetaetigt()).isTrue();
 
   }
 
@@ -52,6 +54,7 @@ public class SpringDataGruppeInMemoryTest {
         List.of(new PersonDTO("MaxHub"), new PersonDTO("GitLisa")),
         List.of(new AusgabeDTO(null, new AktivitaetDTO("Pizza"), new AuslegerDTO("MaxHub"), List.of(new TeilnehmerDTO("GitLisa")), 20)),
         List.of(new TransaktionDTO(null, new ZahlerDTO("GitLisa"), new ZahlungsempfaengerDTO("MaxHub"), 20)),
+        true,
         true);
 
     repository.save(dto);
@@ -65,6 +68,7 @@ public class SpringDataGruppeInMemoryTest {
     assertThat(found.get().gruppenAusgaben()).containsExactly(new AusgabeDTO(1, new AktivitaetDTO("Pizza"), new AuslegerDTO("MaxHub"), List.of(new TeilnehmerDTO("GitLisa")), 20));
     assertThat(found.get().transaktionen()).containsExactly(new TransaktionDTO(1, new ZahlerDTO("GitLisa"), new ZahlungsempfaengerDTO("MaxHub"), 20));
     assertThat(found.get().geschlossen()).isTrue();
+    assertThat(found.get().ausgabeGetaetigt()).isTrue();
 
   }
 

@@ -1,5 +1,5 @@
-insert into gruppe_dto(gruppen_name, geschlossen)
-values ('Reisegruppe', false);
+insert into gruppe_dto(gruppen_name, geschlossen, ausgabe_getaetigt)
+values ('Reisegruppe', false, true);
 
 insert into ausgabe_dto(gruppe_dto, gruppe_dto_key, kosten)
 values (1,0, 40);
@@ -37,8 +37,8 @@ values (1, 'Doener');
 
 
 
-insert into gruppe_dto(id, gruppen_name, geschlossen)
-values (2, 'DieGang', false);
+insert into gruppe_dto(id, gruppen_name, geschlossen, ausgabe_getaetigt)
+values (2, 'DieGang', false, false);
 
 insert into ausgabe_dto(gruppe_dto, gruppe_dto_key, kosten)
 values (2,1, 100);

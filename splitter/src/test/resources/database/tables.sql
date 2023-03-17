@@ -14,7 +14,8 @@ create table gruppe_dto
 (
     id serial primary key,
     gruppen_name varchar(20),
-    geschlossen boolean
+    geschlossen boolean,
+    ausgabe_getaetigt boolean
 );
 
 create table ausgabe_dto

@@ -28,7 +28,7 @@ public class GruppeRepositoryImplTest {
     when(repository.save(any(GruppeDTO.class)))
         .thenReturn(
             new GruppeDTO(1, "Reisegruppe", List.of(new PersonDTO("MaxHub")), List.of(), List.of(),
-                false));
+                false, false));
 
     Gruppe actual = gruppenImpl.save(gruppe);
 
@@ -43,7 +43,7 @@ public class GruppeRepositoryImplTest {
     when(repository.findById(anyInt()))
         .thenReturn(Optional.of(
             new GruppeDTO(1, "Reisegruppe", List.of(new PersonDTO("MaxHub")), List.of(), List.of(),
-                false)));
+                false, false)));
 
     gruppenImpl.findById(1).orElseThrow();
 
@@ -66,7 +66,7 @@ public class GruppeRepositoryImplTest {
     when(repository.findAll())
         .thenReturn(List.of(
             new GruppeDTO(1, "Reisegruppe", List.of(new PersonDTO("MaxHub")), List.of(), List.of(),
-                false)));
+                false, false)));
 
     List<Gruppe> all = gruppenImpl.findAll();
 
@@ -80,11 +80,11 @@ public class GruppeRepositoryImplTest {
     when(repository.findAll())
         .thenReturn(List.of(
             new GruppeDTO(1, "Reisegruppe1", List.of(new PersonDTO("MaxHub")), List.of(), List.of(),
-                false),
+                false, false),
             new GruppeDTO(2, "Reisegruppe2", List.of(new PersonDTO("GitLisa")), List.of(),
-                List.of(), false),
+                List.of(), false, false),
             new GruppeDTO(1, "Reisegruppe3", List.of(new PersonDTO("ErixHub")), List.of(),
-                List.of(), false)));
+                List.of(), false, false)));
 
     List<Gruppe> all = gruppenImpl.findAll();
 
@@ -101,14 +101,14 @@ public class GruppeRepositoryImplTest {
 
     assertThat(dto).isEqualTo(
         new GruppeDTO(1, "Reisegruppe", List.of(new PersonDTO("MaxHub")), List.of(), List.of(),
-            false));
+            false, false));
   }
 
   @Test
   @DisplayName("Von DTO zu Gruppe")
   void test_07() {
     GruppeDTO dto = new GruppeDTO(1, "Reisegruppe", List.of(new PersonDTO("MaxHub")), List.of(),
-        List.of(), false);
+        List.of(), false, false);
 
     Gruppe gruppe = gruppenImpl.toGruppe(dto);
 
