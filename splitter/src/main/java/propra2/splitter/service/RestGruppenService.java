@@ -24,7 +24,7 @@ public class RestGruppenService {
   }
 
   public Integer addRestGruppe(GruppeEntity gruppe) {
-    return add(Gruppe.erstelleRestGruppe(gruppe.getGruppe(), gruppe.getName(), gruppe.getPersonen()));
+    return repository.save(Gruppe.erstelleRestGruppe(null, gruppe.getName(), gruppe.getPersonen())).getId();
   }
 
   public List<GruppeEntity> getRestGruppen() {
