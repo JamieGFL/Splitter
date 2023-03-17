@@ -47,11 +47,11 @@ public class RestGruppenService {
 
   public GruppeInformationEntity toGruppeInformationsEntity(Gruppe gruppe) {
     return new GruppeInformationEntity(gruppe.getId(), gruppe.getGruppenName(),
-        gruppe.getPersonen().stream().map(Person::getName).toList(),
-        gruppe.isGeschlossen(), gruppe.getGruppenAusgaben().stream().
-        map(ausgabe -> new AusgabeEntity(ausgabe.getAktivitaetName(), ausgabe.getAuslegerName(),
-            ausgabe.getPersonenNamen(), ausgabe.getGesamtKosten().getNumber().intValue() * 100))
-        .toList());
+            gruppe.getPersonen().stream().map(Person::getName).toList(),
+            gruppe.isGeschlossen(), gruppe.getGruppenAusgaben().stream().
+            map(ausgabe -> new AusgabeEntity(ausgabe.getAktivitaetName(), ausgabe.getAuslegerName(),
+                    ausgabe.getPersonenNamen(), ausgabe.getGesamtKosten().getNumber().intValue() * 100))
+            .toList());
   }
 
   public String setRestGruppeGeschlossen(Integer id) {
