@@ -19,11 +19,6 @@ public class RestGruppenService {
     this.repository = repository;
   }
 
-  private Integer add(Gruppe gruppe) {
-    gruppen.add(gruppe);
-    return gruppe.getId();
-  }
-
   public Gruppe getSingleGruppe(Integer id) {
     return repository.findById(id).orElse(null);
   }
