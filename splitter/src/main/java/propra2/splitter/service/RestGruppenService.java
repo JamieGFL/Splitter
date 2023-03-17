@@ -81,8 +81,8 @@ public class RestGruppenService {
     List<GruppeEntity> currentDetails = getRestGruppen();
 
     return currentDetails.stream()
-        .filter(groupDetails -> groupDetails.getPersonen().stream()
-            .anyMatch(Person -> Objects.equals(Person, login))).toList();
+            .filter(groupDetails -> groupDetails.getPersonen().stream()
+                    .anyMatch(Person -> Objects.equals(Person, login))).toList();
   }
 
 
