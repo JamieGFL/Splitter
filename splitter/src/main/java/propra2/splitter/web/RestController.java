@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import propra2.splitter.service.*;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.UUID;
 
@@ -38,52 +39,69 @@ public class RestController {
   }
 
   @GetMapping("/api/gruppen/{id}")
-  public ResponseEntity<GruppeInformationEntity> gruppenInfo(@PathVariable Integer id) {
+  public ResponseEntity<GruppeInformationEntity> gruppenInfo(@PathVariable @Valid String id) {
+    try{
+      if (service.getGruppeInformationEntity(Integer.parseInt(id)) == null) {
+        return ResponseEntity.notFound().build();
+      }
 
-    if (service.getGruppeInformationEntity(id) == null) {
+      return new ResponseEntity<>(service.getGruppeInformationEntity(Integer.parseInt(id)), HttpStatus.OK);
+    }
+    catch(NumberFormatException exception){
       return ResponseEntity.notFound().build();
     }
-
-    return new ResponseEntity<>(service.getGruppeInformationEntity(id), HttpStatus.OK);
   }
 
   @PostMapping("/api/gruppen/{id}/schliessen")
-  public ResponseEntity<String> schliesseGruppe(@PathVariable Integer id) {
+  public ResponseEntity<String> schliesseGruppe(@PathVariable String id) {
+    try{
+      if (service.getGruppeInformationEntity(Integer.parseInt(id)) == null) {
+        return ResponseEntity.notFound().build();
+      }
 
-    if (service.getGruppeInformationEntity(id) == null) {
+      return new ResponseEntity<>(service.setRestGruppeGeschlossen(Integer.parseInt(id)), HttpStatus.OK);
+    }
+    catch(NumberFormatException exception){
       return ResponseEntity.notFound().build();
     }
-
-    return new ResponseEntity<>(service.setRestGruppeGeschlossen(id), HttpStatus.OK);
   }
 
   @PostMapping("/api/gruppen/{id}/auslagen")
-  public ResponseEntity<AusgabeEntity> addAusgabe(@PathVariable Integer id,
-      @RequestBody AusgabeEntity ausgabenEntity) {
+  public ResponseEntity<AusgabeEntity> addAusgabe(@PathVariable String id,
+                                                  @RequestBody AusgabeEntity ausgabenEntity) {
+    try{
+      if (service.getGruppeInformationEntity(Integer.parseInt(id)) == null) {
+        return ResponseEntity.notFound().build();
+      }
+      if (service.getGruppeInformationEntity(Integer.parseInt(id)).geschlossen()) {
+        return ResponseEntity.status(409).build();
+      }
+      // If check wenn JSON Dokument fehlerhaft ist
+      if (ausgabenEntity.grund() == null || ausgabenEntity.glaeubiger() == null
+              || ausgabenEntity.schuldner() == null || ausgabenEntity.cent() == null
+              || ausgabenEntity.cent() <= 0 || ausgabenEntity.schuldner().isEmpty()) {
+        return ResponseEntity.badRequest().build();
+      }
 
-    if (service.getGruppeInformationEntity(id) == null) {
+      service.addRestAusgabenToGruppe(Integer.parseInt(id), ausgabenEntity);
+      return new ResponseEntity<>(ausgabenEntity, HttpStatus.CREATED);
+    }
+    catch(NumberFormatException exception){
       return ResponseEntity.notFound().build();
     }
-    if (service.getGruppeInformationEntity(id).geschlossen()) {
-      return ResponseEntity.status(409).build();
-    }
-    // If check wenn JSON Dokument fehlerhaft ist
-    if (ausgabenEntity.grund() == null || ausgabenEntity.glaeubiger() == null
-        || ausgabenEntity.schuldner() == null || ausgabenEntity.cent() == null
-        || ausgabenEntity.cent() <= 0 || ausgabenEntity.schuldner().isEmpty()) {
-      return ResponseEntity.badRequest().build();
-    }
-
-    service.addRestAusgabenToGruppe(id, ausgabenEntity);
-    return new ResponseEntity<>(ausgabenEntity, HttpStatus.CREATED);
   }
 
   @GetMapping("/api/gruppen/{id}/ausgleich")
-  public ResponseEntity<List<TransaktionEntity>> getAusgleichszahlungen(@PathVariable Integer id) {
-    if (service.getGruppeInformationEntity(id) == null) {
+  public ResponseEntity<List<TransaktionEntity>> getAusgleichszahlungen(@PathVariable String id) {
+    try{
+      if (service.getGruppeInformationEntity(Integer.parseInt(id)) == null) {
+        return ResponseEntity.notFound().build();
+      }
+      return new ResponseEntity<>(service.getRestTransaktionen(Integer.parseInt(id)), HttpStatus.OK);
+    }
+    catch(NumberFormatException exception){
       return ResponseEntity.notFound().build();
     }
-    return new ResponseEntity<>(service.getRestTransaktionen(id), HttpStatus.OK);
   }
 
 
