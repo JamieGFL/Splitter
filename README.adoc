@@ -76,7 +76,10 @@ Um den Docker container zu starten müssen Sie zuerst in Ihrer GitBash "docker c
 
 Schritt 6: 
 
-Um die Anwendung zu starten müssen Sie nach diesem Schema ./gradlew bootRun aufrufen: CLIENT_SECRET=SECRET CLIENT_ID=ID ./gradlew bootRun.
+Um die Anwendung zu starten müssen Sie nach diesem Schema ./gradlew bootRun aufrufen: 
+CLIENT_SECRET=SECRET CLIENT_ID=ID POSTGRES_USER=user POSTGRES_PASSWORD=password ./gradlew bootRun.
+
+Bei SECRET, ID, user und password müssen die selber in den Environment Variables gesetzten Werte benutzt werden, wobei user und password dem user und passwort in der docker-compose entsprechen müssen
 
 Nun sollte die Anwendung laufen.
 
