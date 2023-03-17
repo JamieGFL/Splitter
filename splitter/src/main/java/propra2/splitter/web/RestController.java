@@ -53,13 +53,17 @@ public class RestController {
   }
 
   @PostMapping("/api/gruppen/{id}/schliessen")
-  public ResponseEntity<String> schliesseGruppe(@PathVariable Integer id) {
+  public ResponseEntity<String> schliesseGruppe(@PathVariable String id) {
+    try{
+      if (service.getGruppeInformationEntity(Integer.parseInt(id)) == null) {
+        return ResponseEntity.notFound().build();
+      }
 
-    if (service.getGruppeInformationEntity(id) == null) {
+      return new ResponseEntity<>(service.setRestGruppeGeschlossen(Integer.parseInt(id)), HttpStatus.OK);
+    }
+    catch(NumberFormatException exception){
       return ResponseEntity.notFound().build();
     }
-
-    return new ResponseEntity<>(service.setRestGruppeGeschlossen(id), HttpStatus.OK);
   }
 
   @PostMapping("/api/gruppen/{id}/auslagen")
