@@ -5,6 +5,6 @@ services:
     ports:
       - "5432:5432"
     environment:
-      - "POSTGRES_DB=splitter"
-      - "POSTGRES_USER=user"
-      - "POSTGRES_PASSWORD=SplitterIstToll"
+      - POSTGRES_DB=${POSTGRES_DB}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
