@@ -14,7 +14,7 @@ import propra2.splitter.domain.Gruppe;
 import propra2.splitter.service.GruppenOnPage;
 import propra2.splitter.service.GruppenService;
 
-import javax.validation.Valid;
+import jakarta.validation.Valid;
 
 @Controller
 public class WebController {

@@ -1,6 +1,6 @@
 package propra2.splitter.web;
 
-import javax.validation.constraints.Pattern;
+import jakarta.validation.constraints.Pattern;
 
 
 public record LoginForm(
