@@ -1,6 +1,8 @@
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+
 create table gruppe_dto
 (
-    id serial primary key,
+    id UUID PRIMARY KEY NOT NULL DEFAULT gen_random_uuid(),
     gruppen_name varchar(20),
     geschlossen boolean,
     ausgabe_getaetigt boolean
@@ -8,8 +10,8 @@ create table gruppe_dto
 
 create table ausgabe_dto
 (
-    id serial primary key,
-    gruppe_dto int references gruppe_dto (id),
+    id UUID PRIMARY KEY NOT NULL DEFAULT gen_random_uuid(),
+    gruppe_dto UUID references gruppe_dto (id),
     gruppe_dto_key integer,
     kosten numeric
 );
@@ -17,7 +19,7 @@ create table ausgabe_dto
 create table teilnehmer_dto
 (
     id serial primary key,
-    ausgabe_dto int references ausgabe_dto (id),
+    ausgabe_dto UUID references ausgabe_dto (id),
     ausgabe_dto_key int,
     name text
 );
@@ -25,14 +27,14 @@ create table teilnehmer_dto
 create table ausleger_dto
 (
     id serial primary key,
-    ausgabe_dto int references ausgabe_dto (id),
+    ausgabe_dto UUID references ausgabe_dto (id),
     name text
 );
 
 create table transaktion_dto
 (
-    id serial primary key,
-    gruppe_dto int references gruppe_dto (id),
+    id UUID PRIMARY KEY NOT NULL DEFAULT gen_random_uuid(),
+    gruppe_dto UUID references gruppe_dto (id),
     gruppe_dto_key integer,
     netto_betrag numeric
 );
@@ -40,7 +42,7 @@ create table transaktion_dto
 create table zahler_dto
 (
     id serial primary key,
-    transaktion_dto int references transaktion_dto (id),
+    transaktion_dto UUID references transaktion_dto (id),
     name text
 
 );
@@ -48,7 +50,7 @@ create table zahler_dto
 create table zahlungsempfaenger_dto
 (
     id serial primary key,
-    transaktion_dto int references transaktion_dto (id),
+    transaktion_dto UUID references transaktion_dto (id),
     name text
 );
 
@@ -56,7 +58,7 @@ create table zahlungsempfaenger_dto
 create table person_dto
 (
     id serial primary key,
-    gruppe_dto int references gruppe_dto (id),
+    gruppe_dto UUID references gruppe_dto (id),
     gruppe_dto_key int,
     name text
 
@@ -65,6 +67,6 @@ create table person_dto
 
 create table aktivitaet_dto
 (
-    ausgabe_dto int primary key references ausgabe_dto (id),
+    ausgabe_dto UUID primary key references ausgabe_dto (id),
     name text
 );
