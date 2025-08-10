@@ -192,5 +192,19 @@ public class GruppenServiceTests {
     verify(repository, never()).save(gruppe);
   }
 
+  @Test
+  @DisplayName("Zu einer geschlossenen Gruppe kann man keine Personen mehr hinzufügen")
+  void test_14(){
+    GruppenService service = new GruppenService(repository);
+    Gruppe gruppe = Gruppe.erstelleGruppe(1, "James", "Reisegruppe");
+    when(repository.findById(anyInt())).thenReturn(Optional.of(gruppe));
+    service.closeGruppe(gruppe.getId());
+
+    clearInvocations(repository); // clears the first save call from closeGroup
+    service.addPersonToGruppe(gruppe.getId(), "GitLisa");
+
+    verify(repository, never()).save(gruppe); // -> checks save only on from addPersonToGruppe
+  }
+
 
 }
