@@ -47,10 +47,7 @@ public class GruppenService {
 
   public void addPersonToGruppe(Integer id, String login) {
     Gruppe gruppe = getSingleGruppe(id);
-    if (!gruppe.isAusgabeGetaetigt()) {
-      gruppe.addPerson(login);
-      repository.save(gruppe);
-    }
+      if(gruppe.addPerson(login)) repository.save(gruppe);
   }
 
   public void addAusgabeToGruppe(Integer id, String aktivitaet, String login, String teilnehmer,

@@ -51,11 +51,15 @@ public class Gruppe {
     geschlossen = true;
   }
 
-  public void addPerson(String newPerson) {
+  public boolean addPerson(String newPerson) {
     if (!geschlossen) {
-      Person person = new Person(newPerson);
-      personen.add(person);
+      if (!this.ausgabeGetaetigt) {
+        Person person = new Person(newPerson);
+        personen.add(person);
+        return true;
+      }
     }
+    return false;
   }
 
   public void addPersonAlways(String newPerson) {
