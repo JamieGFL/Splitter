@@ -16,6 +16,7 @@ import propra2.splitter.helper.WithMockOAuth2User;
 import propra2.splitter.service.GruppenService;
 
 import java.util.List;
+import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.containsString;
@@ -37,12 +38,12 @@ public class SingleGruppeAnzeigeTest {
   @WithMockOAuth2User(login = "MaxHub")
   @DisplayName("Die interne Gruppenseite ist erreichbar")
   void test_01() throws Exception {
-
-    when(service.getSingleGruppe(1)).thenReturn(Gruppe.erstelleGruppe(1, "MaxHub", "Reisegruppe"));
+    UUID id = UUID.randomUUID();
+    when(service.getSingleGruppe(id)).thenReturn(Gruppe.erstelleGruppe(id, "MaxHub", "Reisegruppe"));
     String error = "invalider GitHub Name";
 
     mvc.perform(get("/gruppe")
-            .param("id", String.valueOf(1))
+            .param("id", String.valueOf(id))
             .param("loginForm", "MaxHub")
             .param("error", error))
         .andExpect(status().isOk())
@@ -54,14 +55,14 @@ public class SingleGruppeAnzeigeTest {
   @WithMockOAuth2User(login = "MaxHub")
   @DisplayName("Das Model für die Seite ist mit den richtigen Eintraegen gefüllt")
   void test_02() throws Exception {
-
-    Gruppe gruppe = Gruppe.erstelleGruppe(1, "MaxHub", "Reisegruppe");
+    UUID id = UUID.randomUUID();
+    Gruppe gruppe = Gruppe.erstelleGruppe(id, "MaxHub", "Reisegruppe");
     gruppe.addPerson("GitLisa");
     String error = "invalider GitHub Name";
 
     when(service.getSingleGruppe(gruppe.getId())).thenReturn(gruppe);
 
-    MvcResult result = mvc.perform(get("/gruppe")
+    mvc.perform(get("/gruppe")
             .param("id", gruppe.getId().toString())
             .param("loginForm", "MaxHub")
             .param("error", error))
@@ -73,8 +74,8 @@ public class SingleGruppeAnzeigeTest {
   @WithMockOAuth2User(login = "MaxHub")
   @DisplayName("Die Seite zeigt die Mitglieder an")
   void test_03() throws Exception {
-
-    Gruppe gruppe = Gruppe.erstelleGruppe(1, "MaxHub", "Reisegruppe");
+    UUID id = UUID.randomUUID();
+    Gruppe gruppe = Gruppe.erstelleGruppe(id, "MaxHub", "Reisegruppe");
     gruppe.addPerson("GitLisa");
     String error = "invalider GitHub Name";
     when(service.getSingleGruppe(gruppe.getId())).thenReturn(gruppe);
@@ -92,8 +93,8 @@ public class SingleGruppeAnzeigeTest {
   @WithMockOAuth2User(login = "MaxHub")
   @DisplayName("Die Seite zeigt die Ausgaben an")
   void test_04() throws Exception {
-
-    Gruppe gruppe = Gruppe.erstelleGruppe(1, "MaxHub", "Reisegruppe");
+    UUID id = UUID.randomUUID();
+    Gruppe gruppe = Gruppe.erstelleGruppe(id, "MaxHub", "Reisegruppe");
     gruppe.addPerson("GitLisa");
     gruppe.addAusgabeToPerson("pizza", "MaxHub", List.of("GitLisa"), Money.of(400, "EUR"));
     String error = "invalider GitHub Name";
@@ -114,8 +115,8 @@ public class SingleGruppeAnzeigeTest {
   @WithMockOAuth2User(login = "MaxHub")
   @DisplayName("Die Seite zeigt die Transaktionsnachricht an")
   void test_05() throws Exception {
-
-    Gruppe gruppe = Gruppe.erstelleGruppe(1, "MaxHub", "Reisegruppe");
+    UUID id = UUID.randomUUID();
+    Gruppe gruppe = Gruppe.erstelleGruppe(id, "MaxHub", "Reisegruppe");
     gruppe.addPerson("GitLisa");
     gruppe.addAusgabeToPerson("pizza", "MaxHub", List.of("GitLisa"), Money.of(400, "EUR"));
     gruppe.berechneTransaktionen();
@@ -134,8 +135,8 @@ public class SingleGruppeAnzeigeTest {
   @WithMockOAuth2User(login = "MaxHub")
   @DisplayName("Das Eingabeformular für Mitglieder wird angezeigt")
   void test_06() throws Exception {
-
-    Gruppe gruppe = Gruppe.erstelleGruppe(1, "MaxHub", "Reisegruppe");
+    UUID id = UUID.randomUUID();
+    Gruppe gruppe = Gruppe.erstelleGruppe(id, "MaxHub", "Reisegruppe");
     String error = "invalider GitHub Name";
     when(service.getSingleGruppe(gruppe.getId())).thenReturn(gruppe);
 
@@ -156,8 +157,8 @@ public class SingleGruppeAnzeigeTest {
   @WithMockOAuth2User(login = "MaxHub")
   @DisplayName("Die Gruppenstartseite ist verlinkt")
   void test_07() throws Exception {
-
-    Gruppe gruppe = Gruppe.erstelleGruppe(1, "MaxHub", "Reisegruppe");
+    UUID id = UUID.randomUUID();
+    Gruppe gruppe = Gruppe.erstelleGruppe(id, "MaxHub", "Reisegruppe");
     String error = "invalider GitHub Name";
     gruppe.addPerson("GitLisa");
     when(service.getSingleGruppe(gruppe.getId())).thenReturn(gruppe);
@@ -177,8 +178,8 @@ public class SingleGruppeAnzeigeTest {
   @WithMockOAuth2User(login = "MaxHub")
   @DisplayName("Das Formular um die Gruppe zu schließen wird angezeigt")
   void test_08() throws Exception {
-
-    Gruppe gruppe = Gruppe.erstelleGruppe(1, "MaxHub", "Reisegruppe");
+    UUID id = UUID.randomUUID();
+    Gruppe gruppe = Gruppe.erstelleGruppe(id, "MaxHub", "Reisegruppe");
     String error = "invalider GitHub Name";
     gruppe.addPerson("GitLisa");
     when(service.getSingleGruppe(gruppe.getId())).thenReturn(gruppe);
@@ -199,8 +200,8 @@ public class SingleGruppeAnzeigeTest {
   @WithMockOAuth2User(login = "MaxHub")
   @DisplayName("")
   void test_09() throws Exception {
-
-    Gruppe gruppe = Gruppe.erstelleGruppe(1, "MaxHub", "Reisegruppe");
+    UUID id = UUID.randomUUID();
+    Gruppe gruppe = Gruppe.erstelleGruppe(id, "MaxHub", "Reisegruppe");
     String error = "invalider GitHub Name";
     gruppe.addPerson("GitLisa");
     when(service.getSingleGruppe(gruppe.getId())).thenReturn(gruppe);
