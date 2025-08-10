@@ -16,6 +16,8 @@ import propra2.splitter.service.GruppenService;
 
 import jakarta.validation.Valid;
 
+import java.util.UUID;
+
 @Controller
 public class WebController {
 
@@ -42,16 +44,16 @@ public class WebController {
       return "index";
     }
 
-    Gruppe gruppe = service.addGruppe(1, token.getPrincipal(), gruppenForm.gruppenName());
+    Gruppe gruppe = service.addGruppe(token.getPrincipal(), gruppenForm.gruppenName());
 
-    Integer id = gruppe.getId();
+    UUID id = gruppe.getId();
 
     return "redirect:/gruppe?id=" + id;
   }
 
   @GetMapping("/gruppe")
   public String getSingleGruppePage(Model model,
-      @RequestParam(name = "id", value = "id", required = false) Integer id,
+      @RequestParam(name = "id", value = "id", required = false) UUID id,
       @ModelAttribute("loginForm") LoginForm loginForm,
       @ModelAttribute("ausgabenForm") AusgabenForm ausgabenForm,
       String error,
@@ -86,7 +88,7 @@ public class WebController {
 
   @PostMapping("/gruppe/add")
   public String addPersonToSingleGruppe(
-      @RequestParam(name = "id", value = "id", required = false) Integer id,
+      @RequestParam(name = "id", value = "id", required = false) UUID id,
       @Valid LoginForm loginForm,
       BindingResult bindingResult,
       RedirectAttributes attributes) {
@@ -105,7 +107,7 @@ public class WebController {
 
   @PostMapping("/gruppe/add/ausgaben")
   public String addAusgabeToGruppe(
-      @RequestParam(name = "id", value = "id", required = false) Integer id,
+      @RequestParam(name = "id", value = "id", required = false) UUID id,
       @Valid AusgabenForm ausgabenForm,
       BindingResult bindingResult,
       RedirectAttributes attributes) {
@@ -154,7 +156,7 @@ public class WebController {
 
   @PostMapping("/gruppe/add/ausgaben/transaktion")
   public String berechneTransaktion(
-      @RequestParam(name = "id", value = "id", required = false) Integer id) {
+      @RequestParam(name = "id", value = "id", required = false) UUID id) {
 
     service.transaktionBerechnen(id);
 
@@ -163,7 +165,7 @@ public class WebController {
 
   @PostMapping("/gruppe/close")
   public String schließGruppe(
-      @RequestParam(name = "id", value = "id", required = false) Integer id) {
+      @RequestParam(name = "id", value = "id", required = false) UUID id) {
     service.closeGruppe(id);
     return "redirect:/gruppe?id=" + id;
   }

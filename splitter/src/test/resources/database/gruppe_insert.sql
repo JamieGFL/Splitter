@@ -1,75 +1,58 @@
-insert into gruppe_dto(gruppen_name, geschlossen, ausgabe_getaetigt)
-values ('Reisegruppe', false, true);
+-- Example data inserts with UUID values
+insert into gruppe_dto(ID, GRUPPEN_NAME, GESCHLOSSEN, AUSGABE_GETAETIGT)
+values ('11111111-1111-1111-1111-111111111111', 'Reisegruppe', false, true);
 
-insert into ausgabe_dto(gruppe_dto, gruppe_dto_key, kosten)
-values (1,0, 40);
+insert into ausgabe_dto(ID, GRUPPE_DTO, GRUPPE_DTO_KEY, KOSTEN)
+values ('aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa', '11111111-1111-1111-1111-111111111111', 0, 40);
 
-insert into teilnehmer_dto(ausgabe_dto, ausgabe_dto_key, name)
-values (1,0,'MaxHub');
+insert into teilnehmer_dto(AUSGABE_DTO, AUSGABE_DTO_KEY, NAME)
+values ('aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 0, 'MaxHub'),
+       ('aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 1, 'GitLisa');
 
-insert into teilnehmer_dto(ausgabe_dto, ausgabe_dto_key, name)
-values (1,1,'GitLisa');
+insert into ausleger_dto(AUSGABE_DTO, NAME)
+values ('aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 'MaxHub');
 
-insert into ausleger_dto(ausgabe_dto, name)
-values (1, 'MaxHub');
+insert into transaktion_dto(ID, GRUPPE_DTO, GRUPPE_DTO_KEY, NETTO_BETRAG)
+values ('bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb', '11111111-1111-1111-1111-111111111111', 0, 40);
 
-insert into transaktion_dto(gruppe_dto, gruppe_dto_key, netto_betrag)
-values (1,0,40);
+insert into zahler_dto(TRANSAKTION_DTO, NAME)
+values ('bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb', 'GitLisa');
 
-insert into zahler_dto(transaktion_dto, name)
-values (1, 'GitLisa');
+insert into zahlungsempfaenger_dto(TRANSAKTION_DTO, NAME)
+values ('bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb', 'MaxHub');
 
-insert into zahlungsempfaenger_dto(transaktion_dto, name)
-values (1, 'MaxHub');
+insert into person_dto(GRUPPE_DTO, GRUPPE_DTO_KEY, NAME)
+values ('11111111-1111-1111-1111-111111111111', 0, 'MaxHub'),
+       ('11111111-1111-1111-1111-111111111111', 1, 'GitLisa');
 
-insert into person_dto(gruppe_dto, gruppe_dto_key, name)
-values (1,0,'MaxHub');
+insert into aktivitaet_dto(AUSGABE_DTO, NAME)
+values ('aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 'Doener');
 
-insert into person_dto(gruppe_dto, gruppe_dto_key, name)
-values (1,1,'GitLisa');
+insert into gruppe_dto(ID, GRUPPEN_NAME, GESCHLOSSEN, AUSGABE_GETAETIGT)
+values ('22222222-2222-2222-2222-222222222222', 'DieGang', false, false);
 
-insert into aktivitaet_dto (ausgabe_dto, name)
-values (1, 'Doener');
+insert into ausgabe_dto(ID, GRUPPE_DTO, GRUPPE_DTO_KEY, KOSTEN)
+values ('cccccccc-cccc-cccc-cccc-cccccccccccc', '22222222-2222-2222-2222-222222222222', 1, 100);
 
+insert into teilnehmer_dto(AUSGABE_DTO, AUSGABE_DTO_KEY, NAME)
+values ('cccccccc-cccc-cccc-cccc-cccccccccccc', 1, 'Freddy'),
+       ('cccccccc-cccc-cccc-cccc-cccccccccccc', 2, 'Otto');
 
+insert into ausleger_dto(AUSGABE_DTO, NAME)
+values ('cccccccc-cccc-cccc-cccc-cccccccccccc', 'Otto');
 
+insert into transaktion_dto(ID, GRUPPE_DTO, GRUPPE_DTO_KEY, NETTO_BETRAG)
+values ('dddddddd-dddd-dddd-dddd-dddddddddddd', '22222222-2222-2222-2222-222222222222', 0, 40);
 
+insert into zahler_dto(TRANSAKTION_DTO, NAME)
+values ('dddddddd-dddd-dddd-dddd-dddddddddddd', 'Freddy');
 
+insert into zahlungsempfaenger_dto(TRANSAKTION_DTO, NAME)
+values ('dddddddd-dddd-dddd-dddd-dddddddddddd', 'Otto');
 
+insert into person_dto(GRUPPE_DTO, GRUPPE_DTO_KEY, NAME)
+values ('22222222-2222-2222-2222-222222222222', 1, 'Otto'),
+       ('22222222-2222-2222-2222-222222222222', 2, 'Freddy');
 
-insert into gruppe_dto(id, gruppen_name, geschlossen, ausgabe_getaetigt)
-values (2, 'DieGang', false, false);
-
-insert into ausgabe_dto(gruppe_dto, gruppe_dto_key, kosten)
-values (2,1, 100);
-
-insert into teilnehmer_dto(ausgabe_dto, ausgabe_dto_key, name)
-values (2,1,'Freddy');
-
-insert into teilnehmer_dto(ausgabe_dto, ausgabe_dto_key, name)
-values (2,2,'Otto');
-
-insert into ausleger_dto(ausgabe_dto, name)
-values (2, 'Otto');
-
-insert into transaktion_dto(gruppe_dto, gruppe_dto_key, netto_betrag)
-values (2,0,40);
-
-insert into zahler_dto(transaktion_dto, name)
-values (2, 'Freddy');
-
-insert into zahlungsempfaenger_dto(transaktion_dto, name)
-values (2, 'Otto');
-
-insert into person_dto(gruppe_dto, gruppe_dto_key, name)
-values (2,1,'Otto');
-
-insert into person_dto(gruppe_dto, gruppe_dto_key, name)
-values (2,2,'Freddy');
-
-insert into aktivitaet_dto (ausgabe_dto, name)
-values (2, 'Club');
-
-
-
-
+insert into aktivitaet_dto(AUSGABE_DTO, NAME)
+values ('cccccccc-cccc-cccc-cccc-cccccccccccc', 'Club');

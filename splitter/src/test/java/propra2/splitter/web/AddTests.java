@@ -14,6 +14,8 @@ import propra2.splitter.domain.Gruppe;
 import propra2.splitter.helper.WithMockOAuth2User;
 import propra2.splitter.service.GruppenService;
 
+import java.util.UUID;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
@@ -36,8 +38,8 @@ public class AddTests {
   @DisplayName("Eine valide Gruppe wird hinzugefügt")
   void test_01() throws Exception {
 
-    when(service.addGruppe(anyInt(), any(), anyString())).thenReturn(
-        Gruppe.erstelleGruppe(1, "MaxHub", "Gruppe"));
+    when(service.addGruppe(any(), anyString())).thenReturn(
+        Gruppe.erstelleGruppe(UUID.randomUUID(), "MaxHub", "Gruppe"));
     String gruppenName = "Gruppe";
 
     mvc.perform(post("/add")
@@ -45,7 +47,7 @@ public class AddTests {
         .with(csrf())).andExpect(status().is3xxRedirection());
 
     ArgumentCaptor<OAuth2User> captor = ArgumentCaptor.forClass(OAuth2User.class);
-    verify(service).addGruppe(eq(1), captor.capture(), eq(gruppenName));
+    verify(service).addGruppe(captor.capture(), eq(gruppenName));
     assertThat((String) captor.getValue().getAttribute("login")).isEqualTo("MaxHub");
 
   }
@@ -55,7 +57,7 @@ public class AddTests {
   @DisplayName("Eine Person wird zu einer Gruppe hinzugefügt")
   void test_02() throws Exception {
 
-    Gruppe gruppe = Gruppe.erstelleGruppe(1, "MaxHub", "Reisegruppe");
+    Gruppe gruppe = Gruppe.erstelleGruppe(UUID.randomUUID(), "MaxHub", "Reisegruppe");
 
     mvc.perform(post("/gruppe/add")
         .param("id", gruppe.getId().toString())
@@ -71,7 +73,7 @@ public class AddTests {
   @DisplayName("Eine Person mit invalidem Github Namen wird nicht hinzugefügt")
   void test_03() throws Exception {
 
-    Gruppe gruppe = Gruppe.erstelleGruppe(1, "MaxHub", "Reisegruppe");
+    Gruppe gruppe = Gruppe.erstelleGruppe(UUID.randomUUID(), "MaxHub", "Reisegruppe");
 
     mvc.perform(post("/gruppe/add")
         .param("id", gruppe.getId().toString())
@@ -87,7 +89,7 @@ public class AddTests {
   @DisplayName("Ausgaben können hinzugefügt werden")
   void test_04() throws Exception {
 
-    Gruppe gruppe = Gruppe.erstelleGruppe(1, "MaxHub", "Reisegruppe");
+    Gruppe gruppe = Gruppe.erstelleGruppe(UUID.randomUUID(), "MaxHub", "Reisegruppe");
     gruppe.addPerson("GitLisa");
 
     mvc.perform(post("/gruppe/add/ausgaben")
@@ -107,7 +109,7 @@ public class AddTests {
   @DisplayName("Ausgabe mit ungültiger Aktivität wird nicht hinzugefügt")
   void test_05() throws Exception {
 
-    Gruppe gruppe = Gruppe.erstelleGruppe(1, "MaxHub", "Reisegruppe");
+    Gruppe gruppe = Gruppe.erstelleGruppe(UUID.randomUUID(), "MaxHub", "Reisegruppe");
     gruppe.addPerson("GitLisa");
 
     mvc.perform(post("/gruppe/add/ausgaben")
@@ -128,7 +130,7 @@ public class AddTests {
   @DisplayName("Ausgabe mit ungültigen Teilnehmer Eintrag wird nicht hinzugefügt")
   void test_06() throws Exception {
 
-    Gruppe gruppe = Gruppe.erstelleGruppe(1, "MaxHub", "Reisegruppe");
+    Gruppe gruppe = Gruppe.erstelleGruppe(UUID.randomUUID(), "MaxHub", "Reisegruppe");
     gruppe.addPerson("GitLisa");
 
     mvc.perform(post("/gruppe/add/ausgaben")
@@ -149,7 +151,7 @@ public class AddTests {
   @DisplayName("Ausgabe mit ungültigen Betrag wird nicht hinzugefügt")
   void test_07() throws Exception {
 
-    Gruppe gruppe = Gruppe.erstelleGruppe(1, "MaxHub", "Reisegruppe");
+    Gruppe gruppe = Gruppe.erstelleGruppe(UUID.randomUUID(), "MaxHub", "Reisegruppe");
     gruppe.addPerson("GitLisa");
 
     mvc.perform(post("/gruppe/add/ausgaben")
@@ -170,7 +172,7 @@ public class AddTests {
   @DisplayName("Ausgabe mit negativen Betrag wird nicht hinzugefügt")
   void test_08() throws Exception {
 
-    Gruppe gruppe = Gruppe.erstelleGruppe(1, "MaxHub", "Reisegruppe");
+    Gruppe gruppe = Gruppe.erstelleGruppe(UUID.randomUUID(), "MaxHub", "Reisegruppe");
     gruppe.addPerson("GitLisa");
 
     mvc.perform(post("/gruppe/add/ausgaben")
@@ -192,7 +194,7 @@ public class AddTests {
   @DisplayName("Transaktionen werden berechnet")
   void test_09() throws Exception {
 
-    Gruppe gruppe = Gruppe.erstelleGruppe(1, "MaxHub", "Reisegruppe");
+    Gruppe gruppe = Gruppe.erstelleGruppe(UUID.randomUUID(), "MaxHub", "Reisegruppe");
 
     mvc.perform(post("/gruppe/add/ausgaben/transaktion")
         .param("id", gruppe.getId().toString())
@@ -207,7 +209,7 @@ public class AddTests {
   @DisplayName("Gruppen werden geschlossen")
   void test_10() throws Exception {
 
-    Gruppe gruppe = Gruppe.erstelleGruppe(1, "MaxHub", "Reisegruppe");
+    Gruppe gruppe = Gruppe.erstelleGruppe(UUID.randomUUID(), "MaxHub", "Reisegruppe");
 
     mvc.perform(post("/gruppe/close")
         .param("id", gruppe.getId().toString())

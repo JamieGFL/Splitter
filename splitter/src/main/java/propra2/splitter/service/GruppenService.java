@@ -17,14 +17,14 @@ public class GruppenService {
     this.repository = repository;
   }
 
-  public Gruppe addGruppe(Integer id, OAuth2User principle, String gruppenName) {
+  public Gruppe addGruppe(OAuth2User principle, String gruppenName) {
     String login = principle.getAttribute("login");
     Gruppe gruppe = Gruppe.erstelleGruppe(null, login, gruppenName);
     return repository.save(gruppe);
   }
 
 
-  public void closeGruppe(Integer id) {
+  public void closeGruppe(UUID id) {
     Gruppe gruppe = getSingleGruppe(id);
     gruppe.closeGroup();
     repository.save(gruppe);
@@ -41,16 +41,16 @@ public class GruppenService {
     return new GruppenOnPage(gruppenDetails);
   }
 
-  public Gruppe getSingleGruppe(Integer id) {
+  public Gruppe getSingleGruppe(UUID id) {
     return repository.findById(id).orElseThrow();
   }
 
-  public void addPersonToGruppe(Integer id, String login) {
+  public void addPersonToGruppe(UUID id, String login) {
     Gruppe gruppe = getSingleGruppe(id);
       if(gruppe.addPerson(login)) repository.save(gruppe);
   }
 
-  public void addAusgabeToGruppe(Integer id, String aktivitaet, String login, String teilnehmer,
+  public void addAusgabeToGruppe(UUID id, String aktivitaet, String login, String teilnehmer,
       Double cost) {
     Gruppe gruppe = getSingleGruppe(id);
     gruppe.addAusgabeToPerson(aktivitaet, login, Arrays.stream(teilnehmer.split(", ")).toList(),
@@ -58,7 +58,7 @@ public class GruppenService {
     repository.save(gruppe);
   }
 
-  public void transaktionBerechnen(Integer id) {
+  public void transaktionBerechnen(UUID id) {
     Gruppe gruppe = getSingleGruppe(id);
     gruppe.clearTransaktionen();
     gruppe.berechneTransaktionen();

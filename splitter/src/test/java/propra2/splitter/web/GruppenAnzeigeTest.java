@@ -14,6 +14,7 @@ import propra2.splitter.service.GruppenDetails;
 import propra2.splitter.service.GruppenOnPage;
 import propra2.splitter.service.GruppenService;
 import java.util.List;
+import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
@@ -50,10 +51,10 @@ public class GruppenAnzeigeTest {
   @WithMockOAuth2User(login = "MaxHub")
   @DisplayName("Nur die Gruppen in denen man auch Mitglied ist werden einem angezeigt")
   void test_02() throws Exception {
-
+    UUID id = UUID.randomUUID();
     when(service.personToGruppeMatch(any()))
         .thenReturn(new GruppenOnPage(List.of(
-            new GruppenDetails(1, "Reisegruppe", List.of("MaxHub"), false))));
+            new GruppenDetails(id, "Reisegruppe", List.of("MaxHub"), false))));
 
     MvcResult result = mvc.perform(get("/")).andReturn();
 
@@ -65,10 +66,10 @@ public class GruppenAnzeigeTest {
   @WithMockOAuth2User(login = "MaxHub")
   @DisplayName("Jede Gruppe hat einen Link für Gruppeninformationen")
   void test_03() throws Exception {
-
+    UUID id = UUID.randomUUID();
     when(service.personToGruppeMatch(any()))
         .thenReturn(new GruppenOnPage(List.of(
-            new GruppenDetails(1, "Reisegruppe", List.of("MaxHub"), false))));
+            new GruppenDetails(id, "Reisegruppe", List.of("MaxHub"), false))));
 
     MvcResult result = mvc.perform(get("/")).andReturn();
 
@@ -80,10 +81,10 @@ public class GruppenAnzeigeTest {
   @WithMockOAuth2User(login = "MaxHub")
   @DisplayName("Das Eingabeformular für den Gruppennamen wird angezeigt")
   void test_04() throws Exception {
-
+    UUID id = UUID.randomUUID();
     when(service.personToGruppeMatch(any()))
         .thenReturn(new GruppenOnPage(List.of(
-            new GruppenDetails(1, "Reisegruppe", List.of("MaxHub"), false))));
+            new GruppenDetails(id, "Reisegruppe", List.of("MaxHub"), false))));
 
     MvcResult result = mvc.perform(get("/")).andReturn();
     String html = result.getResponse().getContentAsString();
@@ -99,7 +100,7 @@ public class GruppenAnzeigeTest {
   @WithMockOAuth2User(login = "MaxHub")
   @DisplayName("Die Gruppeninformationsseite ist verlinkt")
   void test_05() throws Exception {
-    Integer id = 1;
+    UUID id = UUID.randomUUID();
     when(service.personToGruppeMatch(any()))
         .thenReturn(new GruppenOnPage(
             List.of(new GruppenDetails(id, "Reisegruppe", List.of("MaxHub"), false))));
@@ -116,10 +117,10 @@ public class GruppenAnzeigeTest {
   @WithMockOAuth2User(login = "MaxHub")
   @DisplayName("Geschlossene Gruppen in denen man Mitglied war werden einem Seperat angezeigt")
   void test_06() throws Exception {
-
+    UUID id = UUID.randomUUID();
     when(service.personToGruppeMatch(any()))
         .thenReturn(new GruppenOnPage(
-            List.of(new GruppenDetails(1, "Reisegruppe", List.of("MaxHub"), true))));
+            List.of(new GruppenDetails(id, "Reisegruppe", List.of("MaxHub"), true))));
 
     MvcResult result = mvc.perform(get("/")).andReturn();
     String html = result.getResponse().getContentAsString();

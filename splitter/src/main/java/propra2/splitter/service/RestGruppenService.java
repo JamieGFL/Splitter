@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import propra2.splitter.domain.Gruppe;
 import java.util.List;
 import java.util.Objects;
+import java.util.UUID;
 
 @Service
 public class RestGruppenService {
@@ -15,11 +16,11 @@ public class RestGruppenService {
     this.repository = repository;
   }
 
-  public Gruppe getSingleGruppe(Integer id) {
+  public Gruppe getSingleGruppe(UUID id) {
     return repository.findById(id).orElse(null);
   }
 
-  public Integer addRestGruppe(GruppeEntity gruppe) {
+  public UUID addRestGruppe(GruppeEntity gruppe) {
     return repository.save(Gruppe.erstelleRestGruppe(null, gruppe.getName(), gruppe.getPersonen()))
         .getId();
   }
@@ -34,7 +35,7 @@ public class RestGruppenService {
         gruppe.getPersonenNamen());
   }
 
-  public GruppeInformationEntity getGruppeInformationEntity(Integer id) {
+  public GruppeInformationEntity getGruppeInformationEntity(UUID id) {
     if (getSingleGruppe(id) == null) {
       return null;
     }
@@ -51,21 +52,21 @@ public class RestGruppenService {
         .toList());
   }
 
-  public String setRestGruppeGeschlossen(Integer id) {
+  public String setRestGruppeGeschlossen(UUID id) {
     Gruppe gruppe = getSingleGruppe(id);
     gruppe.closeGroup();
     repository.save(gruppe);
     return gruppe.getGruppenName() + " wurde geschlossen";
   }
 
-  public void addRestAusgabenToGruppe(Integer id, AusgabeEntity ausgabenEntity) {
+  public void addRestAusgabenToGruppe(UUID id, AusgabeEntity ausgabenEntity) {
     Gruppe gruppe = getSingleGruppe(id);
     gruppe.addAusgabeToPerson(ausgabenEntity.grund(), ausgabenEntity.glaeubiger(),
         ausgabenEntity.schuldner(), Money.of(ausgabenEntity.cent() / 100, "EUR"));
     repository.save(gruppe);
   }
 
-  public List<TransaktionEntity> getRestTransaktionen(Integer id) {
+  public List<TransaktionEntity> getRestTransaktionen(UUID id) {
     Gruppe gruppe = getSingleGruppe(id);
     gruppe.berechneTransaktionen();
     return gruppe.getTransaktionDetails().stream()

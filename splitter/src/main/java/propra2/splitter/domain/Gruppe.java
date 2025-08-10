@@ -8,7 +8,7 @@ import propra2.splitter.stereotypes.AggregateRoot;
 @AggregateRoot
 public class Gruppe {
 
-  private final Integer id;
+  private final UUID id;
   private List<Person> personen = new ArrayList<>();
   private final List<Ausgabe> gruppenAusgaben = new ArrayList<>();
   private final List<Transaktion> transaktionen = new ArrayList<>();
@@ -19,27 +19,27 @@ public class Gruppe {
   private boolean ausgabeGetaetigt = false;
   private boolean geschlossen = false;
 
-  private Gruppe(Integer id, List<Person> personen, String gruppenName) {
+  private Gruppe(UUID id, List<Person> personen, String gruppenName) {
     this.id = id;
     this.personen = personen;
     this.gruppenName = gruppenName;
   }
 
-  public Gruppe(Integer id, String gruppenName, boolean geschlossen, boolean ausgabeGetaetigt) {
+  public Gruppe(UUID id, String gruppenName, boolean geschlossen, boolean ausgabeGetaetigt) {
     this.id = id;
     this.gruppenName = gruppenName;
     this.geschlossen = geschlossen;
     this.ausgabeGetaetigt = ausgabeGetaetigt;
   }
 
-  public static Gruppe erstelleGruppe(Integer id, String gruender, String gruppenName) {
+  public static Gruppe erstelleGruppe(UUID id, String gruender, String gruppenName) {
     Person person = new Person(gruender);
     List<Person> personen = new ArrayList<>();
     personen.add(person);
     return new Gruppe(id, personen, gruppenName);
   }
 
-  public static Gruppe erstelleRestGruppe(Integer id, String gruppenName, List<String> personen) {
+  public static Gruppe erstelleRestGruppe(UUID id, String gruppenName, List<String> personen) {
     List<Person> personenListe = new ArrayList<>();
     for (String person : personen) {
       personenListe.add(new Person(person));
@@ -290,7 +290,7 @@ public class Gruppe {
             a.getGesamtKosten())).toList();
   }
 
-  public Integer getId() {
+  public UUID getId() {
     return id;
   }
 

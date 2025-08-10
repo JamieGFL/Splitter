@@ -2,10 +2,11 @@ package propra2.splitter.service;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.UUID;
 
 public class GruppeEntity {
 
-  Integer gruppe;
+  UUID gruppe;
   String name;
   List<String> personen;
 
@@ -17,17 +18,17 @@ public class GruppeEntity {
     this.personen = personen;
   }
 
-  public GruppeEntity(Integer gruppe, String name, List<String> personen) {
+  public GruppeEntity(UUID gruppe, String name, List<String> personen) {
     this.gruppe = gruppe;
     this.name = name;
     this.personen = personen;
   }
 
-  public Integer getGruppe() {
+  public UUID getGruppe() {
     return gruppe;
   }
 
-  public void setGruppe(Integer gruppe) {
+  public void setGruppe(UUID gruppe) {
     this.gruppe = gruppe;
   }
 
