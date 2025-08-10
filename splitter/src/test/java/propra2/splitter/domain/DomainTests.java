@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -58,7 +59,8 @@ public class DomainTests {
   @Test
   @DisplayName("Person kann Gruppe hinzugefügt werden")
   void test_01() {
-    Gruppe gruppe = Gruppe.erstelleGruppe(1, "MaxHub", "Reisegruppe");
+    UUID id = UUID.randomUUID();
+    Gruppe gruppe = Gruppe.erstelleGruppe(id, "MaxHub", "Reisegruppe");
 
     gruppe.addPerson("GitLisa");
 
@@ -71,7 +73,8 @@ public class DomainTests {
   void test_02() {
     Person personA = new Person("MaxHub");
 
-    Gruppe gruppe = Gruppe.erstelleGruppe(1, "MaxHub", "Reisegruppe");
+    UUID id = UUID.randomUUID();
+    Gruppe gruppe = Gruppe.erstelleGruppe(id, "MaxHub", "Reisegruppe");
 
     assertThat(gruppe.getPersonen().get(0)).isEqualTo(personA);
   }
@@ -79,7 +82,8 @@ public class DomainTests {
   @Test
   @DisplayName("Ausgaben einer Person werden korrekt ausgerechnet")
   void test_03() {
-    Gruppe gruppe = Gruppe.erstelleGruppe(1, "MaxHub", "Reisegruppe");
+    UUID id = UUID.randomUUID();
+    Gruppe gruppe = Gruppe.erstelleGruppe(id, "MaxHub", "Reisegruppe");
     gruppe.addPerson("GitLisa");
     gruppe.addAusgabeToPerson("Pizza", "MaxHub", List.of("GitLisa"), Money.of(30, "EUR"));
     gruppe.addAusgabeToPerson("Club", "MaxHub", List.of("GitLisa"), Money.of(100, "EUR"));
@@ -93,7 +97,8 @@ public class DomainTests {
   @Test
   @DisplayName("Schulden einer Person werden korrekt ausgerechnet")
   void test_04() {
-    Gruppe gruppe = Gruppe.erstelleGruppe(1, "MaxHub", "Reisegruppe");
+    UUID id = UUID.randomUUID();
+    Gruppe gruppe = Gruppe.erstelleGruppe(id, "MaxHub", "Reisegruppe");
     gruppe.addPerson("GitLisa");
     gruppe.addAusgabeToPerson("Pizza", "MaxHub", List.of("GitLisa"), Money.of(30, "EUR"));
     gruppe.addAusgabeToPerson("Club", "MaxHub", List.of("GitLisa"), Money.of(100, "EUR"));
@@ -109,7 +114,8 @@ public class DomainTests {
   void test_05() {
     Person personA = new Person("MaxHub");
     Person personB = new Person("GitLisa");
-    Gruppe gruppe = Gruppe.erstelleGruppe(1, "MaxHub", "Reisegruppe");
+    UUID id = UUID.randomUUID();
+    Gruppe gruppe = Gruppe.erstelleGruppe(id, "MaxHub", "Reisegruppe");
     gruppe.addPerson("GitLisa");
 
     List<Person> personen = gruppe.getPersonenFromNames(List.of("MaxHub", "GitLisa"));
@@ -121,7 +127,8 @@ public class DomainTests {
   @DisplayName("Person wird richtig gefiltert")
   void test_06() {
     Person personA = new Person("MaxHub");
-    Gruppe gruppe = Gruppe.erstelleGruppe(1, "MaxHub", "Reisegruppe");
+    UUID id = UUID.randomUUID();
+    Gruppe gruppe = Gruppe.erstelleGruppe(id, "MaxHub", "Reisegruppe");
 
     List<Person> personen = gruppe.getPersonenFromNames(List.of("MaxHub"));
 
@@ -162,7 +169,8 @@ public class DomainTests {
   void test_09() {
     Person personA = new Person("MaxHub");
     Person personB = new Person("GitLisa");
-    Gruppe gruppe = Gruppe.erstelleGruppe(1, "MaxHub", "Reisegruppe");
+    UUID id = UUID.randomUUID();
+    Gruppe gruppe = Gruppe.erstelleGruppe(id, "MaxHub", "Reisegruppe");
     gruppe.addPerson(personB.getName());
 
     gruppe.addAusgabeToPerson("Pizza", "MaxHub", List.of("GitLisa"), Money.of(20, "EUR"));
@@ -176,7 +184,8 @@ public class DomainTests {
   void test_10() {
     Person personA = new Person("MaxHub");
     Person personB = new Person("GitLisa");
-    Gruppe gruppe = Gruppe.erstelleGruppe(1, "MaxHub", "Reisegruppe");
+    UUID id = UUID.randomUUID();
+    Gruppe gruppe = Gruppe.erstelleGruppe(id, "MaxHub", "Reisegruppe");
     gruppe.addPerson(personB.getName());
 
     gruppe.addAusgabeToPerson("Pizza", "MaxHub", List.of("GitLisa"), Money.of(20, "EUR"));
@@ -192,7 +201,8 @@ public class DomainTests {
     Person personB = new Person("GitLisa");
     personA.setNettoBetrag(Money.of(20, "EUR"));
     personB.setNettoBetrag(Money.of(-20, "EUR"));
-    Gruppe gruppe = Gruppe.erstelleGruppe(1, "MaxHub", "Reisegruppe");
+    UUID id = UUID.randomUUID();
+    Gruppe gruppe = Gruppe.erstelleGruppe(id, "MaxHub", "Reisegruppe");
 
     Person maxPerson = gruppe.getPersonWithMaxNettoBetrag(List.of(personA, personB));
 
@@ -206,7 +216,8 @@ public class DomainTests {
     Person personB = new Person("GitLisa");
     personA.setNettoBetrag(Money.of(20, "EUR"));
     personB.setNettoBetrag(Money.of(-20, "EUR"));
-    Gruppe gruppe = Gruppe.erstelleGruppe(1, "MaxHub", "Reisegruppe");
+    UUID id = UUID.randomUUID();
+    Gruppe gruppe = Gruppe.erstelleGruppe(id, "MaxHub", "Reisegruppe");
 
     Person minPerson = gruppe.getPersonWithMinNettoBetrag(List.of(personA, personB));
 
@@ -263,7 +274,8 @@ public class DomainTests {
   void test_17() {
     Person personA = new Person("MaxHub");
     Person personB = new Person("GitLisa");
-    Gruppe gruppe = Gruppe.erstelleGruppe(1, personA.getName(), "Reisegruppe");
+    UUID id = UUID.randomUUID();
+    Gruppe gruppe = Gruppe.erstelleGruppe(id, personA.getName(), "Reisegruppe");
     gruppe.addPerson(personB.getName());
     gruppe.addAusgabeToPerson("Pizza", "MaxHub", List.of("MaxHub", "GitLisa"), Money.of(10, "EUR"));
     gruppe.addAusgabeToPerson("Kino", "MaxHub", List.of("MaxHub", "GitLisa"), Money.of(20, "EUR"));
@@ -280,7 +292,8 @@ public class DomainTests {
   void test_18() {
     Person personA = new Person("MaxHub");
     Person personB = new Person("GitLisa");
-    Gruppe gruppe = Gruppe.erstelleGruppe(1, personA.getName(), "Reisegruppe");
+    UUID id = UUID.randomUUID();
+    Gruppe gruppe = Gruppe.erstelleGruppe(id, personA.getName(), "Reisegruppe");
     gruppe.addPerson(personB.getName());
     gruppe.addAusgabeToPerson("Pizza", "MaxHub", List.of("MaxHub", "GitLisa"), Money.of(10, "EUR"));
     gruppe.addAusgabeToPerson("Kino", "GitLisa", List.of("MaxHub", "GitLisa"), Money.of(20, "EUR"));
@@ -297,7 +310,8 @@ public class DomainTests {
   void test_19() {
     Person personA = new Person("MaxHub");
     Person personB = new Person("GitLisa");
-    Gruppe gruppe = Gruppe.erstelleGruppe(1, personA.getName(), "Reisegruppe");
+    UUID id = UUID.randomUUID();
+    Gruppe gruppe = Gruppe.erstelleGruppe(id, personA.getName(), "Reisegruppe");
     gruppe.addPerson(personB.getName());
     gruppe.addAusgabeToPerson("Pizza", "MaxHub", List.of("GitLisa"), Money.of(10, "EUR"));
     gruppe.addAusgabeToPerson("Kino", "MaxHub", List.of("MaxHub", "GitLisa"), Money.of(20, "EUR"));
@@ -315,7 +329,8 @@ public class DomainTests {
     Person personA = new Person("MaxHub");
     Person personB = new Person("GitLisa");
     Person personC = new Person("ErixHub");
-    Gruppe gruppe = Gruppe.erstelleGruppe(1, personA.getName(), "Reisegruppe");
+    UUID id = UUID.randomUUID();
+    Gruppe gruppe = Gruppe.erstelleGruppe(id, personA.getName(), "Reisegruppe");
     gruppe.addPerson(personB.getName());
     gruppe.addPerson(personC.getName());
     gruppe.addAusgabeToPerson("Pizza", "MaxHub", List.of("MaxHub", "GitLisa"), Money.of(10, "EUR"));
@@ -336,7 +351,8 @@ public class DomainTests {
     Person personA = new Person("MaxHub");
     Person personB = new Person("GitLisa");
     Person personC = new Person("ErixHub");
-    Gruppe gruppe = Gruppe.erstelleGruppe(1, personA.getName(), "Reisegruppe");
+    UUID id = UUID.randomUUID();
+    Gruppe gruppe = Gruppe.erstelleGruppe(id, personA.getName(), "Reisegruppe");
     gruppe.addPerson(personB.getName());
     gruppe.addPerson(personC.getName());
     gruppe.addAusgabeToPerson("Pizza", "MaxHub", List.of("MaxHub", "GitLisa"), Money.of(10, "EUR"));
@@ -357,7 +373,8 @@ public class DomainTests {
     Person personA = new Person("Anton");
     Person personB = new Person("Berta");
     Person personC = new Person("Christian");
-    Gruppe gruppe = Gruppe.erstelleGruppe(1, personA.getName(), "Reisegruppe");
+    UUID id = UUID.randomUUID();
+    Gruppe gruppe = Gruppe.erstelleGruppe(id, personA.getName(), "Reisegruppe");
     gruppe.addPerson(personB.getName());
     gruppe.addPerson(personC.getName());
     gruppe.addAusgabeToPerson("Pizza", "Anton", List.of("Anton", "Berta", "Christian"),
@@ -391,7 +408,8 @@ public class DomainTests {
     Person personD = new Person("D");
     Person personE = new Person("E");
     Person personF = new Person("F");
-    Gruppe gruppe = Gruppe.erstelleGruppe(1, personA.getName(), "Reisegruppe");
+    UUID id = UUID.randomUUID();
+    Gruppe gruppe = Gruppe.erstelleGruppe(id, personA.getName(), "Reisegruppe");
     gruppe.addPerson(personB.getName());
     gruppe.addPerson(personC.getName());
     gruppe.addPerson(personD.getName());
@@ -434,7 +452,8 @@ public class DomainTests {
     Person personE = new Person("E");
     Person personF = new Person("F");
     Person personG = new Person("G");
-    Gruppe gruppe = Gruppe.erstelleGruppe(1, personA.getName(), "Reisegruppe");
+    UUID id = UUID.randomUUID();
+    Gruppe gruppe = Gruppe.erstelleGruppe(id, personA.getName(), "Reisegruppe");
     gruppe.addPerson(personB.getName());
     gruppe.addPerson(personC.getName());
     gruppe.addPerson(personD.getName());
@@ -471,7 +490,8 @@ public class DomainTests {
     Person personB = new Person("B");
     Person personC = new Person("C");
 
-    Gruppe gruppe = Gruppe.erstelleGruppe(1, personA.getName(), "Reisegruppe");
+    UUID id = UUID.randomUUID();
+    Gruppe gruppe = Gruppe.erstelleGruppe(id, personA.getName(), "Reisegruppe");
     gruppe.addPerson(personB.getName());
     gruppe.addPerson(personC.getName());
 
