@@ -1,9 +1,16 @@
 package propra2.splitter.database;
 
 import java.util.List;
-import org.springframework.data.annotation.Id;
+import java.util.UUID;
 
-public record AusgabeDTO(@Id Integer id, AktivitaetDTO aktivitaet, AuslegerDTO ausleger,
-                         List<TeilnehmerDTO> personen, double kosten) {
+import org.springframework.data.annotation.Id;
+import org.springframework.data.relational.core.mapping.Table;
+
+@Table(name = "ausgabe_dto")
+public record AusgabeDTO(@Id UUID id,
+                         AktivitaetDTO aktivitaet,
+                         AuslegerDTO ausleger,
+                         List<TeilnehmerDTO> personen,
+                         double kosten) {
 
 }

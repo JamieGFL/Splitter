@@ -2,6 +2,8 @@ package propra2.splitter.database;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
+
 import org.javamoney.moneta.Money;
 import org.springframework.stereotype.Repository;
 import propra2.splitter.domain.Gruppe;
@@ -24,7 +26,7 @@ public class GruppenRepositoryImpl implements GruppenRepository {
   }
 
   @Override
-  public Optional<Gruppe> findById(Integer id) {
+  public Optional<Gruppe> findById(UUID id) {
     return repository.findById(id).map(this::toGruppe);
   }
 
@@ -40,7 +42,7 @@ public class GruppenRepositoryImpl implements GruppenRepository {
     Gruppe gruppe = new Gruppe(dto.id(), dto.gruppenName(), dto.geschlossen(),
         dto.ausgabeGetaetigt());
     dto.personen().forEach(p -> gruppe.addPersonAlways(p.name()));
-    dto.gruppenAusgaben().forEach(a -> gruppe.addAusgabe(a.aktivitaet().name(), a.ausleger().name(),
+    dto.ausgaben().forEach(a -> gruppe.addAusgabe(a.aktivitaet().name(), a.ausleger().name(),
         a.personen().stream().map(TeilnehmerDTO::name).toList(), Money.of(a.kosten(), "EUR")));
     dto.transaktionen().forEach(
         t -> gruppe.addTransaktion(t.zahler().name(), t.zahlungsempfaenger().name(),
