@@ -12,6 +12,7 @@ import static org.mockito.Mockito.*;
 
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 public class GruppenServiceTests {
 
@@ -28,10 +29,11 @@ public class GruppenServiceTests {
   @DisplayName("Service kann Gruppen hinzufügen")
   void test_01() {
     GruppenService service = new GruppenService(repository);
-    Gruppe gruppe = Gruppe.erstelleGruppe(1, "James", "Reisegruppe");
+    UUID id = UUID.randomUUID();
+    Gruppe gruppe = Gruppe.erstelleGruppe(id, "James", "Reisegruppe");
     when(repository.save(any(Gruppe.class))).thenReturn(gruppe);
 
-    Gruppe actualGruppe = service.addGruppe(1, mkUser("James"), "Reisegruppe");
+    Gruppe actualGruppe = service.addGruppe(mkUser("James"), "Reisegruppe");
 
     assertThat(actualGruppe).isEqualTo(gruppe);
     verify(repository, times(1)).save(any(Gruppe.class));
@@ -42,10 +44,11 @@ public class GruppenServiceTests {
   @DisplayName("Service kann mehr als eine Person zu einer Gruppe hinzufügen")
   void test_03() {
     GruppenService service = new GruppenService(repository);
-    Gruppe gruppe = Gruppe.erstelleGruppe(1, "James", "Reisegruppe");
-    when(repository.findById(anyInt())).thenReturn(Optional.of(gruppe));
+    UUID id = UUID.randomUUID();
+    Gruppe gruppe = Gruppe.erstelleGruppe(id, "James", "Reisegruppe");
+    when(repository.findById(any(UUID.class))).thenReturn(Optional.of(gruppe));
 
-    service.addPersonToGruppe(1, "James2");
+    service.addPersonToGruppe(id, "James2");
 
     verify(repository, times(1)).save(gruppe);
   }
@@ -54,15 +57,17 @@ public class GruppenServiceTests {
   @DisplayName("Eine Person kann Bestandteil von mehreren Gruppen sein")
   void test_04() {
     GruppenService service = new GruppenService(repository);
-    Gruppe gruppe1 = Gruppe.erstelleGruppe(1, "James", "Reisegruppe");
-    Gruppe gruppe2 = Gruppe.erstelleGruppe(2, "MaxHub", "Reisegruppe");
-    when(repository.findById(anyInt())).thenReturn(Optional.of(gruppe1)).thenReturn(
+    UUID id = UUID.randomUUID();
+    Gruppe gruppe1 = Gruppe.erstelleGruppe(id, "James", "Reisegruppe");
+    UUID id2 = UUID.randomUUID();
+    Gruppe gruppe2 = Gruppe.erstelleGruppe(id2, "MaxHub", "Reisegruppe");
+    when(repository.findById(any(UUID.class))).thenReturn(Optional.of(gruppe1)).thenReturn(
         Optional.of(gruppe2));
 
-    Gruppe actualGruppe1 = service.addGruppe(1, mkUser("MaxHub"), "Reisegruppe1");
-    Gruppe actualGruppe2 = service.addGruppe(2, mkUser("GitLisa"), "Reisegruppe2");
-    service.addPersonToGruppe(1, "MaxHub");
-    service.addPersonToGruppe(2, "James");
+    Gruppe actualGruppe1 = service.addGruppe(mkUser("MaxHub"), "Reisegruppe1");
+    Gruppe actualGruppe2 = service.addGruppe(mkUser("GitLisa"), "Reisegruppe2");
+    service.addPersonToGruppe(id, "MaxHub");
+    service.addPersonToGruppe(id2, "James");
 
     verify(repository, times(1)).save(gruppe1);
     verify(repository, times(1)).save(gruppe2);
@@ -72,12 +77,14 @@ public class GruppenServiceTests {
   @DisplayName("Eine Person kann mehrere Gruppen erstellen")
   void test_05() {
     GruppenService service = new GruppenService(repository);
-    Gruppe gruppe1 = Gruppe.erstelleGruppe(1, "James", "Reisegruppe");
-    Gruppe gruppe2 = Gruppe.erstelleGruppe(2, "James", "Reisegruppe2");
+    UUID id = UUID.randomUUID();
+    Gruppe gruppe1 = Gruppe.erstelleGruppe(id, "James", "Reisegruppe");
+    UUID id2 = UUID.randomUUID();
+    Gruppe gruppe2 = Gruppe.erstelleGruppe(id2, "James", "Reisegruppe2");
     when(repository.save(any(Gruppe.class))).thenReturn(gruppe1).thenReturn(gruppe2);
 
-    service.addGruppe(1, mkUser("James"), "Reisegruppe");
-    service.addGruppe(2, mkUser("James"), "Reisegruppe");
+    service.addGruppe(mkUser("James"), "Reisegruppe");
+    service.addGruppe(mkUser("James"), "Reisegruppe");
 
     verify(repository, times(2)).save(any(Gruppe.class));
   }
@@ -86,16 +93,18 @@ public class GruppenServiceTests {
   @DisplayName("Es werden einem nur Gruppen angezeigt, in welchen man auch Mitglied ist")
   void test_06() {
     GruppenService service = new GruppenService(repository);
+    UUID id = UUID.randomUUID();
+    UUID id2 = UUID.randomUUID();
     when(repository.findAll())
-        .thenReturn(List.of(Gruppe.erstelleGruppe(1, "James", "Reisegruppe"),
-            Gruppe.erstelleGruppe(2, "GitLisa", "Reisegruppe2")));
+        .thenReturn(List.of(Gruppe.erstelleGruppe(id, "James", "Reisegruppe"),
+            Gruppe.erstelleGruppe(id2, "GitLisa", "Reisegruppe2")));
 
-    Gruppe gruppe = service.addGruppe(1, mkUser("James"), "Reisegruppe");
-    Gruppe gruppe2 = service.addGruppe(2, mkUser("GitLisa"), "Reisegruppe2");
+    Gruppe gruppe = service.addGruppe(mkUser("James"), "Reisegruppe");
+    Gruppe gruppe2 = service.addGruppe(mkUser("GitLisa"), "Reisegruppe2");
     GruppenOnPage actualGruppen = service.personToGruppeMatch(mkUser("James"));
 
     assertThat(actualGruppen.details()).containsExactly(
-        new GruppenDetails(1, "Reisegruppe", List.of("James"), false));
+        new GruppenDetails(id, "Reisegruppe", List.of("James"), false));
     verify(repository, times(1)).findAll();
   }
 
@@ -103,26 +112,27 @@ public class GruppenServiceTests {
   @DisplayName("Service kann nach beliebigen Gruppen durch die ID filtern")
   void test_07() {
     GruppenService service = new GruppenService(repository);
-    Gruppe gruppe = Gruppe.erstelleGruppe(1, "James", "Reisegruppe");
-    when(repository.findById(anyInt())).thenReturn(
-        Optional.of(Gruppe.erstelleGruppe(1, "James", "Reisegruppe")));
+    UUID id = UUID.randomUUID();
+    Gruppe gruppe = Gruppe.erstelleGruppe(id, "James", "Reisegruppe");
+    when(repository.findById(any(UUID.class))).thenReturn(
+        Optional.of(Gruppe.erstelleGruppe(id, "James", "Reisegruppe")));
 
-    service.addGruppe(1, mkUser("James"), "Reisegruppe");
+    service.addGruppe(mkUser("James"), "Reisegruppe");
 
-    assertThat(service.getSingleGruppe(1)).isEqualTo(gruppe);
-    verify(repository, times(1)).findById(1);
-
+    assertThat(service.getSingleGruppe(id)).isEqualTo(gruppe);
+    verify(repository, times(1)).findById(id);
   }
 
   @Test
   @DisplayName("Der Service kann Ausgaben eintragen")
   void test_08() {
     GruppenService service = new GruppenService(repository);
-    Gruppe gruppe = Gruppe.erstelleGruppe(1, "James", "Reisegruppe");
-    when(repository.findById(anyInt())).thenReturn(Optional.of(gruppe));
+    UUID id = UUID.randomUUID();
+    Gruppe gruppe = Gruppe.erstelleGruppe(id, "James", "Reisegruppe");
+    when(repository.findById(any(UUID.class))).thenReturn(Optional.of(gruppe));
 
-    service.addPersonToGruppe(1, "GitLisa");
-    service.addAusgabeToGruppe(1, "Pizza", "James", "James, GitLisa", 40.00);
+    service.addPersonToGruppe(id, "GitLisa");
+    service.addAusgabeToGruppe(id, "Pizza", "James", "James, GitLisa", 40.00);
 
     verify(repository, times(2)).save(gruppe);
   }
@@ -131,9 +141,10 @@ public class GruppenServiceTests {
   @DisplayName("Der Service kann mehrere Ausgaben eintragen")
   void test_09() {
     GruppenService service = new GruppenService(repository);
-    Gruppe gruppe = Gruppe.erstelleGruppe(1, "James", "Reisegruppe");
-    when(repository.findById(anyInt())).thenReturn(Optional.of(gruppe));
-    service.addPersonToGruppe(1, "GitLisa");
+    UUID id = UUID.randomUUID();
+    Gruppe gruppe = Gruppe.erstelleGruppe(id, "James", "Reisegruppe");
+    when(repository.findById(any(UUID.class))).thenReturn(Optional.of(gruppe));
+    service.addPersonToGruppe(id, "GitLisa");
 
     service.addAusgabeToGruppe(gruppe.getId(), "pizza", "James", "James, GitLisa", 40.00);
     service.addAusgabeToGruppe(gruppe.getId(), "club", "James", "James, GitLisa", 40.00);
@@ -145,12 +156,13 @@ public class GruppenServiceTests {
   @DisplayName("Service kann Transaktionen für eine Gruppe hinzufügen")
   void test_10() {
     GruppenService service = new GruppenService(repository);
-    Gruppe gruppe = Gruppe.erstelleGruppe(1, "James", "Reisegruppe");
-    when(repository.findById(anyInt())).thenReturn(Optional.of(gruppe));
+    UUID id = UUID.randomUUID();
+    Gruppe gruppe = Gruppe.erstelleGruppe(id, "James", "Reisegruppe");
+    when(repository.findById(any(UUID.class))).thenReturn(Optional.of(gruppe));
 
-    service.addPersonToGruppe(1, "GitLisa");
-    service.addAusgabeToGruppe(1, "pizza", "James", "James, GitLisa", 40.00);
-    service.transaktionBerechnen(1);
+    service.addPersonToGruppe(id, "GitLisa");
+    service.addAusgabeToGruppe(id, "pizza", "James", "James, GitLisa", 40.00);
+    service.transaktionBerechnen(id);
 
     verify(repository, times(3)).save(gruppe);
   }
@@ -159,8 +171,9 @@ public class GruppenServiceTests {
   @DisplayName("Service speichert nur Transaktionsnachricht für Gesamtheit der Ausgaben")
   void test_11() {
     GruppenService service = new GruppenService(repository);
-    Gruppe gruppe = Gruppe.erstelleGruppe(1, "James", "Reisegruppe");
-    when(repository.findById(anyInt())).thenReturn(Optional.of(gruppe));
+    UUID id = UUID.randomUUID();
+    Gruppe gruppe = Gruppe.erstelleGruppe(id, "James", "Reisegruppe");
+    when(repository.findById(any(UUID.class))).thenReturn(Optional.of(gruppe));
 
     service.addAusgabeToGruppe(gruppe.getId(), "pizza", "James", "James, GitLisa", 40.00);
     service.transaktionBerechnen(gruppe.getId());
@@ -174,8 +187,9 @@ public class GruppenServiceTests {
   @DisplayName("Service kann Gruppen schließen")
   void test_12() {
     GruppenService service = new GruppenService(repository);
-    Gruppe gruppe = Gruppe.erstelleGruppe(1, "James", "Reisegruppe");
-    when(repository.findById(anyInt())).thenReturn(Optional.of(gruppe));
+    UUID id = UUID.randomUUID();
+    Gruppe gruppe = Gruppe.erstelleGruppe(id, "James", "Reisegruppe");
+    when(repository.findById(any(UUID.class))).thenReturn(Optional.of(gruppe));
 
     service.closeGruppe(gruppe.getId());
 
@@ -186,8 +200,9 @@ public class GruppenServiceTests {
   @DisplayName("Nicht geschlossene Gruppen sind offen")
   void test_13() {
     GruppenService service = new GruppenService(repository);
-    Gruppe gruppe = Gruppe.erstelleGruppe(1, "James", "Reisegruppe");
-    when(repository.findById(anyInt())).thenReturn(Optional.of(gruppe));
+    UUID id = UUID.randomUUID();
+    Gruppe gruppe = Gruppe.erstelleGruppe(id, "James", "Reisegruppe");
+    when(repository.findById(any(UUID.class))).thenReturn(Optional.of(gruppe));
 
     verify(repository, never()).save(gruppe);
   }
@@ -196,8 +211,9 @@ public class GruppenServiceTests {
   @DisplayName("Zu einer geschlossenen Gruppe kann man keine Personen mehr hinzufügen")
   void test_14(){
     GruppenService service = new GruppenService(repository);
-    Gruppe gruppe = Gruppe.erstelleGruppe(1, "James", "Reisegruppe");
-    when(repository.findById(anyInt())).thenReturn(Optional.of(gruppe));
+    UUID id = UUID.randomUUID();
+    Gruppe gruppe = Gruppe.erstelleGruppe(id, "James", "Reisegruppe");
+    when(repository.findById(any(UUID.class))).thenReturn(Optional.of(gruppe));
     service.closeGruppe(gruppe.getId());
 
     clearInvocations(repository); // clears the first save call from closeGroup
