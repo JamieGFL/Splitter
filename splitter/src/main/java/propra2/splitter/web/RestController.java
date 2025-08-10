@@ -10,6 +10,7 @@ import propra2.splitter.service.*;
 
 import jakarta.validation.Valid;
 import java.util.List;
+import java.util.UUID;
 
 @org.springframework.web.bind.annotation.RestController
 public class RestController {
@@ -26,7 +27,7 @@ public class RestController {
   }
 
   @PostMapping("/api/gruppen")
-  public ResponseEntity<Integer> addGruppen(@RequestBody GruppeEntity gruppenEntity) {
+  public ResponseEntity<UUID> addGruppen(@RequestBody GruppeEntity gruppenEntity) {
 
     if (gruppenEntity.getName() == null) {
       return ResponseEntity.badRequest().body(null);
@@ -40,11 +41,11 @@ public class RestController {
   @GetMapping("/api/gruppen/{id}")
   public ResponseEntity<GruppeInformationEntity> gruppenInfo(@PathVariable @Valid String id) {
     try {
-      if (service.getGruppeInformationEntity(Integer.parseInt(id)) == null) {
+      if (service.getGruppeInformationEntity(UUID.fromString(id)) == null) {
         return ResponseEntity.notFound().build();
       }
 
-      return new ResponseEntity<>(service.getGruppeInformationEntity(Integer.parseInt(id)),
+      return new ResponseEntity<>(service.getGruppeInformationEntity(UUID.fromString(id)),
           HttpStatus.OK);
     } catch (NumberFormatException exception) {
       return ResponseEntity.notFound().build();
@@ -54,11 +55,11 @@ public class RestController {
   @PostMapping("/api/gruppen/{id}/schliessen")
   public ResponseEntity<String> schliesseGruppe(@PathVariable String id) {
     try {
-      if (service.getGruppeInformationEntity(Integer.parseInt(id)) == null) {
+      if (service.getGruppeInformationEntity(UUID.fromString(id)) == null) {
         return ResponseEntity.notFound().build();
       }
 
-      return new ResponseEntity<>(service.setRestGruppeGeschlossen(Integer.parseInt(id)),
+      return new ResponseEntity<>(service.setRestGruppeGeschlossen(UUID.fromString(id)),
           HttpStatus.OK);
     } catch (NumberFormatException exception) {
       return ResponseEntity.notFound().build();
@@ -69,10 +70,10 @@ public class RestController {
   public ResponseEntity<AusgabeEntity> addAusgabe(@PathVariable String id,
       @RequestBody AusgabeEntity ausgabenEntity) {
     try {
-      if (service.getGruppeInformationEntity(Integer.parseInt(id)) == null) {
+      if (service.getGruppeInformationEntity(UUID.fromString(id)) == null) {
         return ResponseEntity.notFound().build();
       }
-      if (service.getGruppeInformationEntity(Integer.parseInt(id)).geschlossen()) {
+      if (service.getGruppeInformationEntity(UUID.fromString(id)).geschlossen()) {
         return ResponseEntity.status(409).build();
       }
       // If check, wenn JSON Dokument fehlerhaft ist
@@ -82,7 +83,7 @@ public class RestController {
         return ResponseEntity.badRequest().build();
       }
 
-      service.addRestAusgabenToGruppe(Integer.parseInt(id), ausgabenEntity);
+      service.addRestAusgabenToGruppe(UUID.fromString(id), ausgabenEntity);
       return new ResponseEntity<>(ausgabenEntity, HttpStatus.CREATED);
     } catch (NumberFormatException exception) {
       return ResponseEntity.notFound().build();
@@ -92,10 +93,10 @@ public class RestController {
   @GetMapping("/api/gruppen/{id}/ausgleich")
   public ResponseEntity<List<TransaktionEntity>> getAusgleichszahlungen(@PathVariable String id) {
     try {
-      if (service.getGruppeInformationEntity(Integer.parseInt(id)) == null) {
+      if (service.getGruppeInformationEntity(UUID.fromString(id)) == null) {
         return ResponseEntity.notFound().build();
       }
-      return new ResponseEntity<>(service.getRestTransaktionen(Integer.parseInt(id)),
+      return new ResponseEntity<>(service.getRestTransaktionen(UUID.fromString(id)),
           HttpStatus.OK);
     } catch (NumberFormatException exception) {
       return ResponseEntity.notFound().build();
