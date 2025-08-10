@@ -1,37 +1,19 @@
-name: Build and Test
+name: build and test
 
 on: [push]
 
 jobs:
   build:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout repository
+      - name: checkout repo
         uses: actions/checkout@v3
-
-      - name: Set up JDK 17
+      - name: install latest jdk
         uses: actions/setup-java@v3
         with:
-          distribution: temurin
           java-version: 17
-          cache: gradle
-
-      - name: Verify Gradle wrapper version
-        run: |
-          cd splitter
-          ./gradlew --version
-
-      - name: Clean and run tests with Gradle wrapper
-        run: |
-          cd splitter
-          chmod +x ./gradlew
-          ./gradlew clean check --no-daemon
-
-      # Show test reports if you want to debug failures
-      - name: Upload test reports
-        if: failure()
-        uses: actions/upload-artifact@v4
-        with:
-          name: test-reports
-          path: splitter/build/reports/tests/test/
+          cache: 'gradle'
+          distribution: 'temurin'
+      - env:
+          path: splitter/
+        run: cd $path && chmod +x gradlew && gradle check
